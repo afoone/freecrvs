@@ -1,0 +1,11 @@
+.datepicker-full,
+.datepicker-full > div.react-datepicker-wrapper,
+.datepicker-full
+  > div
+  > div.react-datepicker__input-container
+  .datepicker-full
+  > div
+  > div.react-datepicker__input-container
+  input {
+  width: 100%;
+}

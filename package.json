@@ -2,7 +2,7 @@
   "name": "with-mongodb",
   "version": "0.1.0",
   "scripts": {
-    "dev": "next dev",
+    "dev": "docker-compose up -d && next dev",
     "build": "next build",
     "start": "next start"
   },
@@ -12,7 +12,9 @@
     "next": "latest",
     "react": "^16.13.1",
     "react-datepicker": "^3.6.0",
-    "react-dom": "^16.13.1"
+    "react-dom": "^16.13.1",
+    "react-select": "^4.3.0",
+    "uuid": "^8.3.2"
   },
   "license": "MIT"
 }
