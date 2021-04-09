@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react";
 // import { getToken } from '@client/utils/authUtils'
-import axios from 'axios'
+import axios from "axios";
 
-export const getFullName = patient => {
-  return `${patient.firstName}  ${patient.middleName} ${patient.lastName}`
-}
+export const getFullName = (patient) => {
+  return `${patient.firstName}  ${patient.middleName} ${patient.lastName}`;
+};
 
-export const getIdentifiers = patient => {
+export const getIdentifiers = (patient) => {
   return (
     <div>
       {patient.NIN && <div>{`NIN: ${patient.NIN}`}</div>}
       {patient.myChildId && <div>{`myChildId: ${patient.myChildId}`}</div>}
     </div>
-  )
-}
+  );
+};
 
 const PatientRow = ({ patient }) => {
   return (
@@ -23,7 +23,7 @@ const PatientRow = ({ patient }) => {
         {patient.dateOfBirth &&
           new Date(patient.dateOfBirth).toLocaleDateString()}
       </td>
-      <td>{patient.gender === 'M' ? 'Male' : 'Female'}</td>
+      <td>{patient.gender === "M" ? "Male" : "Female"}</td>
       <td>{getIdentifiers(patient)}</td>
       <td>
         <a href={`/immunization/${patient._id}`}>
@@ -31,45 +31,45 @@ const PatientRow = ({ patient }) => {
         </a>
       </td>
     </tr>
-  )
-}
+  );
+};
 
 const Pagination = ({ size, position, setOffset }) => {
   const getPages = (size, position) => {
-    const pages = []
+    const pages = [];
     for (let index = 0; index < Math.min(size, 10); index++) {
       pages.push(
         <div
           onClick={() => setOffset(index * 10)}
           key={`page-${index}`}
           className={`ui button basic mini ${
-            index === position ? 'blue' : 'grey'
+            index === position ? "blue" : "grey"
           }`}
         >
           {index + 1}
         </div>
-      )
+      );
     }
-    return pages
-  }
+    return pages;
+  };
 
-  return <div className="ui buttons">{getPages(size, position)}</div>
-}
+  return <div className="ui buttons">{getPages(size, position)}</div>;
+};
 
 const ImmunizationList = () => {
-  const [patients, setPatients] = useState([])
-  const [total, setTotal] = useState(0)
-  const [offset, setOffset] = useState(0)
-  const [count, setCount] = useState(25)
-  const [searchGiven, setSearchGiven] = useState('')
-  const [searchLast, setSearchLast] = useState('')
-  const [searchNIN, setSearchNIN] = useState('')
-  const [searchToday, setSearchToday] = useState(false)
+  const [patients, setPatients] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [offset, setOffset] = useState(0);
+  const [count, setCount] = useState(25);
+  const [searchGiven, setSearchGiven] = useState("");
+  const [searchLast, setSearchLast] = useState("");
+  const [searchNIN, setSearchNIN] = useState("");
+  const [searchToday, setSearchToday] = useState(false);
 
-  const getPatientsWithParams = params => {
-    let url = `/api/patients/?_count=${count}&_getpagesoffset=${offset}`
+  const getPatientsWithParams = (params) => {
+    let url = `/api/patients/?_count=${count}&_getpagesoffset=${offset}`;
     if (params) {
-      url += params
+      url += params;
     }
 
     axios
@@ -78,47 +78,44 @@ const ImmunizationList = () => {
         //   Authorization: `Bearer ${getToken()}`
         // }
       })
-      .then(res => {
-        setPatients(res.data)
+      .then((res) => {
+        setPatients(res.data);
         // setTotal(res.data.data && res.data.data.total ? res.data.data.total : 0)
-      })
-  }
+      });
+  };
 
   useEffect(() => {
-    getPatientsWithParams()
-  }, [count])
+    getPatientsWithParams();
+  }, [count]);
 
   const searchPatients = () => {
-    let url = ''
+    let url = "";
     if (searchGiven) {
-      url += `&firstName=${searchGiven}`
+      url += `&firstName=${searchGiven}`;
     }
     if (searchLast) {
-      url += `&lastName=${searchLast}`
+      url += `&lastName=${searchLast}`;
     }
     if (searchNIN) {
-      url += `&NIN=${searchNIN}`
+      url += `&NIN=${searchNIN}`;
     }
     if (searchToday) {
-      const date = new Date()
-      date.setDate(date.getDate() - 1)
+      const date = new Date();
+      date.setDate(date.getDate() - 1);
       url += `&_lastUpdated=gt${date.getFullYear()}-${
-        date.getMonth() < 9 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1
-      }-${date.getDate() < 10 ? '0' + date.getDate() : date.getDate()}`
+        date.getMonth() < 9 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1
+      }-${date.getDate() < 10 ? "0" + date.getDate() : date.getDate()}`;
     }
-    console.log(url)
 
-    getPatientsWithParams(url)
-  }
+    getPatientsWithParams(url);
+  };
 
   const resetSearch = () => {
-    setSearchGiven('')
-    setSearchLast('')
-    setSearchNIN('')
-    getPatientsWithParams()
-  }
-
-  console.log(patients)
+    setSearchGiven("");
+    setSearchLast("");
+    setSearchNIN("");
+    getPatientsWithParams();
+  };
 
   return (
     <div className="immunization-list">
@@ -129,7 +126,7 @@ const ImmunizationList = () => {
               type="text"
               placeholder="Given name..."
               value={searchGiven}
-              onChange={e => setSearchGiven(e.target.value)}
+              onChange={(e) => setSearchGiven(e.target.value)}
             />
           </div>
           <div className="ui field">
@@ -137,7 +134,7 @@ const ImmunizationList = () => {
               type="text"
               placeholder="Last name..."
               value={searchLast}
-              onChange={e => setSearchLast(e.target.value)}
+              onChange={(e) => setSearchLast(e.target.value)}
             />
           </div>
           <div className="ui field">
@@ -145,7 +142,7 @@ const ImmunizationList = () => {
               type="text"
               placeholder="ID (NIN)"
               value={searchNIN}
-              onChange={e => setSearchNIN(e.target.value)}
+              onChange={(e) => setSearchNIN(e.target.value)}
             />
           </div>
           <div className="inline fields">
@@ -169,7 +166,7 @@ const ImmunizationList = () => {
             <select
               className="ui fluid dropdown"
               value={count}
-              onChange={e => setCount(parseInt(e.target.value))}
+              onChange={(e) => setCount(parseInt(e.target.value))}
             >
               <option value={10}>10</option>
               <option value={25}>25</option>
@@ -194,7 +191,7 @@ const ImmunizationList = () => {
           </tr>
         </thead>
         <tbody>
-          {patients.map(i => (
+          {patients.map((i) => (
             <PatientRow key={i._id} patient={i} />
           ))}
         </tbody>
@@ -205,7 +202,7 @@ const ImmunizationList = () => {
         setOffset={setOffset}
       />
     </div>
-  )
-}
+  );
+};
 
-export default ImmunizationList
+export default ImmunizationList;

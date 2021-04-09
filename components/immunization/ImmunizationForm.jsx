@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 // import { getToken } from '@client/utils/authUtils'
@@ -22,8 +23,9 @@ import {
 import ImmunizationRecordForm from "./ImmunizationRecordForm";
 
 const ImmunizationForm = ({ id }) => {
+  const router = useRouter();
+
   // utils
-  const [redirect, setRedirect] = useState(false);
   const [patient, setPatient] = useState({});
 
   // locations
@@ -243,19 +245,6 @@ const ImmunizationForm = ({ id }) => {
   };
 
   useEffect(() => {
-    // storage.getItem('USER_DETAILS').then(res => console.log(JSON.parse(res)))
-    // storage.getItem('offline').then(res => {
-    //   const offlineData = JSON.parse(res)
-    //   console.log(offlineData)
-    //   setFacilities(
-    //     Object.keys(offlineData.facilities).map(k => ({
-    //       id: offlineData.facilities[k].id,
-    //       name: offlineData.facilities[k].name,
-    //       partOf: offlineData.facilities[k].partOf
-    //     }))
-    //   )
-    //   setLocationsOnState(offlineData.locations)
-    // })
     if (!id) {
       return;
     }
@@ -266,6 +255,7 @@ const ImmunizationForm = ({ id }) => {
         // },
       })
       .then((res) => {
+        console.log("patient retrieved", res);
         setPatient(res.data);
         populateData(res.data);
       });
@@ -277,7 +267,7 @@ const ImmunizationForm = ({ id }) => {
 
   const savePatient = (e) => {
     e.preventDefault();
-    const url = `${window.config.RESOURCES_URL}/immunization/`;
+    const url = `/api/patients/`;
     const object = {
       patient: patient.id ? patient.id : uuid(),
       // informant,
@@ -350,18 +340,18 @@ const ImmunizationForm = ({ id }) => {
         axios
           .put(url + `${patient._id}/`, object, {
             headers: {
-              Authorization: `Bearer ${getToken()}`,
+              // Authorization: `Bearer ${getToken()}`,
             },
           })
-          .then(setRedirect(true));
+          .then(router.push("/immunization/"));
       } else {
         axios
           .post(url, object, {
             headers: {
-              Authorization: `Bearer ${getToken()}`,
+              // Authorization: `Bearer ${getToken()}`,
             },
           })
-          .then(setRedirect(true));
+          .then(router.push("/immunization/"));
       }
     }
     setErrors(validationErrors);

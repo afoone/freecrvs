@@ -5,6 +5,11 @@
 }
 
 .error {
-  color:red; 
+  color: red;
   font-size: 0.7rem;
+}
+
+.immunization-layout h1:first-child {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
 }

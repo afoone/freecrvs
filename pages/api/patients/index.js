@@ -1,25 +1,25 @@
-import { connectToDatabase } from "../../../util/mongodb";
+import {
+  add,
+  list,
+  deleteImmunization,
+  update,
+  get,
+} from "../../../services/immunization";
 
 export default async (req, res) => {
-  const { db } = await connectToDatabase();
+  // const { db } = await connectToDatabase();
 
+  switch (req.method) {
+    case "POST":
+      const patient = await add(req.body);
+      console.log(patient);
+      res.json(patient);
+      break;
 
-  if (req.method === 'POST') {
-    // Process a POST request
-    const patient = await db.collection("patients").insertOne(req.body)
-    res.json(patient.ops[0])
-
-  } else {
-    // Handle any other HTTP method
-    const patients = await db
-      .collection("patients")
-      .find({})
-      .limit(20)
-      .toArray();
-
-    res.json(patients);
+    default:
+      const patients = await list();
+      console.log("patients", patients);
+      res.json(patients);
+      break;
   }
-
-
-
 };
