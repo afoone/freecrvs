@@ -1,233 +1,263 @@
-import Head from 'next/head'
-import { connectToDatabase } from '../util/mongodb'
+import React, { useState } from "react";
+import Link from "next/link";
+import Router from "next/router";
+import Cookies from "js-cookie";
 
-export default function Home({ isConnected }) {
+/* middleware */
+import {
+  absoluteUrl,
+  getAppCookies,
+  verifyToken,
+  setLogout,
+} from "../services/auth";
+
+/* components */
+import FormLogin from "../components/login/FormLogin";
+
+const emailRegEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,2|3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+/* login schemas */
+const FORM_DATA_LOGIN = {
+  email: {
+    value: "",
+    label: "Email",
+    min: 10,
+    max: 36,
+    required: true,
+    validator: {
+      regEx: emailRegEx,
+      error: "Please insert valid email",
+    },
+  },
+  password: {
+    value: "",
+    label: "Password",
+    min: 6,
+    max: 36,
+    required: true,
+    validator: {
+      regEx: /^[a-z\sA-Z0-9\W\w]+$/,
+      error: "Please insert valid password",
+    },
+  },
+};
+
+export default function Home(props) {
+  const { baseApiUrl, profile } = props;
+  const [stateFormData, setStateFormData] = useState(FORM_DATA_LOGIN);
+  const [stateFormError, setStateFormError] = useState([]);
+  const [stateFormValid, setStateFormValid] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [stateFormMessage, setStateFormMessage] = useState({});
+
+  function onChangeHandler(e) {
+    const { name, value } = e.currentTarget;
+
+    setStateFormData({
+      ...stateFormData,
+      [name]: {
+        ...stateFormData[name],
+        value,
+      },
+    });
+
+    /* validation handler */
+    validationHandler(stateFormData, e);
+  }
+
+  async function onSubmitHandler(e) {
+    e.preventDefault();
+
+    let data = { ...stateFormData };
+
+    /* email */
+    data = { ...data, email: data.email.value || "" };
+    /* password */
+    data = { ...data, password: data.password.value || "" };
+
+    /* validation handler */
+    const isValid = validationHandler(stateFormData);
+
+    if (isValid) {
+      // Call an external API endpoint to get posts.
+      // You can use any data fetching library
+      setLoading(!loading);
+      const loginApi = await fetch(`${baseApiUrl}/auth`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }).catch((error) => {
+        console.error("Error:", error);
+      });
+      let result = await loginApi.json();
+      if (result.success && result.token) {
+        Cookies.set("token", result.token);
+        // window.location.href = referer ? referer : "/";
+        // const pathUrl = referer ? referer.lastIndexOf("/") : "/";
+        Router.push("/");
+      } else {
+        setStateFormMessage(result);
+      }
+      setLoading(false);
+    }
+  }
+
+  function validationHandler(states, e) {
+    const input = (e && e.target.name) || "";
+    const errors = [];
+    let isValid = true;
+
+    if (input) {
+      if (states[input].required) {
+        if (!states[input].value) {
+          errors[input] = {
+            hint: `${states[e.target.name].label} required`,
+            isInvalid: true,
+          };
+          isValid = false;
+        }
+      }
+      if (
+        states[input].value &&
+        states[input].min > states[input].value.length
+      ) {
+        errors[input] = {
+          hint: `Field ${states[input].label} min ${states[input].min}`,
+          isInvalid: true,
+        };
+        isValid = false;
+      }
+      if (
+        states[input].value &&
+        states[input].max < states[input].value.length
+      ) {
+        errors[input] = {
+          hint: `Field ${states[input].label} max ${states[input].max}`,
+          isInvalid: true,
+        };
+        isValid = false;
+      }
+      if (
+        states[input].validator !== null &&
+        typeof states[input].validator === "object"
+      ) {
+        if (
+          states[input].value &&
+          !states[input].validator.regEx.test(states[input].value)
+        ) {
+          errors[input] = {
+            hint: states[input].validator.error,
+            isInvalid: true,
+          };
+          isValid = false;
+        }
+      }
+    } else {
+      Object.entries(states).forEach((item) => {
+        item.forEach((field) => {
+          errors[item[0]] = "";
+          if (field.required) {
+            if (!field.value) {
+              errors[item[0]] = {
+                hint: `${field.label} required`,
+                isInvalid: true,
+              };
+              isValid = false;
+            }
+          }
+          if (field.value && field.min >= field.value.length) {
+            errors[item[0]] = {
+              hint: `Field ${field.label} min ${field.min}`,
+              isInvalid: true,
+            };
+            isValid = false;
+          }
+          if (field.value && field.max <= field.value.length) {
+            errors[item[0]] = {
+              hint: `Field ${field.label} max ${field.max}`,
+              isInvalid: true,
+            };
+            isValid = false;
+          }
+          if (field.validator !== null && typeof field.validator === "object") {
+            if (field.value && !field.validator.regEx.test(field.value)) {
+              errors[item[0]] = {
+                hint: field.validator.error,
+                isInvalid: true,
+              };
+              isValid = false;
+            }
+          }
+        });
+      });
+    }
+    if (isValid) {
+      setStateFormValid(isValid);
+    }
+    setStateFormError({
+      ...errors,
+    });
+    return isValid;
+  }
+
+  function handleOnClickLogout(e) {
+    setLogout(e);
+  }
+
   return (
     <div className="container">
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
       <main>
-        <h1 className="title">
-          Welcome to <a href="https://nextjs.org">Next.js with MongoDB!</a>
-        </h1>
-
-        {isConnected ? (
-          <h2 className="subtitle">You are connected to MongoDB</h2>
-        ) : (
-          <h2 className="subtitle">
-            You are NOT connected to MongoDB. Check the <code>README.md</code>{' '}
-            for instructions.
-          </h2>
-        )}
-
-        <p className="description">
-          Get started by editing <code>pages/index.js</code>
-        </p>
-
-        <div className="grid">
-          <a href="https://nextjs.org/docs" className="card">
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className="card">
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className="card"
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className="card"
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
+        {!profile ? (
+          <>
+            <h3>Login to continue</h3>
+            <p className="description">
+              Use : <code>example1@example.com</code> or{" "}
+              <code>example2@example.com</code> with the password:
+              <code>password</code>
             </p>
-          </a>
-        </div>
+            <div>
+              <FormLogin
+                props={{
+                  onSubmitHandler,
+                  onChangeHandler,
+                  loading,
+                  stateFormData,
+                  stateFormError,
+                  stateFormMessage,
+                }}
+              />
+            </div>
+          </>
+        ) : (
+          <div>
+            <Link href={{ pathname: "/about" }}>
+              <a style={{ marginRight: ".75rem" }}>&bull; About Page</a>
+            </Link>
+            <a href="#" onClick={(e) => handleOnClickLogout(e)}>
+              &bull; Logout
+            </a>
+          </div>
+        )}
       </main>
-
-      <footer>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className="logo" />
-        </a>
-      </footer>
-
-      <style jsx>{`
-        .container {
-          min-height: 100vh;
-          padding: 0 0.5rem;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-
-        main {
-          padding: 5rem 0;
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-
-        footer {
-          width: 100%;
-          height: 100px;
-          border-top: 1px solid #eaeaea;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-
-        footer img {
-          margin-left: 0.5rem;
-        }
-
-        footer a {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-
-        a {
-          color: inherit;
-          text-decoration: none;
-        }
-
-        .title a {
-          color: #0070f3;
-          text-decoration: none;
-        }
-
-        .title a:hover,
-        .title a:focus,
-        .title a:active {
-          text-decoration: underline;
-        }
-
-        .title {
-          margin: 0;
-          line-height: 1.15;
-          font-size: 4rem;
-        }
-
-        .title,
-        .description {
-          text-align: center;
-        }
-
-        .subtitle {
-          font-size: 2rem;
-        }
-
-        .description {
-          line-height: 1.5;
-          font-size: 1.5rem;
-        }
-
-        code {
-          background: #fafafa;
-          border-radius: 5px;
-          padding: 0.75rem;
-          font-size: 1.1rem;
-          font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
-            DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
-        }
-
-        .grid {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-wrap: wrap;
-
-          max-width: 800px;
-          margin-top: 3rem;
-        }
-
-        .card {
-          margin: 1rem;
-          flex-basis: 45%;
-          padding: 1.5rem;
-          text-align: left;
-          color: inherit;
-          text-decoration: none;
-          border: 1px solid #eaeaea;
-          border-radius: 10px;
-          transition: color 0.15s ease, border-color 0.15s ease;
-        }
-
-        .card:hover,
-        .card:focus,
-        .card:active {
-          color: #0070f3;
-          border-color: #0070f3;
-        }
-
-        .card h3 {
-          margin: 0 0 1rem 0;
-          font-size: 1.5rem;
-        }
-
-        .card p {
-          margin: 0;
-          font-size: 1.25rem;
-          line-height: 1.5;
-        }
-
-        .logo {
-          height: 1em;
-        }
-
-        @media (max-width: 600px) {
-          .grid {
-            width: 100%;
-            flex-direction: column;
-          }
-        }
-      `}</style>
-
-      <style jsx global>{`
-        html,
-        body {
-          padding: 0;
-          margin: 0;
-          font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-            Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
-            sans-serif;
-        }
-
-        * {
-          box-sizing: border-box;
-        }
-      `}</style>
     </div>
-  )
+  );
 }
 
 export async function getServerSideProps(context) {
-  const { client } = await connectToDatabase()
+  const { req } = context;
+  const { origin } = absoluteUrl(req);
 
-  const isConnected = await client.isConnected()
+  const baseApiUrl = `${origin}/api`;
 
+  const { token } = getAppCookies(req);
+  const profile = token ? verifyToken(token.split(" ")[1]) : "";
   return {
-    props: { isConnected },
-  }
+    props: {
+      baseApiUrl,
+      profile,
+    },
+  };
 }
