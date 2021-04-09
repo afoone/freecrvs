@@ -4,14 +4,17 @@ import React from "react";
 import ImmunizationLayout from "../../components/immunization/Layout";
 import ImmunizationList from "../../components/ImmunizationList";
 import { useRouter } from "next/router";
+import AuthHOC from "../../components/auth/AuthHOC";
 // import { useParams } from "react-router";
 
 const ImmunizationHome = () => {
   return (
-    <ImmunizationLayout>
-      <h1>The Gambia COVID-19 Vaccination Form</h1>
-      <ImmunizationList></ImmunizationList>
-    </ImmunizationLayout>
+    <AuthHOC>
+      <ImmunizationLayout>
+        <h1>The Gambia COVID-19 Vaccination Form</h1>
+        <ImmunizationList></ImmunizationList>
+      </ImmunizationLayout>
+    </AuthHOC>
   );
 };
 
