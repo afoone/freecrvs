@@ -23,18 +23,4 @@ export default async (req, res) => {
       res.json(patients);
       break;
   }
-
-  //   if (req.method === "PUT") {
-  //     // Process a POST request
-  //     const patient = await db
-  //       .collection("patients")
-  //       .update({ _id: id }, req.body);
-  //     res.status(200).json(patient);
-  //   } else {
-  //     // Handle any other HTTP method
-  //     console.log("retrieving id", id);
-  //     const patient = await db.collection("patients").findOne({ _id: id });
-
-  //     res.json(patient);
-  //   }
 };

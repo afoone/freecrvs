@@ -1,66 +1,78 @@
-import Router from 'next/router';
-import Cookies from 'js-cookie';
+import { connectToDatabase } from "../util/mongodb";
+import { ObjectId } from "mongodb";
+const crypto = require("crypto");
+const hashingSecret = "912ec803b2ce49e4a541068d495ab570";
 
-import jwt from 'jsonwebtoken';
+export const add = async (data) => {
+  const { db } = await connectToDatabase();
+  console.log("data on post", data, typeof data);
+  const user = typeof data === "string" ? JSON.parse(data) : data;
+  const mongoResponse = await db.collection("users").insertOne(user);
+  console.log("response", mongoResponse);
+  return mongoResponse.ops[0];
+};
 
-const SECRET_KEY = process.env.JWT_KEY;
+export const list = async (offset = 0, maxResults = 10) => {
+  const { db } = await connectToDatabase();
+  if (offset) {
+    return await db
+      .collection("users")
+      .find({})
+      .skip(offset)
+      .limit(maxResults)
+      .toArray();
+  } else {
+    return await db.collection("users").find({}).limit(maxResults).toArray();
+  }
+};
 
-/*
- * @params {jwtToken} extracted from cookies
- * @return {object} object of extracted token
- */
-export function verifyToken(jwtToken) {
+export const update = async (id, data) => {
+  const user = typeof data === "string" ? JSON.parse(data) : data;
+  const { db } = await connectToDatabase();
+  const _id = new ObjectId(id);
+  await db.collection("users").updateOne({ _id: _id }, { $set: user });
+  const userNew = await db.collection("users").findOne({ _id: _id });
+  return userNew;
+};
+
+export const get = async (id) => {
+  const { db } = await connectToDatabase();
+  const _id = new ObjectId(id);
+  const userNew = await db.collection("users").findOne({ _id: _id });
+  return userNew;
+};
+
+export const deleteUser = async (id) => {
+  const { db } = await connectToDatabase();
+  const response = await db
+    .collection("users")
+    .deleteOne({ _id: new ObjectId(id) });
+  return response.result;
+};
+
+export const checkUser = async (username, password) => {
+  console.log("entrando a chequear", username, password);
+  console.log("query", { username: username });
+  const { db } = await connectToDatabase();
+  let user;
   try {
-    return jwt.verify(jwtToken, SECRET_KEY);
-  } catch (e) {
-    console.log('e:', e);
+    user = await db.collection("users").findOne({ username: username });
+    console.log(user);
+  } catch (error) {
+    console.error(error);
+  }
+
+  console.log("user retrieved", user);
+  if (passwordHash(password) === user.passwordHash) {
+    return user;
+  } else {
     return null;
   }
-}
+};
 
-/*
- * @params {request} extracted from request response
- * @return {object} object of parse jwt cookie decode object
- */
-export function getAppCookies(req) {
-  const parsedItems = {};
-  if (req.headers.cookie) {
-    const cookiesItems = req.headers.cookie.split('; ');
-    cookiesItems.forEach(cookies => {
-      const parsedItem = cookies.split('=');
-      parsedItems[parsedItem[0]] = decodeURI(parsedItem[1]);
-    });
-  }
-  return parsedItems;
-}
-
-/*
- * @params {request} extracted from request response, {setLocalhost} your localhost address
- * @return {object} objects of protocol, host and origin
- */
-export function absoluteUrl(req, setLocalhost) {
-  var protocol = 'https:';
-  var host = req
-    ? req.headers['x-forwarded-host'] || req.headers['host']
-    : window.location.host;
-  if (host.indexOf('localhost') > -1) {
-    if (setLocalhost) host = setLocalhost;
-    protocol = 'http:';
-  }
-  return {
-    protocol: protocol,
-    host: host,
-    origin: protocol + '//' + host,
-    url: req,
-  };
-}
-
-/*
- * @params {none} set action for logout and remove cookie
- * @return {function} router function to redirect
- */
-export function setLogout(e) {
-  e.preventDefault();
-  Cookies.remove('token');
-  Router.push('/login');
-}
+export const passwordHash = (password) => {
+  return crypto
+    .createHmac("sha256", hashingSecret)
+    .update(password)
+    .digest("hex");
+};
