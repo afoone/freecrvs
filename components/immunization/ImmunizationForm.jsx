@@ -2,10 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import DatePicker from "react-datepicker";
-// import { getToken } from '@client/utils/authUtils'
 import PatientData from "../PatientData";
-// import { storage } from '@client/storage'
-// import { Redirect } from 'react-router'
 import { validate } from "../validators/validator";
 import Select from "react-select";
 import {
@@ -13,7 +10,6 @@ import {
   preexistingConditions,
 } from "../extraData/multiselect";
 import { v4 as uuid } from "uuid";
-// import AddressFacilityForm from './components/AddressFacilityForm'
 import AddressForm from "../adresss/AddressForm";
 import {
   getProvincesOptions,
@@ -21,9 +17,12 @@ import {
   getNationalityOptions,
 } from "../extraData/options";
 import ImmunizationRecordForm from "./ImmunizationRecordForm";
+import { add } from "../../redux/immunizationSlice";
+import { useDispatch } from "react-redux";
 
 const ImmunizationForm = ({ id }) => {
   const router = useRouter();
+  const dispatch = useDispatch();
 
   // utils
   const [patient, setPatient] = useState({});
@@ -345,13 +344,15 @@ const ImmunizationForm = ({ id }) => {
           })
           .then(router.push("/immunization/"));
       } else {
-        axios
-          .post(url, object, {
-            headers: {
-              // Authorization: `Bearer ${getToken()}`,
-            },
-          })
-          .then(router.push("/immunization/"));
+        dispatch(add(object));
+        router.push("/immunization/");
+        // axios
+        //   .post(url, object, {
+        //     headers: {
+        //       // Authorization: `Bearer ${getToken()}`,
+        //     },
+        //   })
+        //   .then(router.push("/immunization/"));
       }
     }
     setErrors(validationErrors);

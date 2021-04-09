@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-// import { getToken } from '@client/utils/authUtils'
 import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
 
 export const getFullName = (patient) => {
   return `${patient.firstName}  ${patient.middleName} ${patient.lastName}`;
@@ -25,6 +25,7 @@ const PatientRow = ({ patient }) => {
       </td>
       <td>{patient.gender === "M" ? "Male" : "Female"}</td>
       <td>{getIdentifiers(patient)}</td>
+      <td>{!patient.pending ? "Yes" : "No"}</td>
       <td>
         <a href={`/immunization/${patient._id}`}>
           <button className="primary mini ui button">Edit</button>
@@ -66,6 +67,8 @@ const ImmunizationList = () => {
   const [searchNIN, setSearchNIN] = useState("");
   const [searchToday, setSearchToday] = useState(false);
 
+  const immunization = useSelector((state) => state.immunization);
+
   const getPatientsWithParams = (params) => {
     let url = `/api/patients/?_count=${count}&_getpagesoffset=${offset}`;
     if (params) {
@@ -79,7 +82,8 @@ const ImmunizationList = () => {
         // }
       })
       .then((res) => {
-        setPatients(res.data);
+        setPatients(immunization.concat(res.data).slice(0, count));
+
         // setTotal(res.data.data && res.data.data.total ? res.data.data.total : 0)
       });
   };
@@ -183,6 +187,7 @@ const ImmunizationList = () => {
             <th>Birth Date</th>
             <th>Gender</th>
             <th>Identifiers</th>
+            <th>Synchronized</th>
             <th>
               <a href={`/immunization/new/`}>
                 <button className="positive mini ui button">New Patient</button>
@@ -191,8 +196,8 @@ const ImmunizationList = () => {
           </tr>
         </thead>
         <tbody>
-          {patients.map((i) => (
-            <PatientRow key={i._id} patient={i} />
+          {patients.map((i, index) => (
+            <PatientRow key={index} patient={i} />
           ))}
         </tbody>
       </table>
