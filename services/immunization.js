@@ -14,6 +14,13 @@ export const add = async (data) => {
 
 export const list = async (offset = 0, maxResults = 10) => {
   const { db } = await connectToDatabase();
+  console.log(typeof offset, maxResults);
+  if (offset) {
+    offset = parseInt(offset);
+  }
+  if (maxResults) {
+    maxResults = parseInt(maxResults);
+  }
   if (offset) {
     return await db
       .collection("vaccination")

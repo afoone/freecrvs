@@ -39,11 +39,13 @@ const Layout = ({ children }) => {
           />
           <Menu.Item
             name="dashboard"
+            disabled
             active={activeItem === "dashboard"}
             onClick={handleItemClick}
           />
           <Menu.Item
             name="profile"
+            disabled
             active={activeItem === "profile"}
             onClick={handleItemClick}
           />

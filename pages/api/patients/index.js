@@ -17,9 +17,67 @@ export default async (req, res) => {
       break;
 
     default:
-      const patients = await list();
-      console.log("patients", patients);
+      const { _count, _getpagesoffset } = req.query;
+      const patients = await list(_getpagesoffset, _count);
       res.json(patients);
       break;
   }
+
+  // export async function listImmunizationHandler(
+  //   request: Hapi.Request,
+  //   h: Hapi.ResponseToolkit
+  // ): Promise<any> {
+  //   const { page } = request.params
+  //   const offset: number = page ? parseInt(page) * 10 : 0
+  //   let result
+  //   try {
+  //     result = await list(offset, 10)
+  //   } catch (err) {
+  //     console.log('Error :', err)
+  //     throw Error(err)
+  //   }
+  //   return result
+  // }
+
+  // export async function updateImmunizationHandler(
+  //   request: Hapi.Request,
+  //   h: Hapi.ResponseToolkit
+  // ): Promise<any> {
+  //   let result
+  //   try {
+  //     result = await update(request.params.id, request.payload)
+  //   } catch (err) {
+  //     console.log('Error :', err)
+  //     throw Error(err)
+  //   }
+  //   return result
+  // }
+
+  // export async function getImmunizationHandler(
+  //   request: Hapi.Request,
+  //   h: Hapi.ResponseToolkit
+  // ): Promise<any> {
+  //   let result
+  //   try {
+  //     result = await get(request.params.id)
+  //   } catch (err) {
+  //     console.log('Error :', err)
+  //     throw Error(err)
+  //   }
+  //   return result
+  // }
+
+  // export async function deleteImmunizationHandler(
+  //   request: Hapi.Request,
+  //   h: Hapi.ResponseToolkit
+  // ): Promise<any> {
+  //   let result
+  //   try {
+  //     result = await deleteImmunization(request.params.id)
+  //   } catch (err) {
+  //     console.log('Error :', err)
+  //     throw Error(err)
+  //   }
+  //   return result
+  // }
 };
