@@ -12,10 +12,6 @@ const ImmunizationRecordForm = ({
   const [aefi, setAefi] = useState(false)
 
   useEffect(() => {
-    console.log(
-      'setting aefi',
-      immunization.aefi && immunization.aefi.length > 0
-    )
     setAefi(immunization.aefi && immunization.aefi.length > 0)
   }, [immunization.aefi])
 
