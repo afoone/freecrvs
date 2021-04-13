@@ -15,13 +15,12 @@ export default async (req, res) => {
     switch (req.method) {
       case "POST":
         const patient = await add(req.body);
-        console.log(patient);
         res.json(patient);
         break;
 
       default:
         const { _count, _getpagesoffset } = req.query;
-        const patients = await list(_getpagesoffset, _count);
+        const patients = await list(_getpagesoffset, _count, {...req.query, _count: undefined, _getpagesoffset: undefined});
         res.json(patients);
         break;
     }

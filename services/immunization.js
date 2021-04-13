@@ -3,7 +3,6 @@ import { connectToDatabase } from "../util/mongodb";
 
 export const add = async (data) => {
   const { db } = await connectToDatabase();
-  console.log("data on post", data, typeof data);
   const vaccination = typeof data === "string" ? JSON.parse(data) : data;
   const mongoResponse = await db
     .collection("vaccination")
@@ -12,9 +11,21 @@ export const add = async (data) => {
   return mongoResponse.ops[0];
 };
 
-export const list = async (offset = 0, maxResults = 10) => {
+const createQuery = (query) => {
+  let newQuery = {};
+  Object.keys(query).forEach((i) => {
+    if (query[i]) {
+      console.log(i, query[i]);
+      newQuery[i] = { $regex: query[i] };
+    }
+  });
+  console.log(newQuery);
+  return newQuery;
+};
+
+export const list = async (offset = 0, maxResults = 10, query) => {
   const { db } = await connectToDatabase();
-  console.log(typeof offset, maxResults);
+  console.log("query", query);
   if (offset) {
     offset = parseInt(offset);
   }
@@ -24,7 +35,7 @@ export const list = async (offset = 0, maxResults = 10) => {
   if (offset) {
     return await db
       .collection("vaccination")
-      .find({})
+      .find(createQuery(query))
       .sort({ $natural: -1 })
       .skip(offset)
       .limit(maxResults)
@@ -32,7 +43,7 @@ export const list = async (offset = 0, maxResults = 10) => {
   } else {
     return await db
       .collection("vaccination")
-      .find({})
+      .find(createQuery(query))
       .sort({ $natural: -1 })
       .limit(maxResults)
       .toArray();
