@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Menu } from "semantic-ui-react";
 import { Container } from "semantic-ui-react";
 import { useRouter } from "next/router";
-import { route } from "next/dist/next-server/server/router";
 import OfflineBar from "../offline/OfflineBar";
+import Logout from '../auth/Logout'
 
 const Layout = ({ children }) => {
   const [activeItem, setActiveItem] = useState("home");
@@ -30,7 +30,7 @@ const Layout = ({ children }) => {
     <div className="layout">
       <OfflineBar></OfflineBar>
       <Container>
-        <Menu color="blue" inverted widths={4} attached="top">
+        <Menu  attached="top">
           <Menu.Item header>The Gambia CRVS</Menu.Item>
           <Menu.Item
             name="home"
@@ -43,12 +43,10 @@ const Layout = ({ children }) => {
             active={activeItem === "dashboard"}
             onClick={handleItemClick}
           />
-          <Menu.Item
-            name="profile"
-            disabled
-            active={activeItem === "profile"}
-            onClick={handleItemClick}
-          />
+
+          <Menu.Menu position="right">
+            <Logout></Logout>
+          </Menu.Menu>
         </Menu>
         {children}
       </Container>
