@@ -25,6 +25,7 @@ export const list = async (offset = 0, maxResults = 10) => {
     return await db
       .collection("vaccination")
       .find({})
+      .sort({ $natural: -1 })
       .skip(offset)
       .limit(maxResults)
       .toArray();
@@ -32,6 +33,7 @@ export const list = async (offset = 0, maxResults = 10) => {
     return await db
       .collection("vaccination")
       .find({})
+      .sort({ $natural: -1 })
       .limit(maxResults)
       .toArray();
   }
