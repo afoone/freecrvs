@@ -12,15 +12,8 @@ const OfflineBar = () => {
       .get("/api/patients/ping")
       .then(() => {
         setOffline(false);
-        synchronizeData();
       })
       .catch(() => setOffline(true));
-  };
-
-  const synchronizeData = () => {
-    if (immunization.length > 0)
-      dispatch(synchronizeImmunizationsThunk(immunization[0]));
-
   };
 
   const [offline, setOffline] = useState(false);
@@ -32,7 +25,7 @@ const OfflineBar = () => {
     if (currentInterval) clearInterval(currentInterval);
     setCurrentInterval(
       setInterval(() => {
-        synchronizeImmunizations();
+        dispatch(synchronizeImmunizationsThunk());
       }, 10000)
     );
     return () => {

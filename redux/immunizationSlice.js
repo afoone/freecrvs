@@ -3,12 +3,20 @@ import axios from "axios";
 
 export const synchronizeImmunizations = createAsyncThunk(
   "immunizations/syncStatus",
-  async (object, thunkAPI) => {
-    const { data } = await axios.post(`/api/patients/`, {
-      ...object,
-      pending: undefined,
-    });
-    return data;
+  async (arg, thunkAPI) => {
+    const pendingImmunizations = thunkAPI.getState().immunization;
+    console.log("thunk", arg, pendingImmunizations);
+
+    if (pendingImmunizations.length > 0) {
+      const { data } = await axios.post(`/api/patients/`, {
+        ...pendingImmunizations[0],
+        pending: undefined,
+      });
+      console.log("returned data", data);
+      return data;
+    } else {
+      return null;
+    }
   }
 );
 
@@ -25,7 +33,12 @@ export const immunizationSlice = createSlice({
   },
   extraReducers: {
     [synchronizeImmunizations.fulfilled]: (state, action) => {
-      console.log("state", state, action.payload);
+      console.log(
+        "state on fullfiled",
+        state,
+        action.payload,
+        ...state.filter((i) => action.payload.patient != i.patient)
+      );
       return [...state.filter((i) => action.payload.patient != i.patient)];
     },
   },
