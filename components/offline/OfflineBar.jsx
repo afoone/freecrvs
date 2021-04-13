@@ -29,7 +29,6 @@ const OfflineBar = () => {
       }, 10000)
     );
     return () => {
-      console.log("cleanup");
       if (currentInterval) clearInterval(currentInterval);
     };
   }, []);

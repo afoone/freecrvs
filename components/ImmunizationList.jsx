@@ -75,24 +75,17 @@ const ImmunizationList = () => {
       url += params;
     }
 
-    axios
-      .get(url, {
-        // headers: {
-        //   Authorization: `Bearer ${getToken()}`
-        // }
-      })
-      .then((res) => {
-        setPatients(immunization.concat(res.data).slice(0, count));
-
-        // setTotal(res.data.data && res.data.data.total ? res.data.data.total : 0)
-      });
+    axios.get(url).then((res) => {
+      setPatients(immunization.concat(res.data).slice(0, count));
+    });
   };
 
   useEffect(() => {
-    getPatientsWithParams();
+    searchPatients();
   }, [immunization]);
 
   const searchPatients = () => {
+    console.log("searching patients")
     let url = "";
     if (searchGiven) {
       url += `&firstName=${searchGiven}`;
