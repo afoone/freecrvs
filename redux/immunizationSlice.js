@@ -33,12 +33,9 @@ export const immunizationSlice = createSlice({
   },
   extraReducers: {
     [synchronizeImmunizations.fulfilled]: (state, action) => {
-      console.log(
-        "state on fullfiled",
-        state,
-        action.payload,
-        ...state.filter((i) => action.payload.patient != i.patient)
-      );
+      if (!action.payload){
+        return state
+      }
       return [...state.filter((i) => action.payload.patient != i.patient)];
     },
   },
