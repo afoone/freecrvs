@@ -90,7 +90,7 @@ const ImmunizationList = () => {
 
   useEffect(() => {
     getPatientsWithParams();
-  }, [count]);
+  }, [immunization]);
 
   const searchPatients = () => {
     let url = "";
