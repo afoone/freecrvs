@@ -1,6 +1,14 @@
-const withOffline = require("next-offline");
+const withOffline = require("next-pwa");
+
 
 const nextConfig = {
+  pwa: {
+    dest: 'public',
+    disable: false
+  },
+  future: {
+    webpack5: true,
+  },
   async redirects() {
     return [
       {
