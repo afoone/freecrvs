@@ -1,83 +1,29 @@
-import {
-  add,
-  list,
-  deleteImmunization,
-  update,
-  get,
-} from "../../../services/immunization";
+import { add, list } from "../../../services/immunization";
+import jwt from "next-auth/jwt";
+import { getSession } from "next-auth/client";
+
+const secret = process.env.JWT_KEY;
 
 export default async (req, res) => {
   // const { db } = await connectToDatabase();
+  const session = await getSession({ req });
+  // const token = await jwt.getToken({ req, secret });
+  console.log("session", session);
+  if (!session) {
+    res.status(401).json({ msg: "unauthorized" });
+  } else {
+    switch (req.method) {
+      case "POST":
+        const patient = await add(req.body);
+        console.log(patient);
+        res.json(patient);
+        break;
 
-  switch (req.method) {
-    case "POST":
-      const patient = await add(req.body);
-      console.log(patient);
-      res.json(patient);
-      break;
-
-    default:
-      const { _count, _getpagesoffset } = req.query;
-      const patients = await list(_getpagesoffset, _count);
-      res.json(patients);
-      break;
+      default:
+        const { _count, _getpagesoffset } = req.query;
+        const patients = await list(_getpagesoffset, _count);
+        res.json(patients);
+        break;
+    }
   }
-
-  // export async function listImmunizationHandler(
-  //   request: Hapi.Request,
-  //   h: Hapi.ResponseToolkit
-  // ): Promise<any> {
-  //   const { page } = request.params
-  //   const offset: number = page ? parseInt(page) * 10 : 0
-  //   let result
-  //   try {
-  //     result = await list(offset, 10)
-  //   } catch (err) {
-  //     console.log('Error :', err)
-  //     throw Error(err)
-  //   }
-  //   return result
-  // }
-
-  // export async function updateImmunizationHandler(
-  //   request: Hapi.Request,
-  //   h: Hapi.ResponseToolkit
-  // ): Promise<any> {
-  //   let result
-  //   try {
-  //     result = await update(request.params.id, request.payload)
-  //   } catch (err) {
-  //     console.log('Error :', err)
-  //     throw Error(err)
-  //   }
-  //   return result
-  // }
-
-  // export async function getImmunizationHandler(
-  //   request: Hapi.Request,
-  //   h: Hapi.ResponseToolkit
-  // ): Promise<any> {
-  //   let result
-  //   try {
-  //     result = await get(request.params.id)
-  //   } catch (err) {
-  //     console.log('Error :', err)
-  //     throw Error(err)
-  //   }
-  //   return result
-  // }
-
-  // export async function deleteImmunizationHandler(
-  //   request: Hapi.Request,
-  //   h: Hapi.ResponseToolkit
-  // ): Promise<any> {
-  //   let result
-  //   try {
-  //     result = await deleteImmunization(request.params.id)
-  //   } catch (err) {
-  //     console.log('Error :', err)
-  //     throw Error(err)
-  //   }
-  //   return result
-  // }
 };
