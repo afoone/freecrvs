@@ -1,49 +1,54 @@
-import React from 'react'
+import React, { useState } from "react";
 import {
   getProvincesOptions,
   getDistrictOptions,
-  getFacilitiesOptions
-} from '../extraData/options'
-import { v4 as uuid } from 'uuid'
+  getFacilitiesOptions,
+} from "../extraData/options";
+import { v4 as uuid } from "uuid";
 
 const AddressFacilityForm = ({
   address = {},
   setAddress,
   errors = {},
-  title = 'Addressss'
+  title = "Addressss",
 }) => {
-  const radioButtonHandler = e => {
-    setAddress({ ...address, addressType: e.target.value })
-  }
+  const [addressType, setAddressType] = useState("facility");
 
-  const formId = uuid()
+  const radioButtonHandler = (e) => {
+    console.log("ratiod on ", e.target.value);
+    setAddressType(e.target.value);
+  };
+
+  const formId = uuid();
   return (
     <>
       <h4 className="ui dividing header">{title}</h4>
       <div className="ui segment">
         <div className="inline fields">
           <div className="field">
-            <div className="ui radio checkbox">
+            <div
+              className="ui radio checkbox"
+              onClick={() => setAddressType("facility")}
+            >
               <input
                 type="radio"
                 name={formId}
-                value="facility"
                 className="hidden"
-                checked={address.addressType === 'facility'}
-                onChange={radioButtonHandler}
+                checked={addressType === "facility"}
               />
               <label>Facility</label>
             </div>
           </div>
           <div className="field">
-            <div className="ui radio checkbox">
+            <div
+              className="ui radio checkbox"
+              onClick={() => setAddressType("address")}
+            >
               <input
                 type="radio"
                 name={formId}
-                value="address"
                 className="hidden"
-                checked={address.addressType === 'address'}
-                onChange={radioButtonHandler}
+                checked={addressType === "address"}
               />
               <label>Other Address</label>
             </div>
@@ -55,10 +60,10 @@ const AddressFacilityForm = ({
             <select
               className="ui fluid dropdown"
               value={address.province}
-              onChange={e =>
+              onChange={(e) =>
                 setAddress({
                   ...address,
-                  province: e.target.value
+                  province: e.target.value,
                 })
               }
             >
@@ -73,10 +78,10 @@ const AddressFacilityForm = ({
               <select
                 className="ui fluid dropdown"
                 value={address.district}
-                onChange={e =>
+                onChange={(e) =>
                   setAddress({
                     ...address,
-                    district: e.target.value
+                    district: e.target.value,
                   })
                 }
               >
@@ -85,32 +90,32 @@ const AddressFacilityForm = ({
               </select>
             </div>
           )}
-          {address.district && address.addressType !== 'facility' && (
+          {address.district && addressType !== "facility" && (
             <div className="eight wide field">
               <label>Place</label>
               <input
                 type="text"
                 value={address.place}
-                onChange={e =>
+                onChange={(e) =>
                   setAddress({
                     ...address,
-                    place: e.target.value
+                    place: e.target.value,
                   })
                 }
               />
               {errors.place && <div className="error">{errors.place}</div>}
             </div>
           )}
-          {address.district && address.addressType === 'facility' && (
+          {address.district && addressType === "facility" && (
             <div className="eight wide field">
               <label>Facility</label>
               <select
                 className="ui fluid dropdown"
                 value={address.facility}
-                onChange={e =>
+                onChange={(e) =>
                   setAddress({
                     ...address,
-                    facility: e.target.value
+                    facility: e.target.value,
                   })
                 }
               >
@@ -122,7 +127,7 @@ const AddressFacilityForm = ({
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default AddressFacilityForm
+export default AddressFacilityForm;
