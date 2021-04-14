@@ -19,6 +19,7 @@ import {
 import ImmunizationRecordForm from "./ImmunizationRecordForm";
 import { add } from "../../redux/immunizationSlice";
 import { useDispatch } from "react-redux";
+import AddressFacilityForm from "../adresss/AddressFacilityForm";
 
 const ImmunizationForm = ({ id }) => {
   const router = useRouter();
@@ -222,8 +223,7 @@ const ImmunizationForm = ({ id }) => {
       });
   }, []);
 
-  const savePatient = (e) => {
-    e.preventDefault();
+  const savePatient = (createNew = false) => {
     const url = `/api/patients/`;
     console.log("patient to save vaccination 2nd dose", vaccinationSecondDose);
     const object = {
@@ -275,14 +275,16 @@ const ImmunizationForm = ({ id }) => {
 
     const validationErrors = validate(object, validations);
 
+    const redirectUrl = createNew ? "/immunization/new" : "/immunization/";
+
     if (Object.keys(validationErrors).length < 1) {
       if (patient._id) {
         axios
           .put(url + `${patient._id}/`, object)
-          .then(router.push("/immunization/"));
+          .then(router.push(redirectUrl));
       } else {
         dispatch(add(object));
-        router.push("/immunization/");
+        router.push(redirectUrl);
       }
     }
     setErrors(validationErrors);
@@ -422,139 +424,13 @@ const ImmunizationForm = ({ id }) => {
             />
           </div>
         </div>
-        <h5>Place of delivery</h5>
-        <div className="inline fields">
-          <div className="field">
-            <div className="ui radio checkbox">
-              <input
-                type="radio"
-                name="patient-address"
-                value="facility"
-                className="hidden"
-                checked={placeOfDelivery.addressType === "facility"}
-                onChange={(e) =>
-                  setPlaceOfDelivery({
-                    ...placeOfDelivery,
-                    addressType: e.target.value,
-                  })
-                }
-              />
-              <label>Facility</label>
-            </div>
-          </div>
-          <div className="field">
-            <div className="ui radio checkbox">
-              <input
-                type="radio"
-                name="patient-address"
-                value="address"
-                className="hidden"
-                checked={placeOfDelivery.addressType === "address"}
-                onChange={(e) =>
-                  setPlaceOfDelivery({
-                    ...placeOfDelivery,
-                    addressType: e.target.value,
-                  })
-                }
-              />
-              <label>Other Address</label>
-            </div>
-          </div>
-        </div>
-        <div className="fields">
-          <div className="four wide field">
-            <label>Region</label>
-            <select
-              className="ui fluid dropdown"
-              value={placeOfDelivery.province}
-              onChange={(e) =>
-                setPlaceOfDelivery({
-                  ...placeOfDelivery,
-                  province: e.target.value,
-                })
-              }
-            >
-              <option></option>
-              {getProvincesOptions()}
-            </select>
-            {errors.placeOfDelivery && (
-              <div className="error">{errors.placeOfDelivery}</div>
-            )}
-          </div>
-          {placeOfDelivery.province && (
-            <div className="four wide field">
-              <label>District</label>
-              <select
-                className="ui fluid dropdown"
-                value={placeOfDelivery.district}
-                onChange={(e) =>
-                  setPlaceOfDelivery({
-                    ...placeOfDelivery,
-                    district: e.target.value,
-                  })
-                }
-              >
-                <option></option>
-                {getDistrictOptions(placeOfDelivery.province)}
-              </select>
-            </div>
-          )}
-          {placeOfDelivery.district &&
-            placeOfDelivery.addressType !== "facility" && (
-              <div className="eight wide field">
-                <label>Place</label>
-                <input
-                  type="text"
-                  value={placeOfDelivery.place}
-                  onChange={(e) =>
-                    setPlaceOfDelivery({
-                      ...placeOfDelivery,
-                      place: e.target.value,
-                    })
-                  }
-                />
-                {errors.place && <div className="error">{errors.place}</div>}
-              </div>
-            )}
-          {placeOfDelivery.district &&
-            placeOfDelivery.addressType === "facility" && (
-              <div className="eight wide field">
-                <label>Facility</label>
-                <select
-                  className="ui fluid dropdown"
-                  value={facility}
-                  onChange={(e) => setFacility(e.target.value)}
-                >
-                  <option></option>
-                  {facilities
-                    .sort((i, j) => (i.name > j.name ? 1 : -1))
-                    .map((f) => (
-                      <option key={f.id} value={f.id}>
-                        {f.name}
-                      </option>
-                    ))}
-                </select>
-              </div>
-            )}
-        </div>
-        <div className="two fields">
-          <div className="field">
-            <label>Place of Work</label>
-            <input
-              type="text"
-              value={placeOfWork}
-              onChange={(e) => setPlaceOfWork(e.target.value)}
-            />
-          </div>
-          <div className="field">
-            <label>Occupation</label>
-            <input
-              type="text"
-              value={patientOccupation}
-              onChange={(e) => setPatientOccupation(e.target.value)}
-            />
-          </div>
-        </div>
+
+        <AddressFacilityForm
+          title="Place of delivery"
+          setAddress={setPlaceOfDelivery}
+          address={placeOfDelivery}
+          errors={errors}
+        />
         <div className="two fields">
           <div className="field">
             <label>
@@ -812,7 +688,15 @@ const ImmunizationForm = ({ id }) => {
           errors={errors}
         ></ImmunizationRecordForm>
         <div style={{ display: "flex", flexDirection: "row-reverse" }}>
-          <button className="ui button positive" onClick={savePatient}>
+          {!patient._id && (
+            <button
+              className="ui button positive"
+              onClick={() => savePatient(true)}
+            >
+              Save and create other copying data
+            </button>
+          )}
+          <button className="ui button positive" onClick={() => savePatient()}>
             {patient._id ? "Update Patient" : "Save"}
           </button>
           <a href="/immunization">
