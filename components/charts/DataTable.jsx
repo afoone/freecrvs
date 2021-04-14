@@ -17,7 +17,7 @@ const DataTable = ({ title, data }) => {
         {data
           .sort((a, b) => (a.name > b.name ? 1 : -1))
           .map((i) => (
-            <Table.Row>
+            <Table.Row key={i.name}>
               <Table.Cell>{i.name || "Unknown"}</Table.Cell>
               <Table.Cell>{i.value}</Table.Cell>
             </Table.Row>
