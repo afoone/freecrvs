@@ -22,9 +22,16 @@ const ImmunizationRecordForm = ({
         <div className="ui field">
           <label>Date of giving</label>
           <div className="datepicker-full">
+            {/* first dose date for compatibility with version 1.0 */}
             <DatePicker
               dateFormat="dd/MM/yyyy"
-              selected={immunization.date ? new Date(immunization.date) : null}
+              selected={
+                immunization.date
+                  ? new Date(immunization.date)
+                  : immunization.firstDoseDate
+                  ? new Date(immunization.firstDoseDate)
+                  : null
+              }
               onChange={(date) =>
                 setImmunization({
                   ...immunization,
@@ -161,9 +168,9 @@ const ImmunizationRecordForm = ({
         )}
       </div>
       <AddressFacilityForm
-        address={immunization.placeOfVaccination}
+        address={immunization.placeofVaccination}
         setAddress={(address) =>
-          setImmunization({ ...immunization, placeOfVaccination: address })
+          setImmunization({ ...immunization, placeofVaccination: address })
         }
         title="Place of Vaccination"
       ></AddressFacilityForm>

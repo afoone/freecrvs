@@ -36,6 +36,8 @@ const ImmunizationForm = ({ id }) => {
   // const [informantRelationship, setinformantRelationship] = useState('')
   const [phoneNumber, setPhoneNumber] = useState("");
 
+  // Vaccination 1st Dose
+  const [vaccinationFirstDose, setvaccinationFirstDose] = useState({});
   // Vaccination 2nd dose
   const [vaccinationSecondDose, setVaccinationSecondDose] = useState({});
 
@@ -125,25 +127,6 @@ const ImmunizationForm = ({ id }) => {
   const [fatherResidentialAddress, setFatherResidentialAddress] = useState({});
   const [fatherNIN, setFatherNIN] = useState("");
 
-  // Vaccination
-  const [firstDoseDate, setFirstDoseDate] = useState(new Date());
-  const [nameOfTheVaccine, setNameOfTheVaccine] = useState("");
-  const [batchNumber, setBatchNumber] = useState("");
-  const [serialNumber, setSerialNumber] = useState("");
-  const [expirydate, setExpirydate] = useState(new Date());
-  const [dateOfNextVisit, setDateOfNextVisit] = useState(new Date());
-  const [vaccinatorFullName, setVaccinatorFullName] = useState("");
-  const [aefi, setAefi] = useState(false);
-  const [aefiSeverity, setAefiSeverity] = useState("severe");
-  const [aefiDescription, setAefiDescription] = useState("");
-  const [addressType, setAddressType] = useState("facility");
-  const [provinces, setProvinces] = useState([]);
-  const [districts, setDistricts] = useState([]);
-  const [province, setProvince] = useState("");
-  const [district, setDistrict] = useState("");
-  const [facility, setFacility] = useState("");
-  const [place, setPlace] = useState("");
-
   // Errors
   const [errors, setErrors] = useState({});
 
@@ -168,10 +151,6 @@ const ImmunizationForm = ({ id }) => {
     setFirstName(patient.firstName);
     setLastName(patient.lastName);
     setMiddleName(patient.middleName);
-    setAddressType(
-      patient.address && patient.address.address ? "address" : "facility"
-    );
-
     setPatientAddress(patient.address);
     setNIN(patient.NIN);
     setAttendantAtBirth(patient.attendantAtBirth);
@@ -192,11 +171,17 @@ const ImmunizationForm = ({ id }) => {
     setMotherDateOfBirth(
       patient.mother.dateOfBirth && new Date(patient.mother.dateOfBirth)
     );
+    const vaccinationDose1 =
+      patient.vaccination && patient.vaccination.length > 0
+        ? patient.vaccination[0]
+        : {};
     const vaccinationDose2 =
       patient.vaccination && patient.vaccination.length > 1
         ? patient.vaccination[1]
         : {};
-    console.log("2nd dose vaccionation retrieved", vaccinationDose2);
+    console.log("1st dose vaccionation retrieved", vaccinationDose1);
+
+    setvaccinationFirstDose(vaccinationDose1);
     setVaccinationSecondDose(vaccinationDose2);
     setPatientVaccineRegisterNumber(patient.patientVaccineRegisterNumber);
     setMotherNationality(patient.mother.nationality);
@@ -218,29 +203,6 @@ const ImmunizationForm = ({ id }) => {
     );
     setPatientPriorityGroups(patient.priorityGroups);
     setPatientPreviousAllergicReaction(patient.patientPreviousAllergicReaction);
-    setAefiDescription(patient.vaccination[0].aefi[0].aefiDescription);
-    setAefiSeverity(patient.vaccination[0].aefi[0].aefiSeverity);
-    setAefi(!!patient.vaccination[0].aefi[0].aefiDescription);
-    setBatchNumber(patient.vaccination[0].batchNumber);
-    setDateOfNextVisit(
-      patient.vaccination[0].dateOfNextVisit &&
-        new Date(patient.vaccination[0].dateOfNextVisit)
-    );
-    setExpirydate(
-      patient.vaccination[0].expirydate &&
-        new Date(patient.vaccination[0].expirydate)
-    );
-    setFirstDoseDate(
-      patient.vaccination[0].firstDoseDate &&
-        new Date(patient.vaccination[0].firstDoseDate)
-    );
-    setFacility(patient.vaccination[0].placeofVaccination.facility);
-    setDistrict(patient.vaccination[0].placeofVaccination.district);
-    setPlace(patient.vaccination[0].placeofVaccination.place);
-    setProvince(patient.vaccination[0].placeofVaccination.province);
-    setSerialNumber(patient.vaccination[0].serialNumber);
-    setNameOfTheVaccine(patient.vaccination[0].nameOfTheVaccine);
-    setVaccinatorFullName(patient.vaccination[0].vaccinatorFullName);
   };
 
   useEffect(() => {
@@ -260,14 +222,10 @@ const ImmunizationForm = ({ id }) => {
       });
   }, []);
 
-  const radioButtonHandler = (e) => {
-    setAddressType(e.target.value);
-  };
-
   const savePatient = (e) => {
     e.preventDefault();
     const url = `/api/patients/`;
-    console.log("patient to save vaccination 2nd dose", vaccinationSecondDose )
+    console.log("patient to save vaccination 2nd dose", vaccinationSecondDose);
     const object = {
       patient: patient.id ? patient.id : uuid(),
       // informant,
@@ -292,25 +250,7 @@ const ImmunizationForm = ({ id }) => {
       placeOfDelivery,
       address: patientAddress,
       occupation: patientOccupation,
-      vaccination: [
-        {
-          firstDoseDate,
-          nameOfTheVaccine,
-          batchNumber,
-          serialNumber,
-          expirydate,
-          dateOfNextVisit,
-          vaccinatorFullName,
-          aefi: [{ aefiSeverity, aefiDescription }],
-          placeofVaccination: {
-            facility,
-            province,
-            district,
-            place,
-          },
-        },
-        vaccinationSecondDose,
-      ],
+      vaccination: [vaccinationFirstDose, vaccinationSecondDose],
       mother: {
         firstName: motherFirstName,
         middleName: motherMiddleName,
@@ -866,258 +806,12 @@ const ImmunizationForm = ({ id }) => {
             ></AddressForm>
           </>
         )}
-        <h2 className="ui dividing header">Vaccination Data - 1st Dose</h2>
-        <div className="two fields">
-          <div className="ui field">
-            <label>Date of giving (1st dose)</label>
-            <div className="datepicker-full">
-              <DatePicker
-                isClearable
-                dateFormat="dd/MM/yyyy"
-                selected={firstDoseDate}
-                onChange={(date) => setFirstDoseDate(date)}
-              />
-            </div>
-            {errors.firstDoseDate && (
-              <div className="error">{errors.firstDoseDate}</div>
-            )}
-          </div>
-          <div className="ui field">
-            <label>Date of Next Visit (2nd Dose)</label>
-            <div className="datepicker-full">
-              <DatePicker
-                isClearable
-                dateFormat="dd/MM/yyyy"
-                selected={dateOfNextVisit}
-                onChange={(date) => setDateOfNextVisit(date)}
-              />
-            </div>
-            {errors.dateOfNextVisit && (
-              <div className="error">{errors.dateOfNextVisit}</div>
-            )}
-          </div>
-        </div>
-        <div className="three fields">
-          <div className="ui field">
-            <label>Name of the vaccine</label>
-            <select
-              name="last-name"
-              value={nameOfTheVaccine}
-              className="ui dropdown"
-              required
-              onChange={(e) => setNameOfTheVaccine(e.target.value)}
-              placeholder="Name of the vaccine"
-            >
-              <option></option>
-              <option>Astrazeneca</option>
-              <option>Pfizer-BioNTech</option>
-              <option>Moderna</option>
-              <option>NovaVax</option>
-              <option>Jhonson&Jhonson - Jansen</option>
-            </select>
-            {errors.nameOfTheVaccine && (
-              <div className="error">{errors.nameOfTheVaccine}</div>
-            )}
-          </div>
-
-          <div className="ui field">
-            <label>Batch Number</label>
-            <input
-              type="text"
-              name="last-name"
-              value={batchNumber}
-              required
-              onChange={(e) => setBatchNumber(e.target.value)}
-              placeholder="Batch Number"
-            ></input>
-            {errors.batchNumber && (
-              <div className="error">{errors.batchNumber}</div>
-            )}
-          </div>
-          <div className="ui field">
-            <label>Serial Number</label>
-            <input
-              type="text"
-              name="last-name"
-              value={serialNumber}
-              required
-              onChange={(e) => setSerialNumber(e.target.value)}
-              placeholder="Serial Number"
-            ></input>
-            {errors.serialNumber && (
-              <div className="error">{errors.serialNumber}</div>
-            )}
-          </div>
-          <div className="ui field">
-            <label>Expiry Date</label>
-            <div className="datepicker-full">
-              <DatePicker
-                isClearable
-                dateFormat="dd/MM/yyyy"
-                selected={expirydate}
-                onChange={(date) => setExpirydate(date)}
-              />
-            </div>
-            {errors.expirydate && (
-              <div className="error">{errors.expirydate}</div>
-            )}
-          </div>
-        </div>
-        <div className="ui field">
-          <label>Vaccinator Full Name</label>
-          <input
-            type="text"
-            name="last-name"
-            value={vaccinatorFullName}
-            required
-            onChange={(e) => setVaccinatorFullName(e.target.value)}
-            placeholder="Vaccinator FullName"
-          />
-          {errors.vaccinatorFullName && (
-            <div className="error">{errors.vaccinatorFullName}</div>
-          )}
-        </div>
-        <h4 className="ui dividing header">Place of vaccination</h4>
-        <div className="inline fields">
-          <div className="field">
-            <div className="ui radio checkbox">
-              <input
-                type="radio"
-                name="address"
-                value="facility"
-                className="hidden"
-                checked={addressType === "facility"}
-                onChange={radioButtonHandler}
-              />
-              <label>Facility</label>
-            </div>
-          </div>
-          <div className="field">
-            <div className="ui radio checkbox">
-              <input
-                type="radio"
-                name="address"
-                value="address"
-                className="hidden"
-                checked={addressType === "address"}
-                onChange={radioButtonHandler}
-              />
-              <label>Other Address</label>
-            </div>
-          </div>
-        </div>
-        <div className="fields">
-          <div className="four wide field">
-            <label>Region</label>
-            <select
-              className="ui fluid dropdown"
-              value={province}
-              onChange={(e) => setProvince(e.target.value)}
-            >
-              <option></option>
-              {provinces
-                .sort((i, j) => (i.name > j.name ? 1 : -1))
-                .map((f) => (
-                  <option key={f.id} value={f.id}>
-                    {f.name}
-                  </option>
-                ))}
-            </select>
-            {errors.province && <div className="error">{errors.province}</div>}
-          </div>
-          {province && (
-            <div className="four wide field">
-              <label>District</label>
-              <select
-                className="ui fluid dropdown"
-                value={district}
-                onChange={(e) => setDistrict(e.target.value)}
-              >
-                <option></option>
-                {districts
-                  .filter((d) => d.partOf === `Location/${province}`)
-                  .sort((i, j) => (i.name > j.name ? 1 : -1))
-                  .map((f) => (
-                    <option key={f.id} value={f.id}>
-                      {f.name}
-                    </option>
-                  ))}
-              </select>
-              {errors.district && (
-                <div className="error">{errors.district}</div>
-              )}
-            </div>
-          )}
-          {district && addressType !== "facility" && (
-            <div className="eight wide field">
-              <label>Place</label>
-              <input
-                type="text"
-                value={place}
-                onChange={(e) => setPlace(e.target.value)}
-              />
-              {errors.place && <div className="error">{errors.place}</div>}
-            </div>
-          )}
-          {district && addressType === "facility" && (
-            <div className="eight wide field">
-              <label>Facility</label>
-              <select
-                className="ui fluid dropdown"
-                value={facility}
-                onChange={(e) => setFacility(e.target.value)}
-              >
-                <option></option>
-                {facilities
-                  .sort((i, j) => (i.name > j.name ? 1 : -1))
-                  .map((f) => (
-                    <option key={f.id} value={f.id}>
-                      {f.name}
-                    </option>
-                  ))}
-              </select>
-              {errors.facility && (
-                <div className="error">{errors.facility}</div>
-              )}
-            </div>
-          )}
-        </div>
-        <h4 className="ui dividing header">Adverse effect</h4>
-        <div className="ui field">
-          <div className="two fields">
-            <div className="ui field">
-              <input
-                type="checkbox"
-                checked={aefi}
-                onChange={(e) => setAefi(!aefi)}
-              ></input>{" "}
-              Adverse Event Following Immunization
-            </div>
-          </div>
-        </div>
-        {aefi && (
-          <div className="fields">
-            <div className="three wide field">
-              <label>Severity</label>
-              <select
-                className="ui fluid dropdown"
-                value={aefiSeverity}
-                onChange={(e) => setAefiSeverity(e.target.value)}
-              >
-                <option value="severe">Severe</option>
-                <option value="minor">Minor</option>
-              </select>
-            </div>
-            <div className="thirteen wide field">
-              <label>AEFI description</label>
-              <input
-                type="text"
-                value={aefiDescription}
-                onChange={(e) => setAefiDescription(e.target.value)}
-              />
-            </div>
-          </div>
-        )}
+        <ImmunizationRecordForm
+          title="Vaccination Data (1st Dose)"
+          setImmunization={setvaccinationFirstDose}
+          immunization={vaccinationFirstDose}
+          errors={errors}
+        />
         <ImmunizationRecordForm
           title="Vaccination Data (2nd Dose)"
           setImmunization={setVaccinationSecondDose}
