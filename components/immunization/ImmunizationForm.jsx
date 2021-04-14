@@ -283,13 +283,6 @@ const ImmunizationForm = ({ id }) => {
       } else {
         dispatch(add(object));
         router.push("/immunization/");
-        // axios
-        //   .post(url, object, {
-        //     headers: {
-        //       // Authorization: `Bearer ${getToken()}`,
-        //     },
-        //   })
-        //   .then(router.push("/immunization/"));
       }
     }
     setErrors(validationErrors);
@@ -297,7 +290,6 @@ const ImmunizationForm = ({ id }) => {
 
   return (
     <div className="container two-columns">
-      {/* {redirect && <Redirect to="/immunization" />} */}
       {patient && <PatientData patient={patient} />}
       <div className="register-form ui form">
         <h2 className="ui dividing header">Patient Data</h2>
@@ -811,6 +803,7 @@ const ImmunizationForm = ({ id }) => {
           setImmunization={setvaccinationFirstDose}
           immunization={vaccinationFirstDose}
           errors={errors}
+          nextVisit
         />
         <ImmunizationRecordForm
           title="Vaccination Data (2nd Dose)"

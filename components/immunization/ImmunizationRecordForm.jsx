@@ -15,6 +15,11 @@ const ImmunizationRecordForm = ({
     setAefi(immunization.aefi && immunization.aefi.length > 0);
   }, [immunization.aefi]);
 
+  useEffect(() => {
+    if (immunization.firstDoseDate)
+      setImmunization({ ...immunization, date: immunization.firstDoseDate });
+  }, []);
+
   return (
     <div>
       <h2 className="ui dividing header">{title}</h2>
@@ -25,13 +30,7 @@ const ImmunizationRecordForm = ({
             {/* first dose date for compatibility with version 1.0 */}
             <DatePicker
               dateFormat="dd/MM/yyyy"
-              selected={
-                immunization.date
-                  ? new Date(immunization.date)
-                  : immunization.firstDoseDate
-                  ? new Date(immunization.firstDoseDate)
-                  : null
-              }
+              selected={immunization.date ? new Date(immunization.date) : null}
               onChange={(date) =>
                 setImmunization({
                   ...immunization,
