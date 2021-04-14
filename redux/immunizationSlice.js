@@ -5,8 +5,6 @@ export const synchronizeImmunizations = createAsyncThunk(
   "immunizations/syncStatus",
   async (arg, thunkAPI) => {
     const pendingImmunizations = thunkAPI.getState().immunization;
-    console.log("thunk", arg, pendingImmunizations);
-
     if (pendingImmunizations.length > 0) {
       const { data } = await axios.post(`/api/patients/`, {
         ...pendingImmunizations[0],
@@ -33,8 +31,8 @@ export const immunizationSlice = createSlice({
   },
   extraReducers: {
     [synchronizeImmunizations.fulfilled]: (state, action) => {
-      if (!action.payload){
-        return state
+      if (!action.payload) {
+        return state;
       }
       return [...state.filter((i) => action.payload.patient != i.patient)];
     },
