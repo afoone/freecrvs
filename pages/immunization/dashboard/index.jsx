@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Table } from "semantic-ui-react";
 import AuthHOC from "../../../components/auth/AuthHOC";
 import axios from "axios";
+import PieChart from "../../../components/charts/PieChart";
+import DataTable from "../../../components/charts/DataTable";
 
 const Dashboard = () => {
   const [totalVaccines, setTotalVaccines] = useState([]);
@@ -9,32 +10,18 @@ const Dashboard = () => {
   useEffect(() => {
     axios
       .get("/api/patients/dashboard/total")
-      .then((res) => setTotalVaccines(res.data));
+      .then((res) =>
+        setTotalVaccines(res.data.map((i) => ({ name: i._id, value: i.count })))
+      );
   }, []);
 
   return (
     <AuthHOC>
       <h1>The Gambia COVID-19 Vaccination Dashboard</h1>
-
-      <Table celled>
-        <Table.Header>
-          <Table.Row  >
-            <Table.HeaderCell  >Total vaccines given</Table.HeaderCell>
-          </Table.Row>
-          <Table.Row>
-            <Table.HeaderCell>Vaccine</Table.HeaderCell>
-            <Table.HeaderCell>Total</Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          {totalVaccines.map((i) => (
-            <Table.Row>
-              <Table.Cell>{i._id || "Unknown"}</Table.Cell>
-              <Table.Cell>{i.count}</Table.Cell>
-            </Table.Row>
-          ))}
-        </Table.Body>
-      </Table>
+      <div style={{ display: "grid", gridTemplateColumns: "auto auto" }}>
+        <DataTable title="Total doses administered" data={totalVaccines} />
+        <PieChart data={totalVaccines}></PieChart>
+      </div>
     </AuthHOC>
   );
 };

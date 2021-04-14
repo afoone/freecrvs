@@ -1,4 +1,5 @@
 import { ObjectId } from "mongodb";
+
 import { connectToDatabase } from "../util/mongodb";
 
 export const getByGender = async () => {
