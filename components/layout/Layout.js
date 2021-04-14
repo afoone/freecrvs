@@ -16,7 +16,7 @@ const Layout = ({ children }) => {
         router.push("/immunization/");
         break;
       case "dashboard":
-        router.push("/dashboard/");
+        router.push("/immunization/dashboard/");
         break;
       case "profile":
         router.push("/profile/");
@@ -39,7 +39,6 @@ const Layout = ({ children }) => {
           />
           <Menu.Item
             name="dashboard"
-            disabled
             active={activeItem === "dashboard"}
             onClick={handleItemClick}
           />
