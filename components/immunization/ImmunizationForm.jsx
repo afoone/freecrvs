@@ -267,6 +267,7 @@ const ImmunizationForm = ({ id }) => {
   const savePatient = (e) => {
     e.preventDefault();
     const url = `/api/patients/`;
+    console.log("patient to save vaccination 2nd dose", vaccinationSecondDose )
     const object = {
       patient: patient.id ? patient.id : uuid(),
       // informant,
@@ -337,11 +338,7 @@ const ImmunizationForm = ({ id }) => {
     if (Object.keys(validationErrors).length < 1) {
       if (patient._id) {
         axios
-          .put(url + `${patient._id}/`, object, {
-            headers: {
-              // Authorization: `Bearer ${getToken()}`,
-            },
-          })
+          .put(url + `${patient._id}/`, object)
           .then(router.push("/immunization/"));
       } else {
         dispatch(add(object));

@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from 'react'
-import DatePicker from 'react-datepicker'
-import AddressFacilityForm from '../adresss/AddressFacilityForm'
+import React, { useEffect, useState } from "react";
+import DatePicker from "react-datepicker";
+import AddressFacilityForm from "../adresss/AddressFacilityForm";
 
 const ImmunizationRecordForm = ({
   title,
   immunization,
   setImmunization,
   errors,
-  nextVisit
+  nextVisit,
 }) => {
-  const [aefi, setAefi] = useState(false)
+  const [aefi, setAefi] = useState(false);
 
   useEffect(() => {
-    setAefi(immunization.aefi && immunization.aefi.length > 0)
-  }, [immunization.aefi])
+    setAefi(immunization.aefi && immunization.aefi.length > 0);
+  }, [immunization.aefi]);
 
   return (
     <div>
@@ -25,10 +25,10 @@ const ImmunizationRecordForm = ({
             <DatePicker
               dateFormat="dd/MM/yyyy"
               selected={immunization.date ? new Date(immunization.date) : null}
-              onChange={date =>
+              onChange={(date) =>
                 setImmunization({
                   ...immunization,
-                  date
+                  date,
                 })
               }
             />
@@ -49,11 +49,11 @@ const ImmunizationRecordForm = ({
                     ? new Date(immunization.dateOfNextVisit)
                     : null
                 }
-                onChange={date =>
+                onChange={(date) =>
                   setImmunization({ ...immunization, dateOfNextVisit: date })
                 }
               />
-            </div>{' '}
+            </div>{" "}
             {errors.dateOfNextVisit && (
               <div className="error">{errors.dateOfNextVisit}</div>
             )}
@@ -68,10 +68,10 @@ const ImmunizationRecordForm = ({
             value={immunization.nameOfTheVaccine}
             className="ui dropdown"
             required
-            onChange={e =>
+            onChange={(e) =>
               setImmunization({
                 ...immunization,
-                nameOfTheVaccine: e.target.value
+                nameOfTheVaccine: e.target.value,
               })
             }
             placeholder="Name of the vaccine"
@@ -95,7 +95,7 @@ const ImmunizationRecordForm = ({
             name="last-name"
             value={immunization.batchNumber}
             required
-            onChange={e =>
+            onChange={(e) =>
               setImmunization({ ...immunization, batchNumber: e.target.value })
             }
             placeholder="Batch Number"
@@ -111,7 +111,7 @@ const ImmunizationRecordForm = ({
             name="last-name"
             value={immunization.serialNumber}
             required
-            onChange={e =>
+            onChange={(e) =>
               setImmunization({ ...immunization, serialNumber: e.target.value })
             }
             placeholder="Serial Number"
@@ -131,7 +131,7 @@ const ImmunizationRecordForm = ({
                   ? new Date(immunization.expirydate)
                   : null
               }
-              onChange={date =>
+              onChange={(date) =>
                 setImmunization({ ...immunization, expirydate: date })
               }
             />
@@ -148,10 +148,10 @@ const ImmunizationRecordForm = ({
           name="last-name"
           value={immunization.vaccinatorFullName}
           required
-          onChange={e =>
+          onChange={(e) =>
             setImmunization({
               ...immunization,
-              vaccinatorFullName: e.target.value
+              vaccinatorFullName: e.target.value,
             })
           }
           placeholder="Vaccinator FullName"
@@ -162,7 +162,7 @@ const ImmunizationRecordForm = ({
       </div>
       <AddressFacilityForm
         address={immunization.placeOfVaccination}
-        setAddress={address =>
+        setAddress={(address) =>
           setImmunization({ ...immunization, placeOfVaccination: address })
         }
         title="Place of Vaccination"
@@ -170,16 +170,15 @@ const ImmunizationRecordForm = ({
       <h4 className="ui dividing header">Adverse effect</h4>
       <div className="ui field">
         <div className="two fields">
-          <div className="ui field">
-            <input
-              type="checkbox"
-              checked={aefi}
-              onChange={() => {
-                setAefi(!aefi)
-                setImmunization({ ...immunization, aefi: [] })
-              }}
-            ></input>
-            Adverse Event Following Immunization
+          <div
+            className="ui field"
+            onClick={() => {
+              setAefi(!aefi);
+              if (aefi) setImmunization({ ...immunization, aefi: [] });
+            }}
+          >
+            <input type="checkbox" checked={aefi}></input> Adverse Event
+            Following Immunization
           </div>
         </div>
       </div>
@@ -192,14 +191,16 @@ const ImmunizationRecordForm = ({
               value={
                 immunization.aefi && immunization.aefi.length > 0
                   ? immunization.aefi[0].aefiSeverity
-                  : ''
+                  : ""
               }
-              onChange={e =>
+              onChange={(e) => {
                 setImmunization({
                   ...immunization,
-                  aefi: [{ ...aefi[0], aefiSeverity: e.target.value }]
-                })
-              }
+                  aefi: [
+                    { ...immunization.aefi[0], aefiSeverity: e.target.value },
+                  ],
+                });
+              }}
             >
               <option value="severe">Severe</option>
               <option value="minor">Minor</option>
@@ -212,12 +213,17 @@ const ImmunizationRecordForm = ({
               value={
                 immunization.aefi && immunization.aefi.length > 0
                   ? immunization.aefi[0].aefiDescription
-                  : ''
+                  : ""
               }
-              onChange={e =>
+              onChange={(e) =>
                 setImmunization({
                   ...immunization,
-                  aefi: [{ ...aefi[0], aefiDescription: e.target.value }]
+                  aefi: [
+                    {
+                      ...immunization.aefi[0],
+                      aefiDescription: e.target.value,
+                    },
+                  ],
                 })
               }
             />
@@ -225,7 +231,7 @@ const ImmunizationRecordForm = ({
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default ImmunizationRecordForm
+export default ImmunizationRecordForm;

@@ -14,11 +14,6 @@ const AddressFacilityForm = ({
 }) => {
   const [addressType, setAddressType] = useState("facility");
 
-  const radioButtonHandler = (e) => {
-    console.log("ratiod on ", e.target.value);
-    setAddressType(e.target.value);
-  };
-
   const formId = uuid();
   return (
     <>
