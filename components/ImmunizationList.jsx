@@ -27,9 +27,11 @@ const PatientRow = ({ patient }) => {
       <td>{getIdentifiers(patient)}</td>
       <td>{!patient.pending ? "Yes" : "No"}</td>
       <td>
-        <a href={`/immunization/${patient._id}`}>
-          <button className="primary mini ui button">Edit</button>
-        </a>
+        {!patient.pending && (
+          <a href={`/immunization/${patient._id}`}>
+            <button className="primary mini ui button">Edit</button>
+          </a>
+        )}
       </td>
     </tr>
   );
@@ -85,7 +87,7 @@ const ImmunizationList = () => {
   }, [immunization]);
 
   const searchPatients = () => {
-    console.log("searching patients")
+    console.log("searching patients");
     let url = "";
     if (searchGiven) {
       url += `&firstName=${searchGiven}`;
