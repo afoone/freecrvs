@@ -1,0 +1,16 @@
+version: '3.3'
+
+services:
+  mongogambia:
+    image: mongo:3.6
+    volumes:
+      - "./data/mongogambia:/data/db"
+    deploy:
+      replicas: 1
+    networks:
+      - freecrvs
+
+networks:
+  freecrvs:
+    external:
+      name: opencrvs

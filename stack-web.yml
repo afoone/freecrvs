@@ -1,0 +1,25 @@
+version: '3.3'
+
+services:
+  mongogambia:
+    image: docker.pkg.github.com/afoone/freecrvs/image:latest
+    deploy:
+      replicas: 2
+      labels:
+        - 'traefik.enable=true'
+        - 'traefik.frontend.rule=Host: covid19.${HOSTNAME}'
+        - 'traefik.port=3000'
+        - 'traefik.docker.network=opencrvs_overlay_net'
+
+    environment: 
+      - MONGODB_URI=mongodb://mongogambia:27017/gambia?retryWrites=true&w=majority
+      - MONGODB_DB=gambia
+      - JWT_KEY=KDJSALIOOOOOKDJ092348KDSJFJ023
+      - NEXTAUTH_URL=/
+    networks:
+      - freecrvs
+
+networks:
+  freecrvs:
+    external:
+      name: opencrvs
