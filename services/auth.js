@@ -5,10 +5,9 @@ const hashingSecret = "912ec803b2ce49e4a541068d495ab570";
 
 export const add = async (data) => {
   const { db } = await connectToDatabase();
-  console.log("data on post", data, typeof data);
   const user = typeof data === "string" ? JSON.parse(data) : data;
-  const mongoResponse = await db.collection("users").insertOne(user);
-  console.log("response", mongoResponse);
+  const hashedUser = {...user, password: passwordHash(user.password)}
+  const mongoResponse = await db.collection("users").insertOne(hashedUser);
   return mongoResponse.ops[0];
 };
 
@@ -63,7 +62,7 @@ export const checkUser = async (username, password) => {
   }
 
   console.log("user retrieved", user);
-  if (passwordHash(password) === user.passwordHash) {
+  if (passwordHash(password) === user.password) {
     return user;
   } else {
     return null;

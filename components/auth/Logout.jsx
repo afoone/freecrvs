@@ -19,6 +19,7 @@ const LoginButton = () => {
 
 export default function Logout() {
   const [session, loading] = useSession();
+  
   return (
     <div>
       <Icon name="user md" />
