@@ -1,7 +1,7 @@
 version: '3.3'
 
 services:
-  mongogambia:
+  freecrvs:
     image: docker.pkg.github.com/afoone/freecrvs/freecrvs:latest
     deploy:
       replicas: 2
@@ -16,6 +16,7 @@ services:
       - MONGODB_DB=gambia
       - JWT_KEY=KDJSALIOOOOOKDJ092348KDSJFJ023
       - NEXTAUTH_URL=/
+      - BASE_URL=https://covid19.crvs.gm
     networks:
       - freecrvs
 
