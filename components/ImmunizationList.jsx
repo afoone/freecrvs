@@ -84,7 +84,7 @@ const ImmunizationList = () => {
 
   useEffect(() => {
     searchPatients();
-  }, [immunization]);
+  }, [immunization, count]);
 
   const searchPatients = () => {
     console.log("searching patients");
