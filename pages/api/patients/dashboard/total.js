@@ -1,4 +1,4 @@
-import { getByGender , getTotalDosesByType} from "../../../../services/dashboard";
+import { getTotalDosesByType } from "../../../../services/dashboard";
 import { getSession } from "next-auth/client";
 
 export default async (req, res) => {

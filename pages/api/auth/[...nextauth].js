@@ -17,6 +17,20 @@ export default NextAuth({
         username: { label: "Username", type: "text", placeholder: "jsmith" },
         password: { label: "Password", type: "password" },
       },
+      callbacks: {
+        /**
+         * @param  {string} url      URL provided as callback URL by the client
+         * @param  {string} baseUrl  Default base URL of site (can be used as fallback)
+         * @return {string}          URL the client will be redirect to
+         */
+        async redirect(url, baseUrl) {
+          console.log("these are the callbacks", url, baseUrl, BASE_URL);
+          return "/";
+          // return url.startsWith(baseUrl)
+          // ? url
+          // :
+        },
+      },
       async authorize(credentials) {
         console.log("authorize", credentials.username, credentials.password);
         const user = await checkUser(
