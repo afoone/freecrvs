@@ -9,3 +9,14 @@ services:
     # environment:
     #   MONGO_INITDB_ROOT_USERNAME: root
     #   MONGO_INITDB_ROOT_PASSWORD: example
+
+  web:
+    build: .
+    image: afoone/freecrvs
+    ports: 
+      - 3000:3000
+    environment: 
+      - MONGODB_URI=mongodb://mongo:27017/gambia?retryWrites=true&w=majority
+      - MONGODB_DB=gambia
+      - JWT_KEY=KDJSALIOOOOOKDJ092348KDSJFJ023
+      - NEXTAUTH_URL=/
