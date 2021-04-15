@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 
@@ -8,13 +8,24 @@ const UserForm = ({ user, setUser }) => {
     handleSubmit,
     watch,
     formState: { errors },
+    reset,
   } = useForm();
 
   const onSubmit = (data) => {
     console.log("data", data);
-    axios.post("/api/users", data);
+    if (user._id) {
+      axios.put(`/api/users/${user._id}/`, data);
+    } else {
+      axios.post("/api/users", data);
+    }
+
     setUser(null);
   };
+
+  useEffect(() => {
+    if (user) reset({ ...user, password: "" });
+    console.log("miuser", user);
+  }, [user]);
 
   console.log(watch("example")); // watch input value by passing the name of it
 
@@ -53,12 +64,9 @@ const UserForm = ({ user, setUser }) => {
 
         <div className="field">
           <label>Role</label>
-          <select
-            {...register("role", { required: true })}
-            placeholder="Role"
-          >
-              <option >REGISTRAR</option>
-              <option>ADMIN</option>
+          <select {...register("role", { required: true })} placeholder="Role">
+            <option>REGISTRAR</option>
+            <option>ADMIN</option>
           </select>
 
           {errors.email && <span>This field is required</span>}

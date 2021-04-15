@@ -6,7 +6,7 @@ const hashingSecret = "912ec803b2ce49e4a541068d495ab570";
 export const add = async (data) => {
   const { db } = await connectToDatabase();
   const user = typeof data === "string" ? JSON.parse(data) : data;
-  const hashedUser = {...user, password: passwordHash(user.password)}
+  const hashedUser = { ...user, password: passwordHash(user.password) };
   const mongoResponse = await db.collection("users").insertOne(hashedUser);
   return mongoResponse.ops[0];
 };
@@ -29,7 +29,8 @@ export const update = async (id, data) => {
   const user = typeof data === "string" ? JSON.parse(data) : data;
   const { db } = await connectToDatabase();
   const _id = new ObjectId(id);
-  await db.collection("users").updateOne({ _id: _id }, { $set: user });
+  const hashedUser = { ...user, password: passwordHash(user.password) };
+  await db.collection("users").updateOne({ _id: _id }, { $set: hashedUser });
   const userNew = await db.collection("users").findOne({ _id: _id });
   return userNew;
 };
