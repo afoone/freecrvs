@@ -2,7 +2,7 @@ version: '3.3'
 
 services:
   mongogambia:
-    image: docker.pkg.github.com/afoone/freecrvs/image:latest
+    image: docker.pkg.github.com/afoone/freecrvs/freecrvs:latest
     deploy:
       replicas: 2
       labels:
