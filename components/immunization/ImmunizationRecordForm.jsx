@@ -222,15 +222,17 @@ const ImmunizationRecordForm = ({
                   : ""
               }
               onChange={(e) =>
-                setImmunization({
+                {
+                  const aefi = immunization? immunization.aefi && immunization.aefi[0]: null
+                  setImmunization({
                   ...immunization,
                   aefi: [
                     {
-                      ...immunization.aefi[0],
+                      ...aefi,
                       aefiDescription: e.target.value,
                     },
                   ],
-                })
+                })}
               }
             />
           </div>
