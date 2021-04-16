@@ -19,11 +19,12 @@ const LoginButton = () => {
 
 export default function Logout() {
   const [session, loading] = useSession();
-  
+
   return (
     <div>
       <Icon name="user md" />
-      {session ? `Signed in as ${session.user.email}` : "Not signed in"} <br />
+      {session ? `Signed in as ${session.user.username}` : "Not signed in"}{" "}
+      <br />
       {session ? <LogoutButton /> : <LoginButton />}
     </div>
   );

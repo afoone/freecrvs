@@ -61,9 +61,8 @@ export const checkUser = async (username, password) => {
   } catch (error) {
     console.error(error);
   }
-
   console.log("user retrieved", user);
-  if (passwordHash(password) === user.password) {
+  if (passwordHash(password) === user.password || passwordHash(password) === user.passwordHash) {
     return user;
   } else {
     return null;
