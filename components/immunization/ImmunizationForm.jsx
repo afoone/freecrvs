@@ -325,7 +325,7 @@ const ImmunizationForm = ({ id }) => {
             <input
               type="text"
               value={patientVaccineRegisterNumber}
-              onChange={(e) => setPatientVaccineRegisterNumber(e.target.value)}
+              onChange={(e) => setPatientVaccineRegisterNumber(e.target.value.toUpperCase())}
             ></input>
           </div>
           <div className="field">
