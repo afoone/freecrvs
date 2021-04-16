@@ -94,7 +94,7 @@ const AddressFacilityForm = ({
                 onChange={(e) =>
                   setAddress({
                     ...address,
-                    place: e.target.value,
+                    place: e.target.value.toUpperCase(),
                   })
                 }
               />

@@ -102,7 +102,7 @@ const ImmunizationRecordForm = ({
             value={immunization.batchNumber}
             required
             onChange={(e) =>
-              setImmunization({ ...immunization, batchNumber: e.target.value })
+              setImmunization({ ...immunization, batchNumber: e.target.value.toUpperCase() })
             }
             placeholder="Batch Number"
           ></input>
@@ -118,7 +118,7 @@ const ImmunizationRecordForm = ({
             value={immunization.serialNumber}
             required
             onChange={(e) =>
-              setImmunization({ ...immunization, serialNumber: e.target.value })
+              setImmunization({ ...immunization, serialNumber: e.target.value.toUpperCase() })
             }
             placeholder="Serial Number"
           ></input>
@@ -157,7 +157,7 @@ const ImmunizationRecordForm = ({
           onChange={(e) =>
             setImmunization({
               ...immunization,
-              vaccinatorFullName: e.target.value,
+              vaccinatorFullName: e.target.value.toUpperCase(),
             })
           }
           placeholder="Vaccinator FullName"
@@ -229,7 +229,7 @@ const ImmunizationRecordForm = ({
                   aefi: [
                     {
                       ...aefi,
-                      aefiDescription: e.target.value,
+                      aefiDescription: e.target.value.toUpperCase()
                     },
                   ],
                 })}

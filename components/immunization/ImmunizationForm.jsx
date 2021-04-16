@@ -12,8 +12,6 @@ import {
 import { v4 as uuid } from "uuid";
 import AddressForm from "../adresss/AddressForm";
 import {
-  getProvincesOptions,
-  getDistrictOptions,
   getNationalityOptions,
 } from "../extraData/options";
 import ImmunizationRecordForm from "./ImmunizationRecordForm";
@@ -347,7 +345,7 @@ const ImmunizationForm = ({ id }) => {
               name="first-name"
               value={firstName}
               required
-              onChange={(e) => setFirstName(e.target.value)}
+              onChange={(e) => setFirstName(e.target.value.toUpperCase())}
               placeholder="First Name"
             />
             {errors.firstName && (
@@ -360,7 +358,7 @@ const ImmunizationForm = ({ id }) => {
               type="text"
               name="last-name"
               value={middleName}
-              onChange={(e) => setMiddleName(e.target.value)}
+              onChange={(e) => setMiddleName(e.target.value.toUpperCase())}
               placeholder="Middle Name"
             />
             {errors.middleName && (
@@ -377,7 +375,7 @@ const ImmunizationForm = ({ id }) => {
               onChange={(e) => setLastName(e.target.value)}
               placeholder="Last Name"
             />
-            {errors.lastName && <div className="error">{errors.lastName}</div>}
+            {errors.lastName && <div className="error">{errors.lastName.toUpperCase()}</div>}
           </div>
         </div>
         <div className="two fields">
@@ -386,7 +384,7 @@ const ImmunizationForm = ({ id }) => {
             <input
               type="text"
               value={baptismalName}
-              onChange={(e) => setBaptismalName(e.target.value)}
+              onChange={(e) => setBaptismalName(e.target.value.toUpperCase())}
             />
           </div>
           <div className="field">
@@ -510,7 +508,7 @@ const ImmunizationForm = ({ id }) => {
                   name="first-name"
                   value={motherFirstName}
                   required
-                  onChange={(e) => setMotherFirstName(e.target.value)}
+                  onChange={(e) => setMotherFirstName(e.target.value.toUpperCase())}
                   placeholder="First Name"
                 />
                 {errors.motherFirstName && (
@@ -523,7 +521,7 @@ const ImmunizationForm = ({ id }) => {
                   type="text"
                   name="last-name"
                   value={motherMiddleName}
-                  onChange={(e) => setMotherMiddleName(e.target.value)}
+                  onChange={(e) => setMotherMiddleName(e.target.value.toUpperCase())}
                   placeholder="Middle Name"
                 />
                 {errors.motherMiddleName && (
@@ -541,7 +539,7 @@ const ImmunizationForm = ({ id }) => {
                   placeholder="Last Name"
                 />
                 {errors.motherLastName && (
-                  <div className="error">{errors.motherLastName}</div>
+                  <div className="error">{errors.motherLastName.toUpperCase()}</div>
                 )}
               </div>
             </div>
@@ -564,7 +562,7 @@ const ImmunizationForm = ({ id }) => {
               <div className="field">
                 <label>Age</label>
                 <input
-                  type="text"
+                  type="number"
                   value={motherAge}
                   onChange={(e) => setMotherAge(e.target.value)}
                 />
@@ -600,7 +598,7 @@ const ImmunizationForm = ({ id }) => {
                   name="first-name"
                   value={fatherFirstName}
                   required
-                  onChange={(e) => setFatherFirstName(e.target.value)}
+                  onChange={(e) => setFatherFirstName(e.target.value.toUpperCase())}
                   placeholder="First Name"
                 />
                 {errors.fatherFirstName && (
@@ -613,7 +611,7 @@ const ImmunizationForm = ({ id }) => {
                   type="text"
                   name="last-name"
                   value={fatherMiddleName}
-                  onChange={(e) => setFatherMiddleName(e.target.value)}
+                  onChange={(e) => setFatherMiddleName(e.target.value.toUpperCase())}
                   placeholder="Middle Name"
                 />
                 {errors.fatherMiddleName && (
@@ -627,7 +625,7 @@ const ImmunizationForm = ({ id }) => {
                   name="last-name"
                   value={fatherLastName}
                   required
-                  onChange={(e) => setFatherLastName(e.target.value)}
+                  onChange={(e) => setFatherLastName(e.target.value.toUpperCase())}
                   placeholder="Last Name"
                 />
                 {errors.fatherLastName && (
@@ -654,7 +652,7 @@ const ImmunizationForm = ({ id }) => {
               <div className="field">
                 <label>Age</label>
                 <input
-                  type="text"
+                  type="number"
                   value={fatherAge}
                   onChange={(e) => setFatherAge(e.target.value)}
                 />

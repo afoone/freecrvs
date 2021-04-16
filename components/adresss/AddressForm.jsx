@@ -57,7 +57,7 @@ const AddressForm = ({ address, setAddress, errors = {} }) => {
                 onChange={e =>
                   setAddress({
                     ...address,
-                    city: e.target.value
+                    city: e.target.value.toUpperCase()
                   })
                 }
               />
@@ -73,7 +73,7 @@ const AddressForm = ({ address, setAddress, errors = {} }) => {
                 onChange={e =>
                   setAddress({
                     ...address,
-                    compound: e.target.value
+                    compound: e.target.value.toUpperCase()
                   })
                 }
               />
@@ -90,7 +90,7 @@ const AddressForm = ({ address, setAddress, errors = {} }) => {
               onChange={e =>
                 setAddress({
                   ...address,
-                  address: e.target.value
+                  address: e.target.value.toUpperCase()
                 })
               }
             />
