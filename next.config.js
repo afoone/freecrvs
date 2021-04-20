@@ -4,7 +4,8 @@ const withOffline = require("next-pwa");
 const nextConfig = {
   pwa: {
     dest: 'public',
-    disable: false
+    disable: false,
+    cacheOnFrontEndNav: true
   },
   future: {
     webpack5: true,
