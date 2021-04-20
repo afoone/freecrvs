@@ -184,7 +184,7 @@ const ImmunizationList = () => {
             <th>Identifiers</th>
             <th>Synchronized</th>
             <th>
-              <a href={`/immunization/new/`}>
+              <a href={`/immunization/new`}>
                 <button className="positive mini ui button">New Patient</button>
               </a>
             </th>
