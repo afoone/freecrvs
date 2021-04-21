@@ -55,3 +55,40 @@ export const getTotalDosesByType = async () => {
     ])
     .toArray();
 };
+
+
+export const getTotalDosesByTypeAndDay = async () => {
+  const { db } = await connectToDatabase();
+  return await db
+    .collection("vaccination")
+    .aggregate([
+      { $unwind: "$vaccination" },
+
+      {
+        $match: {
+          $or: [
+            { "vaccination.firstDoseDate": { $ne: null } },
+            { "vaccination.date": { $ne: null } },
+          ],
+        },
+      },
+                {
+        $project: {
+            newdate: { $substr: [{ $ifNull: [ "$vaccination.date", "$vaccination.firstDoseDate" ] }, 0, 10 ]},
+            nameOfTheVaccine: "$vaccination.nameOfTheVaccine"
+        }
+    },
+         
+           {
+        $group: {
+          _id: {date:"$newdate", nameOfTheVaccine: "$nameOfTheVaccine"},
+          count: {
+            $sum: 1,
+          },
+        },
+      },
+
+      
+    ])
+    .toArray();
+};
