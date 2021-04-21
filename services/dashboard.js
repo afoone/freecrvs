@@ -11,25 +11,6 @@ export const getByGender = async () => {
     .toArray();
 };
 
-// db.getCollection('vaccination').aggregate([
-//     {$unwind: "$vaccination"},
-//     {$match:
-//         {
-//              "$or": [
-//                 {"vaccination.firstDoseDate": {$ne: null}},
-//                 {"vaccination.date": {$ne: null}},
-//                ]
-//          }
-//     },
-//     {
-//         $group: {
-//             _id: "$vaccination.nameOfTheVaccine",
-//             count: {
-//                 $sum: 1
-//             }
-//         }
-//     }
-//     ])
 export const getTotalDosesByType = async () => {
   const { db } = await connectToDatabase();
   return await db

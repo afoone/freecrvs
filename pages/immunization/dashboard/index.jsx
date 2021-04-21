@@ -40,9 +40,9 @@ const Dashboard = () => {
       >
         <DataTable title="Total doses administered" data={totalVaccines} />
         <PieChart data={totalVaccines}></PieChart>
-        <div style={{ gridColumnStart: 1, gridColumnEnd: 3 }}>
+        {/* <div style={{ gridColumnStart: 1, gridColumnEnd: 3 }}>
           <StackedAreaChart data={totalVaccinesByDate} />
-        </div>
+        </div> */}
       </div>
     </AuthHOC>
   );
