@@ -11,7 +11,7 @@ export const add = async (data) => {
   return mongoResponse.ops[0];
 };
 
-export const list = async (offset = 0, maxResults = 10) => {
+export const list = async (offset = 0, maxResults = 1000) => {
   const { db } = await connectToDatabase();
   if (offset) {
     return await db
