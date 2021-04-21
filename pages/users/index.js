@@ -9,10 +9,18 @@ const users = () => {
   return (
     <div>
       <AuthHOC>
-        <UserList setUser={setEditingUser} />
-        {editingUser && (
-          <UserForm setUser={setEditingUser} user={editingUser}></UserForm>
-        )}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "auto auto",
+            columnGap: "1rem",
+          }}
+        >
+          <UserList setUser={setEditingUser} />
+          {editingUser && (
+            <UserForm setUser={setEditingUser} user={editingUser}></UserForm>
+          )}
+        </div>
       </AuthHOC>
     </div>
   );
