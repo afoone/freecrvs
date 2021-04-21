@@ -20,4 +20,4 @@ services:
       - MONGODB_DB=gambia
       - JWT_KEY=KDJSALIOOOOOKDJ092348KDSJFJ023
       - NEXTAUTH_URL=/
-      - BASE_URL=http://localhost:3000/
+      - NEXT_PUBLIC_BASE_URL=http://localhost:3000/

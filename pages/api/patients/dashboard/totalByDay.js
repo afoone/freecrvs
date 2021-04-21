@@ -4,10 +4,10 @@ import { getSession } from "next-auth/client";
 export default async (req, res) => {
   const session = await getSession({ req });
   console.log("session", session);
-  if (!session) {
-    res.status(401).json({ msg: "unauthorized" });
-  } else {
+  // if (!session) {
+  //   res.status(401).json({ msg: "unauthorized" });
+  // } else {
     const results = await getTotalDosesByTypeAndDay();
     res.json(results);
-  }
+  // }
 };
