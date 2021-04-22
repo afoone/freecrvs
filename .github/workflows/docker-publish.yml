@@ -88,4 +88,4 @@ jobs:
           echo IMAGE_ID=$IMAGE_ID
           docker pull $IMAGE_ID:latest
       - name: Update Image
-        run: docker service update --image $IMAGE_ID:latest freecrvs_web
+        run: docker service update --with-registry-auth --image docker.pkg.github.com/afoone/freecrvs/freecrvs:latest freecrvs_web
