@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import AuthHOC from "../../../components/auth/AuthHOC";
 import PieChart from "../../../components/charts/PieChart";
 import DataTable from "../../../components/charts/DataTable";
 import StackedAreaChart from "../../../components/charts/StackedAreaChart";
-import { getSession } from "next-auth/client";
+import cache from "memory-cache";
 import {
   getAllVaccines,
   getChartData,
@@ -17,10 +17,13 @@ const Dashboard = ({
   totalVaccinesByDate = [],
   totalVaccines = [],
   differentVaccines = [],
+  date = "",
 }) => {
+  const lastUpdated = new Date(date);
   return (
     <AuthHOC>
       <h1>The Gambia COVID-19 Vaccination Dashboard</h1>
+      <h3>Last updated: {lastUpdated.toLocaleString()}</h3>
       <div
         style={{
           display: "grid",
@@ -42,11 +45,33 @@ const Dashboard = ({
   );
 };
 
-export async function getStaticProps(context) {
-  const totalVaccinesByDate = await getTotalDosesByType();
+export async function getServerSideProps() {
+  if (!cache.get("date")) cache.put("date", new Date(), 1000 * 3600 * 24);
+  console.log("set date", cache.get("date"));
+  if (!cache.get("totalVaccinesByDate"))
+    cache.put(
+      "totalVaccinesByDate",
+      await getTotalDosesByTypeAndDay(),
+      1000 * 3600 * 24
+    );
+  const totalVaccinesByDate = cache.get("totalVaccinesByDate"); //await getTotalDosesByTypeAndDay();
+  console.log("get vaccines by date", totalVaccinesByDate);
   const differentVaccines = getAllVaccines(totalVaccinesByDate);
-  const formattedTotalVaccinesByDate = getChartData(totalVaccinesByDate);
-  const totalVaccines = await getTotalDosesByTypeAndDay();
+  console.log("different vaccines", differentVaccines);
+  if (!cache.get("formattedTotalVaccinesByDate"))
+    cache.put(
+      "formattedTotalVaccinesByDate",
+      await getChartData(
+        totalVaccinesByDate,
+        new Date("2021-02-01"),
+        new Date()
+      ),
+      1000 * 3600 * 24
+    );
+  const formattedTotalVaccinesByDate = cache.get(
+    "formattedTotalVaccinesByDate"
+  );
+  const totalVaccines = await getTotalDosesByType();
 
   return {
     props: {
@@ -56,8 +81,8 @@ export async function getStaticProps(context) {
         value: i.count,
       })),
       differentVaccines,
+      date: cache.get("date").toISOString(),
     },
-    revalidate: 3600 * 24,
   };
 }
 
