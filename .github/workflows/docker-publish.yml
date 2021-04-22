@@ -88,4 +88,4 @@ jobs:
           echo IMAGE_ID=$IMAGE_ID
           docker pull $IMAGE_ID:latest
       - name: Update Image
-          docker service update --image $IMAGE_ID:latest freecrvs_web
+        run: docker service update --image $IMAGE_ID:latest freecrvs_web
