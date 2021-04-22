@@ -429,6 +429,14 @@ const ImmunizationForm = ({ id }) => {
           address={placeOfDelivery}
           errors={errors}
         />
+          <div className="field">
+            <label>Place of work</label>
+            <input
+              type="text"
+              value={placeOfWork}
+              onChange={(e) => setPlaceOfWork(e.target.value)}
+            />
+          </div>
         <div className="two fields">
           <div className="field">
             <label>
