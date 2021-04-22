@@ -2,6 +2,7 @@ import React from "react";
 import { Table } from "semantic-ui-react";
 
 const DataTable = ({ title, data }) => {
+  
   return (
     <Table celled>
       <Table.Header>

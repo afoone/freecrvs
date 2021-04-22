@@ -14,7 +14,6 @@ on:
   pull_request:
 
 env:
-  # TODO: Change variable to your image's name.
   IMAGE_NAME: freecrvs
 
 jobs:
@@ -74,7 +73,6 @@ jobs:
 
           docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
-
   deploy-pre:
     needs: push
     runs-on: [self-hosted, linux, x64, ssdnodes]
@@ -89,3 +87,4 @@ jobs:
           docker pull $IMAGE_ID:latest
       - name: Update Image
         run: docker service update --with-registry-auth --image docker.pkg.github.com/afoone/freecrvs/freecrvs:latest freecrvs_web
+
