@@ -16,7 +16,7 @@ const createQuery = (query) => {
   Object.keys(query).forEach((i) => {
     if (query[i]) {
       console.log(i, query[i]);
-      newQuery[i] = { $regex: query[i] };
+      newQuery[i] = { $regex: query[i], $options: "i" };
     }
   });
   console.log(newQuery);
