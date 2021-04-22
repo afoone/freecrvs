@@ -87,3 +87,5 @@ jobs:
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
           echo IMAGE_ID=$IMAGE_ID
           docker pull $IMAGE_ID:latest
+      - name: Update Image
+          docker service update --image $IMAGE_ID:latest freecrvs_web
