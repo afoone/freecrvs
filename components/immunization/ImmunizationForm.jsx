@@ -710,7 +710,7 @@ const ImmunizationForm = ({ id }) => {
               className="ui button positive"
               onClick={() => savePatient(true)}
             >
-              Save and open new form
+              Save and Open New Form
             </button>
           )}
           <button className="ui button positive" onClick={() => savePatient()}>
