@@ -51,7 +51,7 @@ export const deleteUser = async (id) => {
 };
 
 export const checkUser = async (username, password) => {
-  console.log("entrando a chequear", username, password);
+  console.log("Checking entry", username, password);
   console.log("query", { username: username });
   const { db } = await connectToDatabase();
   let user;

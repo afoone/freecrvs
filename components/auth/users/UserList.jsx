@@ -19,7 +19,7 @@ const UserList = ({ setUser }) => {
             <Table.HeaderCell>Email</Table.HeaderCell>
             <Table.HeaderCell>
               <Button primary size="small" onClick={() => setUser({})}>
-                New
+                Create User
               </Button>
             </Table.HeaderCell>
           </Table.Row>
