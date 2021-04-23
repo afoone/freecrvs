@@ -4,7 +4,7 @@ import { Button, Card, Image } from "semantic-ui-react";
 export default function SignIn({ csrfToken }) {
   return (
     <Card centered color="olive">
-          <Image src='/images/gambia.png' wrapped ui={false} />
+          <Image src='/images/logo2.png' wrapped ui={false} />
 
       <Card.Content>
         <Card.Header>Login</Card.Header>

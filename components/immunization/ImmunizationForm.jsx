@@ -284,6 +284,7 @@ const ImmunizationForm = ({ id }) => {
       {patient && <PatientData patient={patient} />}
       <div className="register-form ui form">
         <h2 className="ui dividing header">Patient Data</h2>
+
         <div className="ui field">
           <label>Contact Phone Number:</label>
           <input
@@ -295,6 +296,7 @@ const ImmunizationForm = ({ id }) => {
             <div className="error">{errors.phoneNumber}</div>
           )}
         </div>
+
         <div className="field">
           <label>Nationality</label>
           <select
@@ -304,6 +306,8 @@ const ImmunizationForm = ({ id }) => {
             {getNationalityOptions()}
           </select>
         </div>
+         
+         {/* Patient NIN, VacReg No. and Gender */}
         <div className="three fields">
           <div className="field">
             <label>National ID Number (NIN)</label>
@@ -324,6 +328,7 @@ const ImmunizationForm = ({ id }) => {
               }
             ></input>
           </div>
+          
           <div className="field">
             <label>Gender</label>
             <select value={gender} onChange={(e) => setGender(e.target.value)}>
@@ -333,6 +338,8 @@ const ImmunizationForm = ({ id }) => {
             </select>
           </div>
         </div>
+         
+         {/* Patient birth registration data */}
         <div className="three fields">
           <div className="ui field">
             <label>First Name</label>
@@ -425,6 +432,16 @@ const ImmunizationForm = ({ id }) => {
           address={placeOfDelivery}
           errors={errors}
         />
+
+           {/* Other vaccination data */}
+          <div className="field">
+            <label>Place of work</label>
+            <input
+              type="text"
+              value={placeOfWork}
+              onChange={(e) => setPlaceOfWork(e.target.value)}
+            />
+          </div>
         <div className="two fields">
           <div className="field">
             <label>
@@ -483,6 +500,8 @@ const ImmunizationForm = ({ id }) => {
             </select>
           </div>
         </div>
+
+         {/* Mother's data if nationality is Gambian */}
         {nationality === "GM" && (
           <>
             {" "}
@@ -699,7 +718,7 @@ const ImmunizationForm = ({ id }) => {
               className="ui button positive"
               onClick={() => savePatient(true)}
             >
-              Save and create other copying data
+              Save and Open New Form
             </button>
           )}
           <button className="ui button positive" onClick={() => savePatient()}>
