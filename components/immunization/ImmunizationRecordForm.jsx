@@ -1,3 +1,4 @@
+import moment from "moment";
 import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import AddressFacilityForm from "../adresss/AddressFacilityForm";
@@ -30,7 +31,12 @@ const ImmunizationRecordForm = ({
             {/* first dose date for compatibility with version 1.0 */}
             <DatePicker
               dateFormat="dd/MM/yyyy"
-              selected={immunization.date ? new Date(immunization.date) : null}
+              selected={
+                immunization.date ? new Date(immunization.date) : new Date()
+              }
+              isClearable
+              minDate={new Date("2021-03-01")}
+              maxDate={new Date()}
               onChange={(date) =>
                 setImmunization({
                   ...immunization,
@@ -50,6 +56,8 @@ const ImmunizationRecordForm = ({
               <DatePicker
                 isClearable
                 dateFormat="dd/MM/yyyy"
+                minDate={new Date()}
+                maxDate={moment(new Date()).add(3, "months").toDate()}
                 selected={
                   immunization.dateOfNextVisit
                     ? new Date(immunization.dateOfNextVisit)
@@ -102,7 +110,10 @@ const ImmunizationRecordForm = ({
             value={immunization.batchNumber}
             required
             onChange={(e) =>
-              setImmunization({ ...immunization, batchNumber: e.target.value.toUpperCase() })
+              setImmunization({
+                ...immunization,
+                batchNumber: e.target.value.toUpperCase(),
+              })
             }
             placeholder="Batch Number"
           ></input>
@@ -118,7 +129,10 @@ const ImmunizationRecordForm = ({
             value={immunization.serialNumber}
             required
             onChange={(e) =>
-              setImmunization({ ...immunization, serialNumber: e.target.value.toUpperCase() })
+              setImmunization({
+                ...immunization,
+                serialNumber: e.target.value.toUpperCase(),
+              })
             }
             placeholder="Serial Number"
           ></input>
@@ -221,19 +235,20 @@ const ImmunizationRecordForm = ({
                   ? immunization.aefi[0].aefiDescription
                   : ""
               }
-              onChange={(e) =>
-                {
-                  const aefi = immunization? immunization.aefi && immunization.aefi[0]: null
-                  setImmunization({
+              onChange={(e) => {
+                const aefi = immunization
+                  ? immunization.aefi && immunization.aefi[0]
+                  : null;
+                setImmunization({
                   ...immunization,
                   aefi: [
                     {
                       ...aefi,
-                      aefiDescription: e.target.value.toUpperCase()
+                      aefiDescription: e.target.value.toUpperCase(),
                     },
                   ],
-                })}
-              }
+                });
+              }}
             />
           </div>
         </div>

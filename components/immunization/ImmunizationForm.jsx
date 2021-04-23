@@ -11,9 +11,7 @@ import {
 } from "../extraData/multiselect";
 import { v4 as uuid } from "uuid";
 import AddressForm from "../adresss/AddressForm";
-import {
-  getNationalityOptions,
-} from "../extraData/options";
+import { getNationalityOptions } from "../extraData/options";
 import ImmunizationRecordForm from "./ImmunizationRecordForm";
 import { add } from "../../redux/immunizationSlice";
 import { useDispatch } from "react-redux";
@@ -130,20 +128,13 @@ const ImmunizationForm = ({ id }) => {
   const [errors, setErrors] = useState({});
 
   const validations = {
-    // lastName: { required: true },
-    // batchNumber: { required: true },
-    // vaccinatorFullName: { required: true },
+    lastName: { required: true },
+    firstName: { required: true },
+    phoneNumber: { required: true },
+    vaccinationFirstDose_batchNumber: {required: true}
+    //batchNumber: { required: true },
+    //vaccinatorFullName: { required: true },
     // nameOfTheVaccine: { required: true }
-  };
-
-  const setLocationsOnState = (locationsObject) => {
-    const locationsArray = Object.keys(locationsObject).map((k) => ({
-      id: locationsObject[k].id,
-      name: locationsObject[k].name,
-      partOf: locationsObject[k].partOf,
-    }));
-    setProvinces(locationsArray.filter((l) => l.partOf === "Location/0"));
-    setDistricts(locationsArray.filter((l) => l.partOf !== "Location/0"));
   };
 
   const populateData = (patient) => {
@@ -300,6 +291,9 @@ const ImmunizationForm = ({ id }) => {
             value={phoneNumber}
             onChange={(e) => setPhoneNumber(e.target.value)}
           />
+          {errors.phoneNumber && (
+            <div className="error">{errors.phoneNumber}</div>
+          )}
         </div>
         <div className="field">
           <label>Nationality</label>
@@ -325,7 +319,9 @@ const ImmunizationForm = ({ id }) => {
             <input
               type="text"
               value={patientVaccineRegisterNumber}
-              onChange={(e) => setPatientVaccineRegisterNumber(e.target.value.toUpperCase())}
+              onChange={(e) =>
+                setPatientVaccineRegisterNumber(e.target.value.toUpperCase())
+              }
             ></input>
           </div>
           <div className="field">
@@ -375,7 +371,7 @@ const ImmunizationForm = ({ id }) => {
               onChange={(e) => setLastName(e.target.value)}
               placeholder="Last Name"
             />
-            {errors.lastName && <div className="error">{errors.lastName.toUpperCase()}</div>}
+            {errors.lastName && <div className="error">{errors.lastName}</div>}
           </div>
         </div>
         <div className="two fields">
@@ -508,7 +504,9 @@ const ImmunizationForm = ({ id }) => {
                   name="first-name"
                   value={motherFirstName}
                   required
-                  onChange={(e) => setMotherFirstName(e.target.value.toUpperCase())}
+                  onChange={(e) =>
+                    setMotherFirstName(e.target.value.toUpperCase())
+                  }
                   placeholder="First Name"
                 />
                 {errors.motherFirstName && (
@@ -521,7 +519,9 @@ const ImmunizationForm = ({ id }) => {
                   type="text"
                   name="last-name"
                   value={motherMiddleName}
-                  onChange={(e) => setMotherMiddleName(e.target.value.toUpperCase())}
+                  onChange={(e) =>
+                    setMotherMiddleName(e.target.value.toUpperCase())
+                  }
                   placeholder="Middle Name"
                 />
                 {errors.motherMiddleName && (
@@ -539,7 +539,9 @@ const ImmunizationForm = ({ id }) => {
                   placeholder="Last Name"
                 />
                 {errors.motherLastName && (
-                  <div className="error">{errors.motherLastName.toUpperCase()}</div>
+                  <div className="error">
+                    {errors.motherLastName.toUpperCase()}
+                  </div>
                 )}
               </div>
             </div>
@@ -598,7 +600,9 @@ const ImmunizationForm = ({ id }) => {
                   name="first-name"
                   value={fatherFirstName}
                   required
-                  onChange={(e) => setFatherFirstName(e.target.value.toUpperCase())}
+                  onChange={(e) =>
+                    setFatherFirstName(e.target.value.toUpperCase())
+                  }
                   placeholder="First Name"
                 />
                 {errors.fatherFirstName && (
@@ -611,7 +615,9 @@ const ImmunizationForm = ({ id }) => {
                   type="text"
                   name="last-name"
                   value={fatherMiddleName}
-                  onChange={(e) => setFatherMiddleName(e.target.value.toUpperCase())}
+                  onChange={(e) =>
+                    setFatherMiddleName(e.target.value.toUpperCase())
+                  }
                   placeholder="Middle Name"
                 />
                 {errors.fatherMiddleName && (
@@ -625,7 +631,9 @@ const ImmunizationForm = ({ id }) => {
                   name="last-name"
                   value={fatherLastName}
                   required
-                  onChange={(e) => setFatherLastName(e.target.value.toUpperCase())}
+                  onChange={(e) =>
+                    setFatherLastName(e.target.value.toUpperCase())
+                  }
                   placeholder="Last Name"
                 />
                 {errors.fatherLastName && (
