@@ -31,20 +31,20 @@ export const getAllVaccines = (data) => {
   return [...result];
 };
 
-export const getInterpolatedData = (data) => {};
-
-export const getCumulativeData = (data) => {
+export const getCumulativeData = (data, dateMin, dateMax) => {
   const dataWithDates = data
     .filter((i) => i._id.date)
     .map((i) => ({ ...i, date: new Date(i._id.date) }));
-  const dateMax = dataWithDates.reduce(
-    (acc, curr) => (!acc ? curr.date : acc - curr.date > 0 ? acc : curr.date),
-    null
-  );
-  const dateMin = dataWithDates.reduce(
-    (acc, curr) => (!acc ? curr.date : acc - curr.date < 0 ? acc : curr.date),
-    null
-  );
+  if (!dateMax)
+    dateMax = dataWithDates.reduce(
+      (acc, curr) => (!acc ? curr.date : acc - curr.date > 0 ? acc : curr.date),
+      null
+    );
+  if (!dateMin)
+    dateMin = dataWithDates.reduce(
+      (acc, curr) => (!acc ? curr.date : acc - curr.date < 0 ? acc : curr.date),
+      null
+    );
   const result = [];
   getAllVaccines(data).forEach((i) => {
     const aVaccineData = getDataFromAVaccineSortedByDate(data, i).map(
@@ -59,7 +59,7 @@ export const getCumulativeData = (data) => {
       }
     );
 
-    result.push(...interpolate(aVaccineData, dateMax));
+    result.push(...interpolate(aVaccineData, dateMax, dateMin));
   });
   return result;
 };
@@ -92,10 +92,10 @@ export const createChartData = (data, dateMin, dateMax) => {
 
 export const sortByDate = (a, b) => (a._id.date > b._id.date ? 1 : -1);
 
-export const interpolate = (data, dateMax) => {
+export const interpolate = (data, dateMax, dateMin) => {
   const result = [];
   if (!data || data.length < 1) return result;
-  let currentDate = moment(data[0].date);
+  let currentDate = moment(dateMin || data[0].date);
   do {
     const vaccineForToday = data.filter(
       (i) => i.date === currentDate.format("YYYY-MM-DD")
@@ -115,17 +115,24 @@ export const interpolate = (data, dateMax) => {
   return result;
 };
 
-export const getChartData = (data) => {
+export const getChartData = (data, dateMin, dateMax) => {
   const dataWithDates = data
     .filter((i) => i._id.date)
     .map((i) => ({ ...i, date: new Date(i._id.date) }));
-  const dateMax = dataWithDates.reduce(
-    (acc, curr) => (!acc ? curr.date : acc - curr.date > 0 ? acc : curr.date),
-    null
-  );
-  const dateMin = dataWithDates.reduce(
-    (acc, curr) => (!acc ? curr.date : acc - curr.date < 0 ? acc : curr.date),
-    null
-  );
-  return createChartData(getCumulativeData(data), dateMin, dateMax);
+  console.log("data with dates", dataWithDates);
+  if (!dateMax)
+    dateMax = dataWithDates.reduce(
+      (acc, curr) => (!acc ? curr.date : acc - curr.date > 0 ? acc : curr.date),
+      null
+    );
+  if (!dateMin)
+    dateMin = dataWithDates.reduce(
+      (acc, curr) => (!acc ? curr.date : acc - curr.date < 0 ? acc : curr.date),
+      null
+    );
+  console.log("datemax y min", dateMax, dateMin);
+  const cumulativeData = getCumulativeData(data, dateMin, dateMax);
+  console.log("cumulative data =", cumulativeData);
+
+  return createChartData(cumulativeData, dateMin, dateMax);
 };
