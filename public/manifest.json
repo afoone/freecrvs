@@ -8,6 +8,8 @@
   "dir": "ltr",
   "display": "browser",
   "orientation": "landscape",
+  "scope": "/",
+  "start_url": "/",
   "icons": [
    {
     "src": "/icon/android-icon-192x192-dunplab-manifest-46209.png",
