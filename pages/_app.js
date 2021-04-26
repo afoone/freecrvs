@@ -35,7 +35,7 @@ function App({ Component, pageProps }) {
         <meta name="mobile-web-app-capable" content="yes" />
         <meta
           name="msapplication-config"
-          content="/static/icons/browserconfig.xml"
+          content="/icons/browserconfig.xml"
         />
         <meta name="msapplication-TileColor" content="#2B5797" />
         <meta name="msapplication-tap-highlight" content="no" />
@@ -43,40 +43,40 @@ function App({ Component, pageProps }) {
 
         <link
           rel="apple-touch-icon"
-          href="/static/icons/touch-icon-iphone.png"
+          href="/icons/touch-icon-iphone.png"
         />
         <link
           rel="apple-touch-icon"
           sizes="152x152"
-          href="/static/icons/touch-icon-ipad.png"
+          href="/icons/touch-icon-ipad.png"
         />
         <link
           rel="apple-touch-icon"
           sizes="180x180"
-          href="/static/icons/touch-icon-iphone-retina.png"
+          href="/icons/touch-icon-iphone-retina.png"
         />
         <link
           rel="apple-touch-icon"
           sizes="167x167"
-          href="/static/icons/touch-icon-ipad-retina.png"
+          href="/icons/touch-icon-ipad-retina.png"
         />
 
         <link
           rel="icon"
           type="image/png"
           sizes="32x32"
-          href="/static/icons/favicon-32x32.png"
+          href="/icons/favicon-32x32.png"
         />
         <link
           rel="icon"
           type="image/png"
           sizes="16x16"
-          href="/static/icons/favicon-16x16.png"
+          href="/icons/favicon-16x16.png"
         />
-        <link rel="manifest" href="/static/manifest.json" />
+        <link rel="manifest" href="/manifest.json" />
         <link
           rel="mask-icon"
-          href="/static/icons/safari-pinned-tab.svg"
+          href="/icons/safari-pinned-tab.svg"
           color="#5bbad5"
         />
         <link rel="shortcut icon" href="/favicon.ico" />
@@ -91,7 +91,7 @@ function App({ Component, pageProps }) {
         <meta name="twitter:description" content="Civil Registration and Vital Statistics" />
         <meta
           name="twitter:image"
-          content="https://covid19.crvs.gm/static/icons/android-chrome-192x192.png"
+          content="https://covid19.crvs.gm/icons/android-chrome-192x192.png"
         />
         <meta name="twitter:creator" content="@afoone" />
         <meta property="og:type" content="website" />
@@ -101,7 +101,7 @@ function App({ Component, pageProps }) {
         <meta property="og:url" content="https://covid19.crvs.gm" />
         <meta
           property="og:image"
-          content="https://covid19.crvs.gm/static/icons/apple-touch-icon.png"
+          content="https://covid19.crvs.gm/icons/apple-touch-icon.png"
         />
       </Head>
       <Provider store={store}>
