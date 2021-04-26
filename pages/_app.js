@@ -26,11 +26,11 @@ function App({ Component, pageProps }) {
       <Head>
         <link rel="stylesheet" href="/styles/custom.css"></link>
         <link rel="stylesheet" href="/styles/datepicker-full.css"></link>
-        <meta name="application-name" content="PWA App" />
+        <meta name="application-name" content="FreeCRVS" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="PWA App" />
-        <meta name="description" content="Best PWA App in the world" />
+        <meta name="description" content="Civil Registration and Vital Statistics" />
         <meta name="format-detection" content="telephone=no" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta
@@ -88,15 +88,15 @@ function App({ Component, pageProps }) {
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:url" content="https://covid19.crvs.gm" />
         <meta name="twitter:title" content="PWA App" />
-        <meta name="twitter:description" content="Best PWA App in the world" />
+        <meta name="twitter:description" content="Civil Registration and Vital Statistics" />
         <meta
           name="twitter:image"
           content="https://covid19.crvs.gm/static/icons/android-chrome-192x192.png"
         />
-        <meta name="twitter:creator" content="@DavidWShadow" />
+        <meta name="twitter:creator" content="@afoone" />
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="PWA App" />
-        <meta property="og:description" content="Best PWA App in the world" />
+        <meta property="og:title" content="FreeCRVS" />
+        <meta property="og:description" content="Civil Registration and Vital Statistics" />
         <meta property="og:site_name" content="PWA App" />
         <meta property="og:url" content="https://covid19.crvs.gm" />
         <meta
