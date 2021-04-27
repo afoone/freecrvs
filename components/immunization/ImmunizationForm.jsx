@@ -131,7 +131,7 @@ const ImmunizationForm = ({ id }) => {
     lastName: { required: true },
     firstName: { required: true },
     phoneNumber: { required: true },
-    vaccinationFirstDose_batchNumber: {required: true}
+    // vaccinationFirstDose_batchNumber: {required: true}
     //batchNumber: { required: true },
     //vaccinatorFullName: { required: true },
     // nameOfTheVaccine: { required: true }
@@ -375,7 +375,7 @@ const ImmunizationForm = ({ id }) => {
               name="last-name"
               value={lastName}
               required
-              onChange={(e) => setLastName(e.target.value)}
+              onChange={(e) => setLastName(e.target.value.toUpperCase())}
               placeholder="Last Name"
             />
             {errors.lastName && <div className="error">{errors.lastName}</div>}

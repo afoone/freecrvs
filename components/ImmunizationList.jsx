@@ -77,9 +77,12 @@ const ImmunizationList = () => {
       url += params;
     }
 
-    axios.get(url).then((res) => {
-      setPatients(immunization.concat(res.data).slice(0, count));
-    });
+    axios
+      .get(url)
+      .then((res) => {
+        setPatients(immunization.concat(res.data).slice(0, count));
+      })
+      .catch((err) => setPatients(immunization));
   };
 
   useEffect(() => {

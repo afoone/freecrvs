@@ -6,7 +6,7 @@
   "background_color": "#00aae7",
   "theme_color": "#00aae7",
   "dir": "ltr",
-  "display": "browser",
+  "display": "fullscreen",
   "orientation": "landscape",
   "scope": "/",
   "start_url": "/",
@@ -76,7 +76,6 @@
     "type": "image/png",
     "sizes": "16x16"
    }
-  ],
-  "prefer_related_applications": "false"
+  ]
  }
  
