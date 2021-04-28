@@ -84,8 +84,6 @@ const ImmunizationRecordForm = ({
         title="Place of vaccination"
       ></AddressFacilityForm>
       <div className="two fields">
-
-
         <div className="ui field">
           <label>Batch Number</label>
           <input
