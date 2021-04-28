@@ -11,9 +11,7 @@ import {
 } from "../extraData/multiselect";
 import { v4 as uuid } from "uuid";
 import AddressForm from "../adresss/AddressForm";
-import {
-  getNationalityOptions,
-} from "../extraData/options";
+import { getNationalityOptions } from "../extraData/options";
 import ImmunizationRecordForm from "./ImmunizationRecordForm";
 import { add } from "../../redux/immunizationSlice";
 import { useDispatch } from "react-redux";
@@ -130,20 +128,13 @@ const ImmunizationForm = ({ id }) => {
   const [errors, setErrors] = useState({});
 
   const validations = {
-    // lastName: { required: true },
-    // batchNumber: { required: true },
-    // vaccinatorFullName: { required: true },
+    lastName: { required: true },
+    firstName: { required: true },
+    phoneNumber: { required: true },
+    vaccinationFirstDose_batchNumber: {required: true}
+    //batchNumber: { required: true },
+    //vaccinatorFullName: { required: true },
     // nameOfTheVaccine: { required: true }
-  };
-
-  const setLocationsOnState = (locationsObject) => {
-    const locationsArray = Object.keys(locationsObject).map((k) => ({
-      id: locationsObject[k].id,
-      name: locationsObject[k].name,
-      partOf: locationsObject[k].partOf,
-    }));
-    setProvinces(locationsArray.filter((l) => l.partOf === "Location/0"));
-    setDistricts(locationsArray.filter((l) => l.partOf !== "Location/0"));
   };
 
   const populateData = (patient) => {
@@ -293,7 +284,6 @@ const ImmunizationForm = ({ id }) => {
       {patient && <PatientData patient={patient} />}
       <div className="register-form ui form">
         <h2 className="ui dividing header">Patient Data</h2>
-
         <div className="field">
           <label>Nationality</label>
           <select
@@ -343,7 +333,7 @@ const ImmunizationForm = ({ id }) => {
               onChange={(e) => setLastName(e.target.value)}
               placeholder="Last Name"
             />
-            {errors.lastName && <div className="error">{errors.lastName.toUpperCase()}</div>}
+            {errors.lastName && <div className="error">{errors.lastName}</div>}
           </div>
         </div>
 
@@ -508,6 +498,7 @@ const ImmunizationForm = ({ id }) => {
                   value={fatherFirstName}
                   required
                   onChange={(e) => setFatherFirstName(e.target.value.toUpperCase())}
+
                   placeholder="First Name"
                 />
                 {errors.fatherFirstName && (
@@ -521,6 +512,7 @@ const ImmunizationForm = ({ id }) => {
                   name="last-name"
                   value={fatherMiddleName}
                   onChange={(e) => setFatherMiddleName(e.target.value.toUpperCase())}
+
                   placeholder="Middle Name"
                 />
                 {errors.fatherMiddleName && (
@@ -766,27 +758,5 @@ const ImmunizationForm = ({ id }) => {
     </div>
   );
 };
-        {/* Baptismal and myChild ID 
-          *  now removed from the hardcopy form   
-          */}
-
-        {/* <div className="two fields">
-          <div className="ui field">
-            <label>Baptismal Name (if applicable)</label>
-            <input
-              type="text"
-              value={baptismalName}
-              onChange={(e) => setBaptismalName(e.target.value.toUpperCase())}
-            />
-          </div>
-          <div className="field">
-            <label>MyChild ID (if any)</label>
-            <input
-              type="text"
-              value={myChildId}
-              onChange={(e) => setMyChildId(e.target.value)}
-            />
-          </div>
-        </div> */}
 
 export default ImmunizationForm;
