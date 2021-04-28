@@ -13,14 +13,12 @@ export default async (req, res) => {
   switch (req.method) {
     case "PUT":
       const patient = await update(id, req.body);
-      console.log(patient);
       res.json(patient);
       break;
 
     default:
-      const patients = await get(id);
-      console.log("patients", patients);
-      res.json(patients);
+      const patientResponse = await get(id);
+      res.json(patientResponse);
       break;
   }
 };
