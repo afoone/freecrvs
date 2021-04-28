@@ -49,8 +49,6 @@ const ImmunizationRecordForm = ({
             <div className="error">{errors.firstDoseDate}</div>
           )}
         </div>
-      </div>
-      <div className="three fields">
         <div className="ui field">
           <label>Name of  vaccine</label>
           <select
@@ -77,13 +75,17 @@ const ImmunizationRecordForm = ({
             <div className="error">{errors.nameOfTheVaccine}</div>
           )}
         </div>
-        <AddressFacilityForm
+      </div>
+      <AddressFacilityForm
         address={immunization.placeofVaccination}
         setAddress={(address) =>
           setImmunization({ ...immunization, placeofVaccination: address })
         }
         title="Place of vaccination"
       ></AddressFacilityForm>
+      <div className="two fields">
+
+
         <div className="ui field">
           <label>Batch Number</label>
           <input
