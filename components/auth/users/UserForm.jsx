@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 
-const UserForm = ({ user, setUser }) => {
+const UserForm = ({ user, setUser, addUserToList }) => {
   const {
     register,
     handleSubmit,
@@ -11,13 +11,15 @@ const UserForm = ({ user, setUser }) => {
     reset,
   } = useForm();
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     console.log("data", data);
     if (user._id) {
-      axios.put(`/api/users/${user._id}/`, data);
+      await axios.put(`/api/users/${user._id}/`, { ...data, _id: undefined });
     } else {
-      axios.post("/api/users", data);
+      await axios.post("/api/users", data);
     }
+
+    addUserToList(data);
 
     setUser(null);
   };

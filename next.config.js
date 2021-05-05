@@ -1,11 +1,16 @@
 const withOffline = require("next-pwa");
+// const runtimeCaching = require('next-pwa/cache')
+
 
 
 const nextConfig = {
   pwa: {
     dest: 'public',
     disable: false,
-    cacheOnFrontEndNav: true
+    cacheOnFrontEndNav: true,
+    register: true,
+    scope: "/",
+    dynamicStartUrlRedirect: "/immunization"
   },
   future: {
     webpack5: true,

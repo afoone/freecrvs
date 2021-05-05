@@ -2,12 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Button, Table } from "semantic-ui-react";
 
-const UserList = ({ setUser }) => {
-  const [users, setUsers] = useState([]);
-
-  useEffect(() => {
-    axios.get("/api/users").then((res) => setUsers(res.data));
-  }, []);
+const UserList = ({ setUser, users }) => {
 
   return (
     <div className="user-list">
@@ -19,7 +14,7 @@ const UserList = ({ setUser }) => {
             <Table.HeaderCell>Email</Table.HeaderCell>
             <Table.HeaderCell>
               <Button primary size="small" onClick={() => setUser({})}>
-                New
+                Create User
               </Button>
             </Table.HeaderCell>
           </Table.Row>

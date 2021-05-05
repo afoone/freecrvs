@@ -11,9 +11,7 @@ import {
 } from "../extraData/multiselect";
 import { v4 as uuid } from "uuid";
 import AddressForm from "../adresss/AddressForm";
-import {
-  getNationalityOptions,
-} from "../extraData/options";
+import { getNationalityOptions } from "../extraData/options";
 import ImmunizationRecordForm from "./ImmunizationRecordForm";
 import { add } from "../../redux/immunizationSlice";
 import { useDispatch } from "react-redux";
@@ -44,9 +42,9 @@ const ImmunizationForm = ({ id }) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [middleName, setMiddleName] = useState("");
-  const [baptismalName, setBaptismalName] = useState("");
+  // const [baptismalName, setBaptismalName] = useState("");
   const [NIN, setNIN] = useState("");
-  const [myChildId, setMyChildId] = useState("");
+  // const [myChildId, setMyChildId] = useState("");
   const [nationality, setNationality] = useState("GM");
   const [gender, setGender] = useState("M");
   const [dateOfBirth, setDateOfBirth] = useState(new Date());
@@ -130,20 +128,13 @@ const ImmunizationForm = ({ id }) => {
   const [errors, setErrors] = useState({});
 
   const validations = {
-    // lastName: { required: true },
-    // batchNumber: { required: true },
-    // vaccinatorFullName: { required: true },
+    lastName: { required: true },
+    firstName: { required: true },
+    phoneNumber: { required: true },
+    // vaccinationFirstDose_batchNumber: {required: true}
+    //batchNumber: { required: true },
+    //vaccinatorFullName: { required: true },
     // nameOfTheVaccine: { required: true }
-  };
-
-  const setLocationsOnState = (locationsObject) => {
-    const locationsArray = Object.keys(locationsObject).map((k) => ({
-      id: locationsObject[k].id,
-      name: locationsObject[k].name,
-      partOf: locationsObject[k].partOf,
-    }));
-    setProvinces(locationsArray.filter((l) => l.partOf === "Location/0"));
-    setDistricts(locationsArray.filter((l) => l.partOf !== "Location/0"));
   };
 
   const populateData = (patient) => {
@@ -153,7 +144,7 @@ const ImmunizationForm = ({ id }) => {
     setPatientAddress(patient.address);
     setNIN(patient.NIN);
     setAttendantAtBirth(patient.attendantAtBirth);
-    setBaptismalName(patient.baptismalName);
+    // setBaptismalName(patient.baptismalName);
     setDateOfBirth(patient.dateOfBirth ? new Date(patient.dateOfBirth) : null);
     setAge(patient.age);
     setFatherFirstName(patient.father.firstName);
@@ -188,7 +179,7 @@ const ImmunizationForm = ({ id }) => {
     setMotherLastName(patient.mother.lastName);
     setMotherAge(patient.mother.age);
     setMotherResidentialAddress(patient.mother.residentialAddress);
-    setMyChildId(patient.myChildId);
+    // setMyChildId(patient.myChildId);
     setNationality(patient.nationality);
     setPatientOccupation(patient.occupation);
     setPatient(patient);
@@ -231,11 +222,11 @@ const ImmunizationForm = ({ id }) => {
       firstName,
       lastName,
       middleName,
-      baptismalName,
+      // baptismalName,
       NIN,
       age,
       patientVaccineRegisterNumber,
-      myChildId,
+      // myChildId,
       nationality,
       gender,
       dateOfBirth,
@@ -293,14 +284,6 @@ const ImmunizationForm = ({ id }) => {
       {patient && <PatientData patient={patient} />}
       <div className="register-form ui form">
         <h2 className="ui dividing header">Patient Data</h2>
-        <div className="ui field">
-          <label>Contact Phone Number:</label>
-          <input
-            type="text"
-            value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
-          />
-        </div>
         <div className="field">
           <label>Nationality</label>
           <select
@@ -310,33 +293,8 @@ const ImmunizationForm = ({ id }) => {
             {getNationalityOptions()}
           </select>
         </div>
-        <div className="three fields">
-          <div className="field">
-            <label>National ID Number (NIN)</label>
-            <input
-              type="text"
-              value={NIN}
-              onChange={(e) => setNIN(e.target.value)}
-            />
-          </div>
 
-          <div className="field">
-            <label>Vaccine Registration Number</label>
-            <input
-              type="text"
-              value={patientVaccineRegisterNumber}
-              onChange={(e) => setPatientVaccineRegisterNumber(e.target.value.toUpperCase())}
-            ></input>
-          </div>
-          <div className="field">
-            <label>Gender</label>
-            <select value={gender} onChange={(e) => setGender(e.target.value)}>
-              <option value={"M"}>Male</option>
-              <option value={"F"}>Female</option>
-              <option value="U">Unknown</option>
-            </select>
-          </div>
-        </div>
+        {/* Patient birth registration data */}
         <div className="three fields">
           <div className="ui field">
             <label>First Name</label>
@@ -372,30 +330,42 @@ const ImmunizationForm = ({ id }) => {
               name="last-name"
               value={lastName}
               required
-              onChange={(e) => setLastName(e.target.value)}
+              onChange={(e) => setLastName(e.target.value.toUpperCase())}
               placeholder="Last Name"
             />
-            {errors.lastName && <div className="error">{errors.lastName.toUpperCase()}</div>}
+            {errors.lastName && <div className="error">{errors.lastName}</div>}
           </div>
         </div>
-        <div className="two fields">
-          <div className="ui field">
-            <label>Baptismal Name (if applicable)</label>
-            <input
-              type="text"
-              value={baptismalName}
-              onChange={(e) => setBaptismalName(e.target.value.toUpperCase())}
-            />
-          </div>
+
+        {/* Patient NIN, VacReg No. and Gender */}
+        <div className="three fields">
           <div className="field">
-            <label>MyChild ID (if any)</label>
+            <label>National ID Number (NIN), if known</label>
             <input
               type="text"
-              value={myChildId}
-              onChange={(e) => setMyChildId(e.target.value)}
+              value={NIN}
+              onChange={(e) => setNIN(e.target.value)}
+            />
+          </div>
+
+          <div className="field">
+            <label>Gender</label>
+            <select value={gender} onChange={(e) => setGender(e.target.value)}>
+              <option value={"M"}>Male</option>
+              <option value={"F"}>Female</option>
+              <option value="U">Unknown</option>
+            </select>
+          </div>
+          <div className="ui field">
+            <label>Mobile Number:</label>
+            <input
+              type="text"
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
             />
           </div>
         </div>
+
         <AddressForm address={patientAddress} setAddress={setPatientAddress} />
         <div className="two fields">
           <div className="ui field">
@@ -422,256 +392,315 @@ const ImmunizationForm = ({ id }) => {
             />
           </div>
         </div>
-
-        <AddressFacilityForm
-          title="Place of delivery"
-          setAddress={setPlaceOfDelivery}
-          address={placeOfDelivery}
-          errors={errors}
-        />
-        <div className="two fields">
-          <div className="field">
-            <label>
-              COVID-19 Priority group, select one or more of the Following
-            </label>
-            <Select
-              defaultValue={[]}
-              isMulti
-              name="priority-group"
-              options={priorityGroups}
-              value={patientPriorityGroups}
-              onChange={(sel) => setPatientPriorityGroups(sel)}
-              className="basic-multi-select"
-              classNamePrefix="select"
-            />
-          </div>
-          <div className="field">
-            <label>
-              Pre-existing conditions, select one or more of the Following
-            </label>
-            <Select
-              defaultValue={[]}
-              isMulti
-              value={patientPreexistingConditions}
-              onChange={(sel) => setPatientPreexistingConditions(sel)}
-              name="priority-group"
-              options={preexistingConditions}
-              className="basic-multi-select"
-              classNamePrefix="select"
-            />
-          </div>
-        </div>
-        <div className="two fields">
-          <div className="field">
-            <label>History of COVID-19 Infection (Date, if infection)</label>
-            <div className="datepicker-full">
-              <DatePicker
-                dateFormat="dd/MM/yyyy"
-                isClearable
-                selected={patientPreviousCovid19Infection}
-                onChange={(date) => setpatientPreviousCovid19Infection(date)}
+        <div>
+          {/* Place of birth if
+           * vaccine recipient is Gambian */}
+          {nationality === "GM" && (
+            <>
+              {""}
+              <AddressFacilityForm
+                title="Place of Birth"
+                setAddress={setPlaceOfDelivery}
+                address={placeOfDelivery}
+                errors={errors}
+              />
+            </>
+          )}
+          {/* Other vaccination data */}
+          <div className="two fields">
+            <div className="ui field">
+              <label>Place of work</label>
+              <input
+                type="text"
+                value={placeOfWork}
+                onChange={(e) => setPlaceOfWork(e.target.value)}
+              />
+            </div>
+            <div className="ui field">
+              <label>Occupation</label>
+              <input
+                type="text"
+                value={patientOccupation}
+                onChange={(e) => setPatientOccupation(e.target.value)}
               />
             </div>
           </div>
-          <div className="field">
-            <label>Previous Allergic Reaction</label>
-            <select
-              value={patientPreviousAllergicReaction}
-              onChange={(e) =>
-                setPatientPreviousAllergicReaction(e.target.value)
-              }
-            >
-              <option value="minor">Yes, minor</option>
-              <option value="severe">Yes, severe (anaphylaxis)</option>
-              <option value="no">No</option>
-            </select>
+          <div className="two fields">
+            <div className="field">
+              <label>
+                COVID-19 Priority group, select one or more of the following
+              </label>
+              <Select
+                defaultValue={[]}
+                isMulti
+                name="priority-group"
+                options={priorityGroups}
+                value={patientPriorityGroups}
+                onChange={(sel) => setPatientPriorityGroups(sel)}
+                className="basic-multi-select"
+                classNamePrefix="select"
+              />
+            </div>
+            <div className="field">
+              <label>
+                Pre-existing conditions, select one or more of the following
+              </label>
+              <Select
+                defaultValue={[]}
+                isMulti
+                value={patientPreexistingConditions}
+                onChange={(sel) => setPatientPreexistingConditions(sel)}
+                name="priority-group"
+                options={preexistingConditions}
+                className="basic-multi-select"
+                classNamePrefix="select"
+              />
+            </div>
+          </div>
+          <div>
+            <div className="two fields">
+              <div className="field">
+                <label>
+                  History of COVID-19 Infection (Date, if infection)
+                </label>
+                <div className="datepicker-full">
+                  <DatePicker
+                    dateFormat="dd/MM/yyyy"
+                    isClearable
+                    selected={patientPreviousCovid19Infection}
+                    onChange={(date) =>
+                      setpatientPreviousCovid19Infection(date)
+                    }
+                  />
+                </div>
+              </div>
+              <div className="field">
+                <label>Previous Allergic Reaction</label>
+                <select
+                  value={patientPreviousAllergicReaction}
+                  onChange={(e) =>
+                    setPatientPreviousAllergicReaction(e.target.value)
+                  }
+                >
+                  <option value="minor">Yes, minor</option>
+                  <option value="severe">Yes, severe (anaphylaxis)</option>
+                  <option value="no">No</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Mother/Father's data
+             * if vaccine recipient is Gambian
+             */}
+            {nationality === "GM" && (
+              <>
+                {" "}
+                <h2 className="ui dividing header">Father's Information</h2>
+                <div className="three fields">
+                  <div className="ui field">
+                    <label>First Name</label>
+                    <input
+                      type="text"
+                      name="first-name"
+                      value={fatherFirstName}
+                      required
+                      onChange={(e) =>
+                        setFatherFirstName(e.target.value.toUpperCase())
+                      }
+                      placeholder="First Name"
+                    />
+                    {errors.fatherFirstName && (
+                      <div className="error">{errors.fatherFirstName}</div>
+                    )}
+                  </div>
+                  <div className="ui field">
+                    <label>Middle Name</label>
+                    <input
+                      type="text"
+                      name="last-name"
+                      value={fatherMiddleName}
+                      onChange={(e) =>
+                        setFatherMiddleName(e.target.value.toUpperCase())
+                      }
+                      placeholder="Middle Name"
+                    />
+                    {errors.fatherMiddleName && (
+                      <div className="error">{errors.fatherMiddleName}</div>
+                    )}
+                  </div>
+                  <div className="ui field">
+                    <label>Last Name</label>
+                    <input
+                      type="text"
+                      name="last-name"
+                      value={fatherLastName}
+                      required
+                      onChange={(e) =>
+                        setFatherLastName(e.target.value.toUpperCase())
+                      }
+                      placeholder="Last Name"
+                    />
+                    {errors.fatherLastName && (
+                      <div className="error">{errors.fatherLastName}</div>
+                    )}
+                  </div>
+                </div>
+                <div className="three fields">
+                  <div className="ui field">
+                    <label>Date of Birth</label>
+                    <div className="datepicker-full">
+                      <DatePicker
+                        isClearable
+                        dateFormat="dd/MM/yyyy"
+                        showYearDropdown
+                        selected={fatherDateOfBirth}
+                        onChange={(date) => setFatherDateOfBirth(date)}
+                      />
+                    </div>
+                    {errors.fatherDateOfBirth && (
+                      <div className="error">{errors.fatherDateOfBirth}</div>
+                    )}
+                  </div>
+                  <div className="field">
+                    <label>NIN</label>
+                    <input
+                      type="text"
+                      value={fatherNIN}
+                      onChange={(e) => setFatherNIN(e.target.value)}
+                    />
+                  </div>
+                  <div className="field">
+                    <label>Age</label>
+                    <input
+                      type="number"
+                      value={fatherAge}
+                      onChange={(e) => setFatherAge(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div className="field">
+                  <label>Nationality</label>
+                  <select
+                    value={fatherNationality}
+                    onChange={(e) => setFatherNationality(e.target.value)}
+                  >
+                    {getNationalityOptions()}
+                  </select>
+                </div>
+                <AddressForm
+                  address={fatherResidentialAddress}
+                  setAddress={setFatherResidentialAddress}
+                ></AddressForm>
+                <h2 className="ui dividing header">Mother's Information</h2>
+                <div className="three fields">
+                  <div className="ui field">
+                    <label>First Name</label>
+                    <input
+                      type="text"
+                      name="first-name"
+                      value={motherFirstName}
+                      required
+                      onChange={(e) =>
+                        setMotherFirstName(e.target.value.toUpperCase())
+                      }
+                      placeholder="First Name"
+                    />
+                    {errors.motherFirstName && (
+                      <div className="error">{errors.motherFirstName}</div>
+                    )}
+                  </div>
+                  <div className="ui field">
+                    <label>Middle Name</label>
+                    <input
+                      type="text"
+                      name="last-name"
+                      value={motherMiddleName}
+                      onChange={(e) =>
+                        setMotherMiddleName(e.target.value.toUpperCase())
+                      }
+                      placeholder="Middle Name"
+                    />
+                    {errors.motherMiddleName && (
+                      <div className="error">{errors.motherMiddleName}</div>
+                    )}
+                  </div>
+                  <div className="ui field">
+                    <label>Last Name</label>
+                    <input
+                      type="text"
+                      name="last-name"
+                      value={motherLastName}
+                      required
+                      onChange={(e) => setMotherLastName(e.target.value)}
+                      placeholder="Last Name"
+                    />
+                    {errors.motherLastName && (
+                      <div className="error">
+                        {errors.motherLastName.toUpperCase()}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <div className="three fields">
+                  <div className="ui field">
+                    <label>Date of Birth</label>
+                    <div className="datepicker-full">
+                      <DatePicker
+                        isClearable
+                        showYearDropdown
+                        dateFormat="dd/MM/yyyy"
+                        selected={motherDateOfBirth}
+                        onChange={(date) => setMotherDateOfBirth(date)}
+                      />
+                    </div>
+                    {errors.motherDateOfBirth && (
+                      <div className="error">{errors.motherDateOfBirth}</div>
+                    )}
+                  </div>
+                  <div className="field">
+                    <label>NIN</label>
+                    <input
+                      type="text"
+                      value={motherNIN}
+                      onChange={(e) => setMotherNIN(e.target.value)}
+                    />
+                  </div>
+                  <div className="field">
+                    <label>Age</label>
+                    <input
+                      type="number"
+                      value={motherAge}
+                      onChange={(e) => setMotherAge(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div className="field">
+                  <label>Nationality</label>
+                  <select
+                    value={motherNationality}
+                    onChange={(e) => setMotherNationality(e.target.value)}
+                  >
+                    {getNationalityOptions()}
+                  </select>
+                </div>
+                <AddressForm
+                  address={motherResidentialAddress}
+                  setAddress={setMotherResidentialAddress}
+                ></AddressForm>
+              </>
+            )}
           </div>
         </div>
-        {nationality === "GM" && (
-          <>
-            {" "}
-            <h2 className="ui dividing header">Mother's data</h2>
-            <div className="field">
-              <label>Nationality</label>
-              <select
-                value={motherNationality}
-                onChange={(e) => setMotherNationality(e.target.value)}
-              >
-                {getNationalityOptions()}
-              </select>
-            </div>
-            <div className="three fields">
-              <div className="ui field">
-                <label>First Name</label>
-                <input
-                  type="text"
-                  name="first-name"
-                  value={motherFirstName}
-                  required
-                  onChange={(e) => setMotherFirstName(e.target.value.toUpperCase())}
-                  placeholder="First Name"
-                />
-                {errors.motherFirstName && (
-                  <div className="error">{errors.motherFirstName}</div>
-                )}
-              </div>
-              <div className="ui field">
-                <label>Middle Name</label>
-                <input
-                  type="text"
-                  name="last-name"
-                  value={motherMiddleName}
-                  onChange={(e) => setMotherMiddleName(e.target.value.toUpperCase())}
-                  placeholder="Middle Name"
-                />
-                {errors.motherMiddleName && (
-                  <div className="error">{errors.motherMiddleName}</div>
-                )}
-              </div>
-              <div className="ui field">
-                <label>Last Name</label>
-                <input
-                  type="text"
-                  name="last-name"
-                  value={motherLastName}
-                  required
-                  onChange={(e) => setMotherLastName(e.target.value)}
-                  placeholder="Last Name"
-                />
-                {errors.motherLastName && (
-                  <div className="error">{errors.motherLastName.toUpperCase()}</div>
-                )}
-              </div>
-            </div>
-            <div className="three fields">
-              <div className="ui field">
-                <label>Date of Birth</label>
-                <div className="datepicker-full">
-                  <DatePicker
-                    isClearable
-                    showYearDropdown
-                    dateFormat="dd/MM/yyyy"
-                    selected={motherDateOfBirth}
-                    onChange={(date) => setMotherDateOfBirth(date)}
-                  />
-                </div>
-                {errors.motherDateOfBirth && (
-                  <div className="error">{errors.motherDateOfBirth}</div>
-                )}
-              </div>
-              <div className="field">
-                <label>Age</label>
-                <input
-                  type="number"
-                  value={motherAge}
-                  onChange={(e) => setMotherAge(e.target.value)}
-                />
-              </div>
-              <div className="field">
-                <label>NIN</label>
-                <input
-                  type="text"
-                  value={motherNIN}
-                  onChange={(e) => setMotherNIN(e.target.value)}
-                />
-              </div>
-            </div>
-            <AddressForm
-              address={motherResidentialAddress}
-              setAddress={setMotherResidentialAddress}
-            ></AddressForm>
-            <h2 className="ui dividing header">Father's data</h2>
-            <div className="field">
-              <label>Nationality</label>
-              <select
-                value={fatherNationality}
-                onChange={(e) => setFatherNationality(e.target.value)}
-              >
-                {getNationalityOptions()}
-              </select>
-            </div>
-            <div className="three fields">
-              <div className="ui field">
-                <label>First Name</label>
-                <input
-                  type="text"
-                  name="first-name"
-                  value={fatherFirstName}
-                  required
-                  onChange={(e) => setFatherFirstName(e.target.value.toUpperCase())}
-                  placeholder="First Name"
-                />
-                {errors.fatherFirstName && (
-                  <div className="error">{errors.fatherFirstName}</div>
-                )}
-              </div>
-              <div className="ui field">
-                <label>Middle Name</label>
-                <input
-                  type="text"
-                  name="last-name"
-                  value={fatherMiddleName}
-                  onChange={(e) => setFatherMiddleName(e.target.value.toUpperCase())}
-                  placeholder="Middle Name"
-                />
-                {errors.fatherMiddleName && (
-                  <div className="error">{errors.fatherMiddleName}</div>
-                )}
-              </div>
-              <div className="ui field">
-                <label>Last Name</label>
-                <input
-                  type="text"
-                  name="last-name"
-                  value={fatherLastName}
-                  required
-                  onChange={(e) => setFatherLastName(e.target.value.toUpperCase())}
-                  placeholder="Last Name"
-                />
-                {errors.fatherLastName && (
-                  <div className="error">{errors.fatherLastName}</div>
-                )}
-              </div>
-            </div>
-            <div className="three fields">
-              <div className="ui field">
-                <label>Date of Birth</label>
-                <div className="datepicker-full">
-                  <DatePicker
-                    isClearable
-                    dateFormat="dd/MM/yyyy"
-                    showYearDropdown
-                    selected={fatherDateOfBirth}
-                    onChange={(date) => setFatherDateOfBirth(date)}
-                  />
-                </div>
-                {errors.fatherDateOfBirth && (
-                  <div className="error">{errors.fatherDateOfBirth}</div>
-                )}
-              </div>
-              <div className="field">
-                <label>Age</label>
-                <input
-                  type="number"
-                  value={fatherAge}
-                  onChange={(e) => setFatherAge(e.target.value)}
-                />
-              </div>
-              <div className="field">
-                <label>NIN</label>
-                <input
-                  type="text"
-                  value={fatherNIN}
-                  onChange={(e) => setFatherNIN(e.target.value)}
-                />
-              </div>
-            </div>
-            <AddressForm
-              address={fatherResidentialAddress}
-              setAddress={setFatherResidentialAddress}
-            ></AddressForm>
-          </>
-        )}
+        <div className="field">
+          <label>Vaccine Register Number</label>
+          <input
+            type="text"
+            value={patientVaccineRegisterNumber}
+            onChange={(e) =>
+              setPatientVaccineRegisterNumber(e.target.value.toUpperCase())
+            }
+          ></input>
+        </div>
         <ImmunizationRecordForm
           title="Vaccination Data (1st Dose)"
           setImmunization={setvaccinationFirstDose}
@@ -691,7 +720,7 @@ const ImmunizationForm = ({ id }) => {
               className="ui button positive"
               onClick={() => savePatient(true)}
             >
-              Save and create other copying data
+              Save and Open New Form
             </button>
           )}
           <button className="ui button positive" onClick={() => savePatient()}>

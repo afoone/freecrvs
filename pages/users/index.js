@@ -1,10 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AuthHOC from "../../components/auth/AuthHOC";
 import UserForm from "../../components/auth/users/UserForm";
 import UserList from "../../components/auth/users/UserList";
+import axios from "axios";
 
 const users = () => {
   const [editingUser, setEditingUser] = useState(null);
+
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    axios.get("/api/users").then((res) => setUsers(res.data));
+  }, []);
 
   return (
     <div>
@@ -16,9 +23,15 @@ const users = () => {
             columnGap: "1rem",
           }}
         >
-          <UserList setUser={setEditingUser} />
+          <UserList setUser={setEditingUser} users={users} />
           {editingUser && (
-            <UserForm setUser={setEditingUser} user={editingUser}></UserForm>
+            <UserForm
+              setUser={setEditingUser}
+              user={editingUser}
+              addUserToList={(u) =>
+                setUsers([u, ...users.filter((i) => i._id !== u._id)])
+              }
+            ></UserForm>
           )}
         </div>
       </AuthHOC>
