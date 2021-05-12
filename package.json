@@ -2,7 +2,7 @@
   "name": "with-mongodb",
   "version": "0.1.0",
   "scripts": {
-    "dev": "docker-compose up -d mongo && next dev",
+    "dev": "docker-compose up -d mongo && next dev -p 3005",
     "build": "next build",
     "start": "next start",
     "test": "jest --watch"
