@@ -15,7 +15,7 @@ services:
       - MONGODB_URI=mongodb://mongogambia:27017/gambia?retryWrites=true&w=majority
       - MONGODB_DB=gambia
       - JWT_KEY=KDJSALIOOOOOKDJ092348KDSJFJ023
-      - NEXTAUTH_URL=/
+      - NEXTAUTH_URL=https://covid19.crvs.gm
       - NEXT_PUBLIC_BASE_URL=https://covid19.crvs.gm
     networks:
       - freecrvs
