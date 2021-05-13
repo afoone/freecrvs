@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
+import Skeleton from "react-loading-skeleton";
 
 export const getFullName = (patient) => {
-  return `${patient.firstName}  ${patient.middleName || ""} ${patient.lastName}`;
+  return `${patient.firstName}  ${patient.middleName || ""} ${
+    patient.lastName
+  }`;
 };
 
 export const getIdentifiers = (patient) => {
@@ -32,6 +35,31 @@ const PatientRow = ({ patient }) => {
             <button className="primary mini ui button">Edit</button>
           </a>
         )}
+      </td>
+    </tr>
+  );
+};
+
+const PatientSkeletonRow = () => {
+  return (
+    <tr>
+      <td>
+        <Skeleton></Skeleton>
+      </td>
+      <td>
+        <Skeleton></Skeleton>
+      </td>
+      <td>
+        <Skeleton></Skeleton>
+      </td>
+      <td>
+        <Skeleton></Skeleton>
+      </td>
+      <td>
+        <Skeleton></Skeleton>
+      </td>
+      <td>
+        <Skeleton></Skeleton>
       </td>
     </tr>
   );
@@ -70,6 +98,7 @@ const ImmunizationList = () => {
   const [searchToday, setSearchToday] = useState(false);
 
   const immunization = useSelector((state) => state.immunization);
+  const [loading, setLoading] = useState(true);
 
   const getPatientsWithParams = (params) => {
     let url = `/api/patients/?_count=${count}&_getpagesoffset=${offset}`;
@@ -81,6 +110,7 @@ const ImmunizationList = () => {
       .get(url)
       .then((res) => {
         setPatients(immunization.concat(res.data).slice(0, count));
+        setLoading(false);
       })
       .catch((err) => setPatients(immunization));
   };
@@ -90,7 +120,6 @@ const ImmunizationList = () => {
   }, [immunization, count]);
 
   const searchPatients = () => {
-    console.log("searching patients");
     let url = "";
     if (searchGiven) {
       url += `&firstName=${searchGiven}`;
@@ -194,6 +223,10 @@ const ImmunizationList = () => {
           </tr>
         </thead>
         <tbody>
+          {loading &&
+            [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(() => (
+              <PatientSkeletonRow></PatientSkeletonRow>
+            ))}
           {patients.map((i, index) => (
             <PatientRow key={index} patient={i} />
           ))}
