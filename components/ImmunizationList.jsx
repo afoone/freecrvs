@@ -3,7 +3,7 @@ import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 
 export const getFullName = (patient) => {
-  return `${patient.firstName}  ${patient.middleName} ${patient.lastName}`;
+  return `${patient.firstName}  ${patient.middleName || ""} ${patient.lastName}`;
 };
 
 export const getIdentifiers = (patient) => {
