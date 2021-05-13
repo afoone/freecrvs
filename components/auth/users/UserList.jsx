@@ -10,7 +10,7 @@ const UserRow = ({ user, setUser }) => {
       <Table.Cell>{user.role}</Table.Cell>
       <Table.Cell>{user.email}</Table.Cell>
       <Table.HeaderCell>
-        <Button style={{ float: "right" }} primary size="small" onClick={() => setUser(u)}>
+        <Button style={{ float: "right" }} primary size="small" onClick={() => setUser(user)}>
           Edit
         </Button>
       </Table.HeaderCell>
