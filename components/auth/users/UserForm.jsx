@@ -12,7 +12,6 @@ const UserForm = ({ user, setUser, addUserToList }) => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    console.log("data", data);
     if (user._id) {
       await axios.put(`/api/users/${user._id}/`, { ...data, _id: undefined });
     } else {
@@ -26,10 +25,7 @@ const UserForm = ({ user, setUser, addUserToList }) => {
 
   useEffect(() => {
     if (user) reset({ ...user, password: "" });
-    console.log("miuser", user);
   }, [user]);
-
-  console.log(watch("example")); // watch input value by passing the name of it
 
   return (
     <div className="user-form">

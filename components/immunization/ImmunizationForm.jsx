@@ -169,7 +169,6 @@ const ImmunizationForm = ({ id }) => {
       patient.vaccination && patient.vaccination.length > 1
         ? patient.vaccination[1]
         : {};
-    console.log("1st dose vaccionation retrieved", vaccinationDose1);
 
     setvaccinationFirstDose(vaccinationDose1);
     setVaccinationSecondDose(vaccinationDose2);
@@ -206,7 +205,6 @@ const ImmunizationForm = ({ id }) => {
         // },
       })
       .then((res) => {
-        console.log("patient retrieved", res);
         setPatient(res.data);
         populateData(res.data);
       });
