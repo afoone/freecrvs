@@ -10,6 +10,8 @@ import {
 } from "../../../components/charts/strategies";
 import {
   getAllRegions,
+  getAllRegionsNames,
+  convertRegionNames,
   getAllVaccines,
   getChartData,
 } from "../../../components/charts/cumulativeData";
@@ -62,7 +64,7 @@ const Dashboard = ({
           data={vaccinatedTotals.partial.map((i) => ({
             name: i.id,
             value: i.count,
-          }))} 
+          }))}
           totals
         />
         <h1 class="ui header" style={{ gridColumn: "1/3" }}>
@@ -109,7 +111,7 @@ export async function getServerSideProps() {
   console.log("total vaccines by region is...", totalVaccinesByRegion);
 
   const differentVaccines = getAllVaccines(totalVaccinesByDate);
-  const differentRegions = getAllRegions();
+  const differentRegions = getAllRegionsNames();
 
   if (!cache.get("formattedTotalVaccinesByDate"))
     cache.put(
@@ -149,7 +151,7 @@ export async function getServerSideProps() {
 
   return {
     props: {
-      totalVaccinesByRegion: formattedTotalVaccinesByRegion,
+      totalVaccinesByRegion: convertRegionNames(formattedTotalVaccinesByRegion),
       totalVaccinesByDate: formattedTotalVaccinesByDate,
       differentRegions,
       totalVaccines: totalVaccines.map((i) => ({

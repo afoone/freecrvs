@@ -37,6 +37,25 @@ export const getAllRegions = () => {
   return regions.map((i) => i.id);
 };
 
+export const getAllRegionsNames = () => {
+  return regions.map((i) => i.name);
+};
+
+export const convertRegionItem = (item) => {
+  const newItem = { ...item };
+  Object.keys(item)
+    .filter((i) => i !== "name")
+    .forEach(
+      (k) => (newItem[regions.filter((i) => i.id === k)[0]?.name] = item[k])
+    );
+
+  return newItem;
+};
+
+export const convertRegionNames = (data) => {
+  return data.map((i) => convertRegionItem(i));
+};
+
 export const getCumulativeData = (
   data,
   strategy = vaccineStrategy,
