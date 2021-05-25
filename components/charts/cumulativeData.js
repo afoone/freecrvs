@@ -1,4 +1,6 @@
 import moment from "moment";
+import { regions } from "../extraData/regions";
+import { vaccineStrategy } from "./strategies";
 
 export const calculateCumulativeDate = (data) => {
   const dataWithDates = data
@@ -31,7 +33,16 @@ export const getAllVaccines = (data) => {
   return [...result];
 };
 
-export const getCumulativeData = (data, dateMin, dateMax) => {
+export const getAllRegions = () => {
+  return regions.map((i) => i.id);
+};
+
+export const getCumulativeData = (
+  data,
+  strategy = vaccineStrategy,
+  dateMin,
+  dateMax
+) => {
   const dataWithDates = data
     .filter((i) => i._id.date)
     .map((i) => ({ ...i, date: new Date(i._id.date) }));
@@ -46,35 +57,15 @@ export const getCumulativeData = (data, dateMin, dateMax) => {
       null
     );
   const result = [];
-  getAllVaccines(data).forEach((i) => {
-    const aVaccineData = getDataFromAVaccineSortedByDate(data, i).map(
-      (element, index, arr) => {
-        return {
-          date: element._id.date,
-          nameOfTheVaccine: i,
-          count: arr
-            .slice(0, index)
-            .reduce((acc, curr) => acc + curr.count, element.count),
-        };
-      }
-    );
+  strategy.getAll(data).forEach((i) => {
+    const aResultData = strategy.execute(data, i);
 
-    result.push(...interpolate(aVaccineData, dateMax, dateMin));
+    result.push(...interpolate(aResultData, dateMax, dateMin));
   });
   return result;
 };
 
-export const getDataFromAVaccineSortedByDate = (data, name) => {
-  return data
-    .map((i) => ({
-      ...i,
-      _id: { ...i._id, nameOfTheVaccine: i._id.nameOfTheVaccine || "Unknown" },
-    }))
-    .filter((i) => i._id.nameOfTheVaccine === name)
-    .sort(sortByDate);
-};
-
-export const createChartData = (data, dateMin, dateMax) => {
+export const createChartData = (data, dateMin, dateMax, strategy) => {
   const result = [];
   let currentDate = moment(dateMin);
   do {
@@ -83,14 +74,12 @@ export const createChartData = (data, dateMin, dateMax) => {
     };
     data
       .filter((i) => i.date === currentDate.format("YYYY-MM-DD"))
-      .forEach((i) => (element[i.nameOfTheVaccine || "Unknown"] = i.count));
+      .forEach((i) => (element[i[strategy.field] || "Unknown"] = i.count));
     result.push(element);
     currentDate = currentDate.add(1, "day");
   } while (currentDate < moment(dateMax).add(1, "day"));
   return result;
 };
-
-export const sortByDate = (a, b) => (a._id.date > b._id.date ? 1 : -1);
 
 export const interpolate = (data, dateMax, dateMin) => {
   const result = [];
@@ -115,11 +104,15 @@ export const interpolate = (data, dateMax, dateMin) => {
   return result;
 };
 
-export const getChartData = (data, dateMin, dateMax) => {
+export const getChartData = (
+  data,
+  strategy = vaccineStrategy,
+  dateMin,
+  dateMax
+) => {
   const dataWithDates = data
     .filter((i) => i._id.date)
     .map((i) => ({ ...i, date: new Date(i._id.date) }));
-  console.log("data with dates", dataWithDates);
   if (!dateMax)
     dateMax = dataWithDates.reduce(
       (acc, curr) => (!acc ? curr.date : acc - curr.date > 0 ? acc : curr.date),
@@ -130,9 +123,7 @@ export const getChartData = (data, dateMin, dateMax) => {
       (acc, curr) => (!acc ? curr.date : acc - curr.date < 0 ? acc : curr.date),
       null
     );
-  console.log("datemax y min", dateMax, dateMin);
-  const cumulativeData = getCumulativeData(data, dateMin, dateMax);
-  console.log("cumulative data =", cumulativeData);
+  const cumulativeData = getCumulativeData(data, strategy, dateMin, dateMax);
 
-  return createChartData(cumulativeData, dateMin, dateMax);
+  return createChartData(cumulativeData, dateMin, dateMax, strategy);
 };
