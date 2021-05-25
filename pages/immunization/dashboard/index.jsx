@@ -17,6 +17,8 @@ import {
   getTotalDosesByType,
   getTotalDosesByTypeAndDay,
   getTotalDosesByRegionAndDay,
+  getFirstDoseVaccinated,
+  getFullyVaccinated,
 } from "../../../services/dashboard";
 
 const Dashboard = ({
@@ -25,28 +27,42 @@ const Dashboard = ({
   totalVaccines = [],
   differentVaccines = [],
   differentRegions = [],
+  vaccinatedTotals = {},
   date = "",
 }) => {
   const lastUpdated = new Date(date);
 
-  console.log(
-    "total vaccines by region",
-    totalVaccinesByRegion,
-    "different regions",
-    differentRegions
-  );
   return (
     <AuthHOC>
       <h1>The Gambia COVID-19 Vaccination Dashboard</h1>
       <h3>Last updated: {lastUpdated.toLocaleString()}</h3>
+      {/* <h3>
+        Fully Vaccinated: {vaccinatedTotals.fully}. Partial:{" "}
+        {vaccinatedTotals.partial}
+      </h3> */}
+
       <div
         style={{
           display: "grid",
           gridTemplateColumns: "auto auto",
-          gridTemplateRows: "auto auto 30rem 30rem auto auto",
+          gridTemplateRows: "auto auto auto 30rem 30rem auto auto",
           gap: "1rem",
         }}
       >
+        <DataTable
+          title="Fully Vaccinated By Region"
+          data={vaccinatedTotals.fully.map((i) => ({
+            name: i.id,
+            value: i.count,
+          }))}
+        />
+        <DataTable
+          title="First Dose Vaccinated By Region"
+          data={vaccinatedTotals.partial.map((i) => ({
+            name: i.id,
+            value: i.count,
+          }))}
+        />
         <h1 class="ui header" style={{ gridColumn: "1/3" }}>
           Total doses
         </h1>
@@ -111,7 +127,7 @@ export async function getServerSideProps() {
         totalVaccinesByRegion,
         regionStrategy,
         new Date("2021-02-01"),
-        new Date(),
+        new Date()
       ),
       1000 * 3600 * 24
     );
@@ -122,6 +138,12 @@ export async function getServerSideProps() {
     "formattedTotalVaccinesByRegion"
   );
   const totalVaccines = await getTotalDosesByType();
+  const vaccinatedTotals = {
+    fully: await getFullyVaccinated(),
+    partial: await getFirstDoseVaccinated(),
+  };
+
+  console.log("vaccinatedTotals", vaccinatedTotals);
 
   return {
     props: {
@@ -134,6 +156,7 @@ export async function getServerSideProps() {
       })),
       differentVaccines,
       date: cache.get("date").toISOString(),
+      vaccinatedTotals,
     },
   };
 }

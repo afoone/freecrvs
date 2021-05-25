@@ -1,4 +1,5 @@
 import { connectToDatabase } from "../util/mongodb";
+import { regions } from "../components/extraData/regions";
 
 export const getByGender = async () => {
   const { db } = await connectToDatabase();
@@ -111,4 +112,36 @@ export const getTotalDosesByRegionAndDay = async () => {
       },
     ])
     .toArray();
+};
+
+export const getFullyVaccinated = async () => {
+  const { db } = await connectToDatabase();
+  const byRegion = await db
+    .collection("vaccination")
+    .aggregate([
+      { $match: { "vaccination.1.nameOfTheVaccine": { $exists: true } } },
+      { $group: { _id: "$address.province", count: { $sum: 1 } } },
+    ])
+    .toArray();
+    return byRegion.map((i) => ({
+      ...i,
+      _id : !i._id ? "": i._id,
+      id: regions.filter((e) => e.id === i._id)[0]?.name || "",
+    }));
+};
+
+export const getFirstDoseVaccinated = async () => {
+  const { db } = await connectToDatabase();
+  const byRegion = await db
+    .collection("vaccination")
+    .aggregate([
+      { $match: { "vaccination.0.nameOfTheVaccine": { $exists: true } } },
+      { $group: { _id: "$address.province", count: { $sum: 1 } } },
+    ])
+    .toArray();
+  return byRegion.map((i) => ({
+    ...i,
+    _id : !i._id ? "": i._id,
+    id: regions.filter((e) => e.id === i._id)[0]?.name || "",
+  }));
 };
