@@ -55,13 +55,15 @@ const Dashboard = ({
             name: i.id,
             value: i.count,
           }))}
+          totals
         />
         <DataTable
           title="First Dose Vaccinated By Region"
           data={vaccinatedTotals.partial.map((i) => ({
             name: i.id,
             value: i.count,
-          }))}
+          }))} 
+          totals
         />
         <h1 class="ui header" style={{ gridColumn: "1/3" }}>
           Total doses
