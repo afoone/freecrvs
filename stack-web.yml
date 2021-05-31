@@ -7,16 +7,15 @@ services:
       replicas: 2
       labels:
         - 'traefik.enable=true'
-        - 'traefik.frontend.rule=Host: covid19.${HOSTNAME}'
+        - 'traefik.frontend.rule=Host: covid19.crvs.gm'
         - 'traefik.port=3000'
-        - 'traefik.docker.network=opencrvs_overlay_net'
+        - 'traefik.docker.network=opencrvs'
 
     environment: 
       - MONGODB_URI=mongodb://mongogambia:27017/gambia?retryWrites=true&w=majority
       - MONGODB_DB=gambia
       - JWT_KEY=KDJSALIOOOOOKDJ092348KDSJFJ023
-      - NEXTAUTH_URL=https://covid19.crvs.gm
-      - BASE_URL=https://covid19.crvs.gm
+      - NEXTAUTH_URL=/
       - NEXT_PUBLIC_BASE_URL=https://covid19.crvs.gm
     networks:
       - freecrvs
