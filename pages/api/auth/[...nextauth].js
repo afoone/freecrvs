@@ -13,7 +13,7 @@ export default NextAuth({
   callbacks: {
     async redirect(url, baseUrl) {
       console.log("these are the callbacks", url, baseUrl);
-      return process.env.NEXT_PUBLIC_BASE_URL//"/";
+      return baseUrl//"/";
     },
     jwt: async (token, user, account, profile, isNewUser) => {
       //  "user" parameter is the object received from "authorize"
