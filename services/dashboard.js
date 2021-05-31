@@ -36,6 +36,60 @@ export const getTotalDosesByType = async () => {
     .toArray();
 };
 
+export const getTotalDosesByPriorityGroup = async () => {
+  const { db } = await connectToDatabase();
+  return await db
+    .collection("vaccination")
+    .aggregate([
+      { $unwind: "$priorityGroups" },
+      { $unwind: "$vaccination" },
+      {
+        $match: {
+          $or: [
+            { "vaccination.firstDoseDate": { $ne: null } },
+            { "vaccination.date": { $ne: null } },
+          ],
+        },
+      },
+      {
+        $group: {
+          _id: "$priorityGroups.value",
+          count: {
+            $sum: 1,
+          },
+        },
+      },
+    ])
+    .toArray();
+};
+
+export const getTotalDosesByPreexistingConditions = async () => {
+  const { db } = await connectToDatabase();
+  return await db
+    .collection("vaccination")
+    .aggregate([
+      { $unwind: "$preexistingConditions" },
+      { $unwind: "$vaccination" },
+      {
+        $match: {
+          $or: [
+            { "vaccination.firstDoseDate": { $ne: null } },
+            { "vaccination.date": { $ne: null } },
+          ],
+        },
+      },
+      {
+        $group: {
+          _id: "$preexistingConditions.value",
+          count: {
+            $sum: 1,
+          },
+        },
+      },
+    ])
+    .toArray();
+};
+
 export const getTotalDosesByTypeAndDay = async () => {
   const { db } = await connectToDatabase();
   return await db
@@ -123,11 +177,11 @@ export const getFullyVaccinated = async () => {
       { $group: { _id: "$address.province", count: { $sum: 1 } } },
     ])
     .toArray();
-    return byRegion.map((i) => ({
-      ...i,
-      _id : !i._id ? "": i._id,
-      id: regions.filter((e) => e.id === i._id)[0]?.name || "",
-    }));
+  return byRegion.map((i) => ({
+    ...i,
+    _id: !i._id ? "" : i._id,
+    id: regions.filter((e) => e.id === i._id)[0]?.name || "",
+  }));
 };
 
 export const getFirstDoseVaccinated = async () => {
@@ -141,7 +195,7 @@ export const getFirstDoseVaccinated = async () => {
     .toArray();
   return byRegion.map((i) => ({
     ...i,
-    _id : !i._id ? "": i._id,
+    _id: !i._id ? "" : i._id,
     id: regions.filter((e) => e.id === i._id)[0]?.name || "",
   }));
 };
