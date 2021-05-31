@@ -13,7 +13,7 @@ import { v4 as uuid } from "uuid";
 import AddressForm from "../adresss/AddressForm";
 import { getNationalityOptions } from "../extraData/options";
 import ImmunizationRecordForm from "./ImmunizationRecordForm";
-import { add } from "../../redux/immunizationSlice";
+import { add, update } from "../../redux/immunizationSlice";
 import { useDispatch } from "react-redux";
 import AddressFacilityForm from "../adresss/AddressFacilityForm";
 
@@ -261,10 +261,8 @@ const ImmunizationForm = ({ id }) => {
         axios
           .put(url + `${patient._id}/`, object)
           .then(router.push(redirectUrl));
+        dispatch(update(object));
       } else {
-        axios
-          .post(url + `${patient._id}/`, object)
-          .then(router.push(redirectUrl));
         dispatch(add(object));
         router.push(redirectUrl);
       }
