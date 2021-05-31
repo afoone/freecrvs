@@ -8,6 +8,7 @@
     "test": "jest --watch"
   },
   "dependencies": {
+    "@react-pdf/renderer": "^2.0.13",
     "@reduxjs/toolkit": "^1.5.1",
     "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
