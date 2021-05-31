@@ -51,22 +51,14 @@ const ImmunizationForm = ({ id }) => {
   const [age, setAge] = useState("");
   const [placeOfWork, setPlaceOfWork] = useState("");
   const [patientPriorityGroups, setPatientPriorityGroups] = useState([]);
-  const [
-    patientVaccineRegisterNumber,
-    setPatientVaccineRegisterNumber,
-  ] = useState("");
-  const [
-    patientPreexistingConditions,
-    setPatientPreexistingConditions,
-  ] = useState([]);
-  const [
-    patientPreviousCovid19Infection,
-    setpatientPreviousCovid19Infection,
-  ] = useState(null);
-  const [
-    patientPreviousAllergicReaction,
-    setPatientPreviousAllergicReaction,
-  ] = useState("no");
+  const [patientVaccineRegisterNumber, setPatientVaccineRegisterNumber] =
+    useState("");
+  const [patientPreexistingConditions, setPatientPreexistingConditions] =
+    useState([]);
+  const [patientPreviousCovid19Infection, setpatientPreviousCovid19Infection] =
+    useState(null);
+  const [patientPreviousAllergicReaction, setPatientPreviousAllergicReaction] =
+    useState("no");
   const [attendantAtBirth, setAttendantAtBirth] = useState("");
   // const [typeofBirth, setTypeofBirth] = useState('single')
   // const [orderOfBirth, setOrderOfBirth] = useState(1)
@@ -270,6 +262,9 @@ const ImmunizationForm = ({ id }) => {
           .put(url + `${patient._id}/`, object)
           .then(router.push(redirectUrl));
       } else {
+        axios
+          .post(url + `${patient._id}/`, object)
+          .then(router.push(redirectUrl));
         dispatch(add(object));
         router.push(redirectUrl);
       }
