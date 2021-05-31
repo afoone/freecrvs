@@ -3,10 +3,14 @@ import {
   createChartData,
   getAllVaccines,
   getCumulativeData,
-  getDataFromAVaccineSortedByDate,
   interpolate,
-  sortByDate,
 } from "./cumulativeData";
+
+import {
+  getDataFromAVaccineSortedByDate,
+  _sortByDate,
+  vaccineStrategy,
+} from "./strategies";
 
 const data1 = [
   { _id: { date: "2021-04-13", nameOfTheVaccine: "NovaVax" }, count: 1 },
@@ -25,7 +29,7 @@ const dataWhitBlank = [
 
 describe("get all the chart data", () => {
   test("should generate data without blanks", () => {
-    expect(getChartData(data1)).toEqual([
+    expect(getChartData(data1, vaccineStrategy)).toEqual([
       {
         name: "2021-04-05",
         Moderna: 1,
@@ -135,7 +139,8 @@ test("should create good chart data, one element", () => {
         { date: "2021-04-08", nameOfTheVaccine: "Moderna", count: 3 },
       ],
       new Date("2021-04-03T00:00:00.000Z"),
-      new Date("2021-04-08T00:00:00.000Z")
+      new Date("2021-04-08T00:00:00.000Z"),
+      vaccineStrategy
     )
   ).toEqual(
     [
@@ -169,7 +174,8 @@ describe("full data", () => {
           { date: "2021-04-08", nameOfTheVaccine: "Otra", count: 3 },
         ],
         new Date("2021-04-03T00:00:00.000Z"),
-        new Date("2021-04-08T00:00:00.000Z")
+        new Date("2021-04-08T00:00:00.000Z"),
+        vaccineStrategy
       )
     ).toEqual([
       { name: "2021-04-03", Moderna: 1, Otra: 1 },
@@ -195,7 +201,8 @@ describe("full data", () => {
           { date: "2021-04-08", nameOfTheVaccine: "Otra", count: 7 },
         ],
         new Date("2021-04-03T00:00:00.000Z"),
-        new Date("2021-04-08T00:00:00.000Z")
+        new Date("2021-04-08T00:00:00.000Z"),
+        vaccineStrategy
       )
     ).toEqual([
       { name: "2021-04-03", Moderna: 1 },
@@ -224,7 +231,8 @@ describe("full data", () => {
           { date: "2021-04-08", nameOfTheVaccine: "", count: 3 },
         ],
         new Date("2021-04-03T00:00:00.000Z"),
-        new Date("2021-04-08T00:00:00.000Z")
+        new Date("2021-04-08T00:00:00.000Z"),
+        vaccineStrategy
       )
     ).toEqual([
       { name: "2021-04-03", Moderna: 1, Unknown: 1 },
@@ -250,7 +258,8 @@ describe("full data", () => {
           { date: "2021-04-08", nameOfTheVaccine: "", count: 7 },
         ],
         new Date("2021-04-03T00:00:00.000Z"),
-        new Date("2021-04-08T00:00:00.000Z")
+        new Date("2021-04-08T00:00:00.000Z"),
+        vaccineStrategy
       )
     ).toEqual([
       { name: "2021-04-03", Moderna: 1 },
@@ -271,7 +280,7 @@ describe("sort by date", () => {
         { _id: { date: "2021-04-14", nameOfTheVaccine: "Otra" }, count: 5 },
         { _id: { date: "2021-04-05", nameOfTheVaccine: "Moderna" }, count: 1 },
         { _id: { date: "2021-04-06", nameOfTheVaccine: "Moderna" }, count: 2 },
-      ].sort(sortByDate)
+      ].sort(_sortByDate)
     ).toStrictEqual([
       { _id: { date: "2021-04-05", nameOfTheVaccine: "Moderna" }, count: 1 },
       { _id: { date: "2021-04-06", nameOfTheVaccine: "Moderna" }, count: 2 },
@@ -329,6 +338,4 @@ describe("get data from a vaccine sorted by date", () => {
       { _id: { date: "2021-04-06", nameOfTheVaccine: "Unknown" }, count: 2 },
     ]);
   });
-})
-
-
+});

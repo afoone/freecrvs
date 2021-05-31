@@ -22,7 +22,7 @@ let persistor = persistStore(store);
 
 function App({ Component, pageProps }) {
   return (
-    <div className="ui container">
+    <div className="ui container" style={{marginBottom: "3rem"}}>
       <Head>
         <link rel="stylesheet" href="/styles/custom.css"></link>
         <link rel="stylesheet" href="/styles/datepicker-full.css"></link>

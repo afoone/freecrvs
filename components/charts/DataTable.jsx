@@ -1,8 +1,17 @@
 import React from "react";
 import { Table } from "semantic-ui-react";
 
-const DataTable = ({ title, data }) => {
-  
+const DataTable = ({ title, data, totals }) => {
+  // Grouping unkowns
+  const dataGrouped = [
+    ...data.filter((i) => i.name),
+    {
+      value: data
+        .filter((i) => !i.name)
+        .reduce((acc, curr) => acc + curr.value, 0),
+    },
+  ];
+
   return (
     <Table celled>
       <Table.Header>
@@ -15,7 +24,7 @@ const DataTable = ({ title, data }) => {
         </Table.Row>
       </Table.Header>
       <Table.Body>
-        {data
+        {dataGrouped
           .sort((a, b) => (a.name > b.name ? 1 : -1))
           .map((i) => (
             <Table.Row key={i.name}>
@@ -23,6 +32,14 @@ const DataTable = ({ title, data }) => {
               <Table.Cell>{i.value}</Table.Cell>
             </Table.Row>
           ))}
+        {totals && (
+          <Table.Row positive>
+            <Table.Cell>Totals</Table.Cell>
+            <Table.Cell>
+              {dataGrouped.reduce((acc, curr) => acc + curr.value, 0)}
+            </Table.Cell>
+          </Table.Row>
+        )}
       </Table.Body>
     </Table>
   );

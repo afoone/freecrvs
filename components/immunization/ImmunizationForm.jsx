@@ -13,7 +13,7 @@ import { v4 as uuid } from "uuid";
 import AddressForm from "../adresss/AddressForm";
 import { getNationalityOptions } from "../extraData/options";
 import ImmunizationRecordForm from "./ImmunizationRecordForm";
-import { add } from "../../redux/immunizationSlice";
+import { add, update } from "../../redux/immunizationSlice";
 import { useDispatch } from "react-redux";
 import AddressFacilityForm from "../adresss/AddressFacilityForm";
 
@@ -32,6 +32,7 @@ const ImmunizationForm = ({ id }) => {
   // const [informant, setInformant] = useState('self')
   // const [informantRelationship, setinformantRelationship] = useState('')
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [email, setEmail] = useState("");
 
   // Vaccination 1st Dose
   const [vaccinationFirstDose, setvaccinationFirstDose] = useState({});
@@ -51,22 +52,14 @@ const ImmunizationForm = ({ id }) => {
   const [age, setAge] = useState("");
   const [placeOfWork, setPlaceOfWork] = useState("");
   const [patientPriorityGroups, setPatientPriorityGroups] = useState([]);
-  const [
-    patientVaccineRegisterNumber,
-    setPatientVaccineRegisterNumber,
-  ] = useState("");
-  const [
-    patientPreexistingConditions,
-    setPatientPreexistingConditions,
-  ] = useState([]);
-  const [
-    patientPreviousCovid19Infection,
-    setpatientPreviousCovid19Infection,
-  ] = useState(null);
-  const [
-    patientPreviousAllergicReaction,
-    setPatientPreviousAllergicReaction,
-  ] = useState("no");
+  const [patientVaccineRegisterNumber, setPatientVaccineRegisterNumber] =
+    useState("");
+  const [patientPreexistingConditions, setPatientPreexistingConditions] =
+    useState([]);
+  const [patientPreviousCovid19Infection, setpatientPreviousCovid19Infection] =
+    useState(null);
+  const [patientPreviousAllergicReaction, setPatientPreviousAllergicReaction] =
+    useState("no");
   const [attendantAtBirth, setAttendantAtBirth] = useState("");
   // const [typeofBirth, setTypeofBirth] = useState('single')
   // const [orderOfBirth, setOrderOfBirth] = useState(1)
@@ -76,22 +69,6 @@ const ImmunizationForm = ({ id }) => {
   const [patientAddress, setPatientAddress] = useState({});
   const [patientOccupation, setPatientOccupation] = useState("");
 
-  // // Applicant (if other)
-  // const [applicantNationality, setApplicantNationality] = useState('GM')
-  // const [applicantNIN, setApplicantNIN] = useState('')
-  // const [applicantFirstName, setApplicantFirstName] = useState('')
-  // const [applicantMiddleName, setApplicantMiddleName] = useState('')
-  // const [applicantLastName, setApplicantLastName] = useState('')
-  // const [
-  //   applicantResidentialAddress,
-  //   setApplicantResidentialAddress
-  // ] = useState({})
-  // const [
-  //   reasonNotApplyingMotherOrFather,
-  //   setReasonNotApplyingMotherOrFather
-  // ] = useState('')
-  // const [primaryCaregiver, setPrimaryCaregiver] = useState('')
-
   // Mother
   const [motherFirstName, setMotherFirstName] = useState("");
   const [motherMiddleName, setMotherMiddleName] = useState("");
@@ -100,16 +77,7 @@ const ImmunizationForm = ({ id }) => {
   const [motherNIN, setMotherNIN] = useState("");
   const [motherDateOfBirth, setMotherDateOfBirth] = useState(new Date());
   const [motherAge, setMotherAge] = useState("");
-  // const [motherMaritalStatuts, setMotherMaritalStatuts] = useState('')
-  // const [motherOccupation, setMotherOccupation] = useState('')
-  // const [motherLevelOfEducation, setMotherLevelOfEducation] = useState('')
-  // const [motherChildrenBorn, setMotherChildrenBorn] = useState(1)
-  // const [motherFetalDeaths, setMotherFetalDeaths] = useState(0)
-  // const [motherPreviousLiveBirth, setMotherPreviousLiveBirth] = useState(
-  //   new Date()
-  // )
   const [motherResidentialAddress, setMotherResidentialAddress] = useState({});
-  // const [motherCurrentAddress, setMotherCurrentAddress] = useState({})
 
   // Father
   const [fatherFirstName, setFatherFirstName] = useState("");
@@ -118,9 +86,6 @@ const ImmunizationForm = ({ id }) => {
   const [fatherNationality, setFatherNationality] = useState("GM");
   const [fatherDateOfBirth, setFatherDateOfBirth] = useState(new Date());
   const [fatherAge, setFatherAge] = useState("");
-  // const [fatherMaritalStatus, setFatherMaritalStatus] = useState('')
-  // const [fatherOccupation, setFatherOccupation] = useState('')
-  // const [fatherLevelOfEducation, setFatherLevelOfEducation] = useState('')
   const [fatherResidentialAddress, setFatherResidentialAddress] = useState({});
   const [fatherNIN, setFatherNIN] = useState("");
 
@@ -131,10 +96,6 @@ const ImmunizationForm = ({ id }) => {
     lastName: { required: true },
     firstName: { required: true },
     phoneNumber: { required: true },
-    // vaccinationFirstDose_batchNumber: {required: true}
-    //batchNumber: { required: true },
-    //vaccinatorFullName: { required: true },
-    // nameOfTheVaccine: { required: true }
   };
 
   const populateData = (patient) => {
@@ -143,6 +104,7 @@ const ImmunizationForm = ({ id }) => {
     setMiddleName(patient.middleName);
     setPatientAddress(patient.address);
     setNIN(patient.NIN);
+    setEmail(patient.email);
     setAttendantAtBirth(patient.attendantAtBirth);
     // setBaptismalName(patient.baptismalName);
     setDateOfBirth(patient.dateOfBirth ? new Date(patient.dateOfBirth) : null);
@@ -169,7 +131,6 @@ const ImmunizationForm = ({ id }) => {
       patient.vaccination && patient.vaccination.length > 1
         ? patient.vaccination[1]
         : {};
-    console.log("1st dose vaccionation retrieved", vaccinationDose1);
 
     setvaccinationFirstDose(vaccinationDose1);
     setVaccinationSecondDose(vaccinationDose2);
@@ -206,7 +167,6 @@ const ImmunizationForm = ({ id }) => {
         // },
       })
       .then((res) => {
-        console.log("patient retrieved", res);
         setPatient(res.data);
         populateData(res.data);
       });
@@ -228,6 +188,7 @@ const ImmunizationForm = ({ id }) => {
       patientVaccineRegisterNumber,
       // myChildId,
       nationality,
+      email,
       gender,
       dateOfBirth,
       placeOfWork,
@@ -271,6 +232,7 @@ const ImmunizationForm = ({ id }) => {
         axios
           .put(url + `${patient._id}/`, object)
           .then(router.push(redirectUrl));
+        dispatch(update(object));
       } else {
         dispatch(add(object));
         router.push(redirectUrl);
@@ -284,14 +246,24 @@ const ImmunizationForm = ({ id }) => {
       {patient && <PatientData patient={patient} />}
       <div className="register-form ui form">
         <h2 className="ui dividing header">Patient Data</h2>
-        <div className="field">
-          <label>Nationality</label>
-          <select
-            value={nationality}
-            onChange={(e) => setNationality(e.target.value)}
-          >
-            {getNationalityOptions()}
-          </select>
+        <div className="two fields">
+          <div className="field">
+            <label>Nationality</label>
+            <select
+              value={nationality}
+              onChange={(e) => setNationality(e.target.value)}
+            >
+              {getNationalityOptions()}
+            </select>
+          </div>
+          <div className="field">
+            <label>e-mail</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
         </div>
 
         {/* Patient birth registration data */}

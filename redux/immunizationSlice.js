@@ -28,6 +28,14 @@ export const immunizationSlice = createSlice({
         pending: true,
       });
     },
+    update: (state, action) => {
+      state
+        .filter((i) => i._id != action.payload._id)
+        .push({
+          ...action.payload,
+          pending: true,
+        });
+    },
   },
   extraReducers: {
     [synchronizeImmunizations.fulfilled]: (state, action) => {
@@ -39,6 +47,6 @@ export const immunizationSlice = createSlice({
   },
 });
 
-export const { add } = immunizationSlice.actions;
+export const { add, update } = immunizationSlice.actions;
 
 export default immunizationSlice.reducer;
