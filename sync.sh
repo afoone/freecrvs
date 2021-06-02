@@ -4,8 +4,8 @@
 seconds_init=`date +%s`
 
 # Get last vaccination and users from production
-echo 'get /root/backups/backup_vaccination.json' | sftp root@crvs.gm
-echo 'get /root/backups/backup_users.json' | sftp root@crvs.gm
+echo 'get /home/covgm/backups/backups/backup_vaccination.json' | sftp covgm@covid19.crvs.gm
+echo 'get /home/covgm/backups/backups/backup_users.json' | sftp covgm@covid19.crvs.gm
 
 # get the container name
 CONTAINER_NAME=`docker ps | grep mongo | awk '{print $NF}'`
