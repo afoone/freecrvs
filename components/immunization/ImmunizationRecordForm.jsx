@@ -50,7 +50,7 @@ const ImmunizationRecordForm = ({
           )}
         </div>
         <div className="ui field">
-          <label>Name of  vaccine</label>
+          <label>Name of vaccine</label>
           <select
             name="last-name"
             value={immunization.nameOfTheVaccine}
@@ -66,6 +66,7 @@ const ImmunizationRecordForm = ({
           >
             <option></option>
             <option>Astrazeneca</option>
+            <option>Sinovac</option>
             <option>Pfizer-BioNTech</option>
             <option>Moderna</option>
             <option>NovaVax</option>
@@ -142,7 +143,7 @@ const ImmunizationRecordForm = ({
             <div className="error">{errors.expiryDate}</div>
           )}
         </div>
-          {nextVisit && (
+        {nextVisit && (
           <div className="ui field">
             <label>Date of next visit dose</label>
             <div className="datepicker-full">
@@ -184,7 +185,7 @@ const ImmunizationRecordForm = ({
           <div className="error">{errors.vaccinatorFullName}</div>
         )}
       </div>
-      
+
       <h4 className="ui dividing header">Adverse effect</h4>
       <div className="ui field">
         <div className="two fields">

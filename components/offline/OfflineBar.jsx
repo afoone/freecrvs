@@ -18,7 +18,6 @@ const OfflineBar = () => {
 
   const [offline, setOffline] = useState(false);
 
-  const immunization = useSelector((state) => state.immunization);
   const [currentInterval, setCurrentInterval] = useState(null);
 
   useEffect(() => {

@@ -23,14 +23,6 @@ const ImmunizationForm = ({ id }) => {
 
   // utils
   const [patient, setPatient] = useState({});
-
-  // locations
-  const [facilities, setFacilities] = useState([]);
-  // user
-  // const [user, setUser] = useState({})
-  // Application
-  // const [informant, setInformant] = useState('self')
-  // const [informantRelationship, setinformantRelationship] = useState('')
   const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
 
@@ -43,6 +35,8 @@ const ImmunizationForm = ({ id }) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [middleName, setMiddleName] = useState("");
+  const [photo, setPhoto] = useState("");
+  
   // const [baptismalName, setBaptismalName] = useState("");
   const [NIN, setNIN] = useState("");
   // const [myChildId, setMyChildId] = useState("");
@@ -61,10 +55,6 @@ const ImmunizationForm = ({ id }) => {
   const [patientPreviousAllergicReaction, setPatientPreviousAllergicReaction] =
     useState("no");
   const [attendantAtBirth, setAttendantAtBirth] = useState("");
-  // const [typeofBirth, setTypeofBirth] = useState('single')
-  // const [orderOfBirth, setOrderOfBirth] = useState(1)
-  // const [weightAtBirth, setWeightAtBirth] = useState('')
-  // const [heightAtBirth, setHeightAtBirth] = useState('')
   const [placeOfDelivery, setPlaceOfDelivery] = useState({});
   const [patientAddress, setPatientAddress] = useState({});
   const [patientOccupation, setPatientOccupation] = useState("");
@@ -105,6 +95,7 @@ const ImmunizationForm = ({ id }) => {
     setPatientAddress(patient.address);
     setNIN(patient.NIN);
     setEmail(patient.email);
+    setPhoto(patient.photo);
     setAttendantAtBirth(patient.attendantAtBirth);
     // setBaptismalName(patient.baptismalName);
     setDateOfBirth(patient.dateOfBirth ? new Date(patient.dateOfBirth) : null);
@@ -160,16 +151,10 @@ const ImmunizationForm = ({ id }) => {
     if (!id) {
       return;
     }
-    axios
-      .get(`/api/patients/${id}/`, {
-        // headers: {
-        //   Authorization: `Bearer ${getToken()}`,
-        // },
-      })
-      .then((res) => {
-        setPatient(res.data);
-        populateData(res.data);
-      });
+    axios.get(`/api/patients/${id}/`).then((res) => {
+      setPatient(res.data);
+      populateData(res.data);
+    });
   }, []);
 
   const savePatient = (createNew = false) => {
@@ -177,16 +162,14 @@ const ImmunizationForm = ({ id }) => {
     console.log("patient to save vaccination 2nd dose", vaccinationSecondDose);
     const object = {
       patient: patient.id ? patient.id : uuid(),
-      // informant,
       phoneNumber,
       firstName,
       lastName,
       middleName,
-      // baptismalName,
+      photo,
       NIN,
       age,
       patientVaccineRegisterNumber,
-      // myChildId,
       nationality,
       email,
       gender,
@@ -243,7 +226,9 @@ const ImmunizationForm = ({ id }) => {
 
   return (
     <div className="container two-columns">
-      {patient && <PatientData patient={patient} />}
+      {patient && (
+        <PatientData patient={patient} setImage={setPhoto} image={photo} />
+      )}
       <div className="register-form ui form">
         <h2 className="ui dividing header">Patient Data</h2>
         <div className="two fields">
