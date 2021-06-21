@@ -35,7 +35,7 @@ const Layout = ({ children }) => {
       <Container>
         <Menu attached="top">
           <Menu.Item header>
-            <span>The Gambia CRVS <small>1.2.3</small></span>
+            <span>The Gambia CRVS <small>1.3.0</small></span>
           </Menu.Item>
           <Menu.Item
             name="home"
