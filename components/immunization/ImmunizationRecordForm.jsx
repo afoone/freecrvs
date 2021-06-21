@@ -66,7 +66,7 @@ const ImmunizationRecordForm = ({
           >
             <option></option>
             <option>Astrazeneca</option>
-            <option>Sinovac</option>
+            <option>Sinopharm</option>
             <option>Pfizer-BioNTech</option>
             <option>Moderna</option>
             <option>NovaVax</option>
