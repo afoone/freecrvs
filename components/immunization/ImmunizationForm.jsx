@@ -36,7 +36,7 @@ const ImmunizationForm = ({ id }) => {
   const [lastName, setLastName] = useState("");
   const [middleName, setMiddleName] = useState("");
   const [photo, setPhoto] = useState("");
-  
+
   // const [baptismalName, setBaptismalName] = useState("");
   const [NIN, setNIN] = useState("");
   // const [myChildId, setMyChildId] = useState("");
@@ -156,7 +156,6 @@ const ImmunizationForm = ({ id }) => {
       populateData(res.data);
     });
   }, []);
-
   const savePatient = (createNew = false) => {
     const url = `/api/patients/`;
     console.log("patient to save vaccination 2nd dose", vaccinationSecondDose);
@@ -225,10 +224,12 @@ const ImmunizationForm = ({ id }) => {
   };
 
   return (
-    <div className="container two-columns">
-      {patient && (
-        <PatientData patient={patient} setImage={setPhoto} image={photo} />
-      )}
+    <div className="container two-row">
+      <div style={{ display: "flex", justifyItems: "center" }}>
+        {patient && (
+          <PatientData patient={patient} setImage={setPhoto} image={photo} />
+        )}
+      </div>
       <div className="register-form ui form">
         <h2 className="ui dividing header">Patient Data</h2>
         <div className="two fields">

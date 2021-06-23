@@ -8,6 +8,8 @@
     "test": "jest --watch"
   },
   "dependencies": {
+    "@material-ui/core": "^4.11.4",
+    "@material-ui/data-grid": "^4.0.0-alpha.32",
     "@reduxjs/toolkit": "^1.5.1",
     "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",

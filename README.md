@@ -8,15 +8,16 @@ Civil Registration and Vital Statistics for The Gambia
 
 2. In mongo, you'll need an admin user. create database `gambia` and collection `users`
 
-insert: 
+insert:
+
 ```json
 {
-    "password" : "cac76f43eb9243de03d52a0d12702d268fb101f50446af58a8c18985824c9587",
-    "firstName" : "Lamin ",
-    "lastName" : "Admin ",
-    "email" : "test@test.com",
-    "role" : "ADMIN",
-    "username" : "admin "
+  "password": "cac76f43eb9243de03d52a0d12702d268fb101f50446af58a8c18985824c9587",
+  "firstName": "Lamin ",
+  "lastName": "Admin ",
+  "email": "test@test.com",
+  "role": "ADMIN",
+  "username": "admin"
 }
 ```
 

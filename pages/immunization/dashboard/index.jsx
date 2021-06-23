@@ -1,4 +1,10 @@
 import React from "react";
+// import DataT from "../dashboard/DataT";
+import {
+  preexistingConditions,
+  priorityGroups,
+} from "../../../components/extraData/multiselect";
+import { Label } from "semantic-ui-react";
 import AuthHOC from "../../../components/auth/AuthHOC";
 import PieChart from "../../../components/charts/PieChart";
 import DataTable from "../../../components/charts/DataTable";
@@ -46,11 +52,56 @@ const Dashboard = ({
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "auto auto",
-          gridTemplateRows: "auto auto auto 30rem 30rem auto auto",
+          gridTemplateColumns: "50% 50%",
+          gridTemplateRows:
+            "auto auto auto auto auto auto 30rem 30rem auto auto",
           gap: "1rem",
         }}
       >
+        <Label
+          color="teal"
+          tag
+          size="huge"
+          class="ui header"
+          style={{
+            gridColumn: "1/3",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          First Dose Vaccinated
+        </Label>
+
+        <DataTable
+          title="First Dose Vaccinated By Region"
+          data={vaccinatedTotals.partial.map((i) => ({
+            name: i.id,
+            value: i.count,
+          }))}
+          totals
+        />
+        {/* <DataT /> */}
+        <DataTable
+          title="Priority Groups"
+          data={priorityGroups.map((i) => ({
+            name: i.value,
+            value: i.count,
+          }))}
+          totals
+        />
+        <Label
+          color="green"
+          tag
+          size="huge"
+          class="ui header"
+          style={{
+            gridColumn: "1/3",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          Fully Vaccinated
+        </Label>
         <DataTable
           title="Fully Vaccinated By Region"
           data={vaccinatedTotals.fully.map((i) => ({
@@ -60,22 +111,39 @@ const Dashboard = ({
           totals
         />
         <DataTable
-          title="First Dose Vaccinated By Region"
-          data={vaccinatedTotals.partial.map((i) => ({
-            name: i.id,
+          title="Preexisting conditions"
+          data={preexistingConditions.map((i) => ({
+            name: i.value,
             value: i.count,
           }))}
           totals
         />
-        <h1 class="ui header" style={{ gridColumn: "1/3" }}>
+        <Label
+          size="huge"
+          class="ui header"
+          style={{
+            gridColumn: "1/3",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
           Total doses
-        </h1>
+        </Label>
         <DataTable title="Total doses administered" data={totalVaccines} />
         <PieChart data={totalVaccines}></PieChart>
         <div style={{ gridColumnStart: 1, gridColumnEnd: 3 }}>
-          <h1 class="ui header" style={{ gridColumn: "1/3" }}>
+          <Label
+            size="huge"
+            class="ui header"
+            style={{
+              marginTop: "10%",
+              gridColumn: "1/3",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
             Total vaccines by date
-          </h1>
+          </Label>
 
           <StackedAreaChart
             data={totalVaccinesByDate}

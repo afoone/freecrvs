@@ -12,7 +12,6 @@ const users = () => {
   useEffect(() => {
     axios.get("/api/users").then((res) => setUsers(res.data));
   }, []);
-
   return (
     <div>
       <AuthHOC>

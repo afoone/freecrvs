@@ -13,7 +13,7 @@ const DataTable = ({ title, data, totals }) => {
   ];
 
   return (
-    <Table celled>
+    <Table color="blue" celled>
       <Table.Header>
         <Table.Row>
           <Table.HeaderCell colSpan={2}>{title}</Table.HeaderCell>
