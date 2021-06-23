@@ -1,7 +1,18 @@
 import React from "react";
 import { Table } from "semantic-ui-react";
 
-const DataTable = ({ title, data, totals }) => {
+const defaultConfig = [
+  {
+    field: "name",
+    header: "Name",
+  },
+  {
+    field: "value",
+    header: "Value",
+  },
+];
+
+const DataTable = ({ title, data, totals, config = defaultConfig }) => {
   // Grouping unkowns
   const dataGrouped = [
     ...data.filter((i) => i.name),
@@ -16,11 +27,12 @@ const DataTable = ({ title, data, totals }) => {
     <Table color="blue" celled>
       <Table.Header>
         <Table.Row>
-          <Table.HeaderCell colSpan={2}>{title}</Table.HeaderCell>
+          <Table.HeaderCell colSpan={config.length}>{title}</Table.HeaderCell>
         </Table.Row>
         <Table.Row>
-          <Table.HeaderCell>Name</Table.HeaderCell>
-          <Table.HeaderCell>Value</Table.HeaderCell>
+          {config.map((i) => (
+            <Table.HeaderCell>{i.header}</Table.HeaderCell>
+          ))}
         </Table.Row>
       </Table.Header>
       <Table.Body>
@@ -28,16 +40,21 @@ const DataTable = ({ title, data, totals }) => {
           .sort((a, b) => (a.name > b.name ? 1 : -1))
           .map((i) => (
             <Table.Row key={i.name}>
-              <Table.Cell>{i.name || "Unknown"}</Table.Cell>
-              <Table.Cell>{i.value}</Table.Cell>
+              {config.map((element) => (
+                <Table.Cell>{i[element.field] || "Unknown"}</Table.Cell>
+              ))}
             </Table.Row>
           ))}
         {totals && (
           <Table.Row positive>
             <Table.Cell>Totals</Table.Cell>
-            <Table.Cell>
-              {dataGrouped.reduce((acc, curr) => acc + curr.value, 0)}
-            </Table.Cell>
+            {config
+              .filter((i) => i.field !== "name")
+              .map((element) => (
+                <Table.Cell>
+                  {dataGrouped.reduce((acc, curr) => acc + curr[element.field], 0)}
+                </Table.Cell>
+              ))}
           </Table.Row>
         )}
       </Table.Body>

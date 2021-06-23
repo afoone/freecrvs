@@ -108,6 +108,22 @@ const Dashboard = ({
             name: i.id,
             value: i.count,
           }))}
+          config= {
+            [
+              {
+                field: "name",
+                header: "Name",
+              },
+              {
+                field: "value",
+                header: "Value",
+              },
+              {
+                field: "value",
+                header: "Age",
+              },
+            ]
+          }
           totals
         />
         <DataTable
