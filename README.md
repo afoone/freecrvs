@@ -16,7 +16,7 @@ insert:
     "lastName" : "Admin ",
     "email" : "test@test.com",
     "role" : "ADMIN",
-    "username" : "admin "
+    "username" : "admin"
 }
 ```
 
