@@ -1,9 +1,9 @@
 import React from "react";
-// import DataT from "../dashboard/DataT";
 import {
   preexistingConditions,
   priorityGroups,
 } from "../../../components/extraData/multiselect";
+
 import { Label } from "semantic-ui-react";
 import AuthHOC from "../../../components/auth/AuthHOC";
 import PieChart from "../../../components/charts/PieChart";
@@ -78,15 +78,52 @@ const Dashboard = ({
             name: i.id,
             value: i.count,
           }))}
+          config={[
+            {
+              field: "name",
+              header: "Region's Name",
+            },
+            {
+              field: "value",
+              header: "Vaccinated People",
+            },
+          ]}
           totals
         />
-        {/* <DataT /> */}
+        {/* <DataTable
+          title="Age Range"
+          data={ageRangeArray.map((i) => ({
+            name: i,
+            value: i,
+          }))}
+          config={[
+            {
+              field: "name",
+              header: "Age",
+            },
+            {
+              field: "value",
+              header: "Vaccinated",
+            },
+          ]}
+          totals
+        /> */}
+        {console.log("priorityGroups", priorityGroups)}
         <DataTable
           title="Priority Groups"
           data={priorityGroups.map((i) => ({
             name: i.value,
-            value: i.count,
           }))}
+          config={[
+            {
+              field: "name",
+              header: "Name",
+            },
+            {
+              field: "value",
+              header: "Value",
+            },
+          ]}
           totals
         />
         <Label
@@ -108,22 +145,24 @@ const Dashboard = ({
             name: i.id,
             value: i.count,
           }))}
-          config= {
-            [
-              {
-                field: "name",
-                header: "Name",
-              },
-              {
-                field: "value",
-                header: "Value",
-              },
-              {
-                field: "value",
-                header: "Age",
-              },
-            ]
-          }
+          config={[
+            {
+              field: "name",
+              header: "Region's Name",
+            },
+            {
+              field: "value",
+              header: "Total Population",
+            },
+            {
+              field: "value",
+              header: "Vaccinated People",
+            },
+            {
+              field: "value",
+              header: "Percentage of Vaccinated People",
+            },
+          ]}
           totals
         />
         <DataTable

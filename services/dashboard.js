@@ -50,6 +50,19 @@ export const getFirstDoseByAge = async () => {
   ]).toArray();
 };
 
+export const getFirstDoseByPriorityGroups = async () => {
+  const { db } = await connectToDatabase();
+  return await db.collection("vaccination").aggregate([
+    {
+      $group: {
+        _id: "$priorityGroups",
+        count: {
+          $sum: 1,
+        },
+      },
+    },
+  ]).toArray();
+};
 export const getTotalDosesByTypeAndDay = async () => {
   const { db } = await connectToDatabase();
   return await db
