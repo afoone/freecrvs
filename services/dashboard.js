@@ -52,16 +52,28 @@ export const getFirstDoseByAge = async () => {
 
 export const getFirstDoseByPriorityGroups = async () => {
   const { db } = await connectToDatabase();
-  return await db.collection("vaccination").aggregate([
-    {
-      $group: {
-        _id: "$priorityGroups",
-        count: {
-          $sum: 1,
+  return await db.collection("vaccination").aggregate(
+    [
+        {
+            $unwind: "$preexistingConditions"
         },
-      },
-    },
-  ]).toArray();
+        
+        {
+            $match: {
+                "preexistingConditions.value" : { $ne: "None"}
+            }
+        },
+        
+        {
+            $group: {
+                _id:  {value: "$preexistingConditions.value"},
+                count: {$sum:1}
+            }
+        
+        }
+        
+    ]
+    ).toArray();
 };
 export const getTotalDosesByTypeAndDay = async () => {
   const { db } = await connectToDatabase();
