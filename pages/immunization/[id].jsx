@@ -8,7 +8,15 @@ const ImmunizationHome = () => {
 
   return (
     <ImmunizationLayout>
-      <h1>The Gambia COVID-19 Vaccination Form</h1>
+      <h1
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          marginBottom: "5%",
+        }}
+      >
+        The Gambia COVID-19 Vaccination Form
+      </h1>
       {id && <ImmunizationForm id={id}></ImmunizationForm>}
     </ImmunizationLayout>
   );

@@ -225,7 +225,12 @@ const ImmunizationForm = ({ id }) => {
 
   return (
     <div className="container two-row">
-      <div style={{ display: "flex", justifyItems: "center" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyItems: "center",
+        }}
+      >
         {patient && (
           <PatientData patient={patient} setImage={setPhoto} image={photo} />
         )}
