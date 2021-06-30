@@ -21,7 +21,9 @@ const DataTable = ({ title, data, totals, config = defaultConfig }) => {
         .filter((i) => !i.name)
         .reduce((acc, curr) => acc + curr.value, 0),
     },
-  ];
+  ].filter(
+    e => e.value
+  )
 
   return (
     <Table color="blue" celled>
@@ -37,7 +39,7 @@ const DataTable = ({ title, data, totals, config = defaultConfig }) => {
       </Table.Header>
       <Table.Body>
         {dataGrouped
-          .sort((a, b) => (a.name > b.name ? 1 : -1))
+          .sort((a, b) => (a.name?.match(/\w*/g).join("") > b.name?.match(/\w*/g).join("") ? 1 : -1))
           .map((i) => (
             <Table.Row key={i.name}>
               {config.map((element) => (

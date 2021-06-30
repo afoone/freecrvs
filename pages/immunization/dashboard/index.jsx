@@ -48,6 +48,7 @@ const Dashboard = ({
   const [totalByAge, setTotalByAge] = useState([]);
 
   useEffect(() => {
+    
     axios.get(`/api/patients/dashboard/totalByPriorityGroups`).then((res) => {
       setTotalByPriorityGroups(res.data);
     });
