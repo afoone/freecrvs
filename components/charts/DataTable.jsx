@@ -43,7 +43,7 @@ const DataTable = ({ title, data, totals, config = defaultConfig }) => {
           .map((i) => (
             <Table.Row key={i.name}>
               {config.map((element) => (
-                <Table.Cell>{i[element.field] || "Unknown"}</Table.Cell>
+                <Table.Cell>{i[element.field] || "-"}</Table.Cell>
               ))}
             </Table.Row>
           ))}

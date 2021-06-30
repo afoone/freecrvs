@@ -5,6 +5,7 @@ import {
 } from "../../../components/extraData/multiselect";
 
 import axios from "axios";
+import { regions } from "../../../components/extraData/regions";
 
 import { Label } from "semantic-ui-react";
 import AuthHOC from "../../../components/auth/AuthHOC";
@@ -48,7 +49,6 @@ const Dashboard = ({
   const [totalByAge, setTotalByAge] = useState([]);
 
   useEffect(() => {
-    
     axios.get(`/api/patients/dashboard/totalByPriorityGroups`).then((res) => {
       setTotalByPriorityGroups(res.data);
     });
@@ -62,15 +62,6 @@ const Dashboard = ({
     });
   }, []);
 
-  const poblationPerRegion = [
-    { regionName: "Central River Region Total", regionNumber: "262,851.23" },
-    { regionName: "Lower River Region Total", regionNumber: "89,156.75" },
-    { regionName: "North Bank East Region Total", regionNumber: "132,740.05" },
-    { regionName: "North Bank West Region Total", regionNumber: "133,320.34" },
-    { regionName: "Upper River Region Total", regionNumber: "291,293.09" },
-    { regionName: "Western Region 1 Total", regionNumber: "985,182.64" },
-    { regionName: "Western Region 2 Total", regionNumber: "544,354.45" },
-  ];
   return (
     <AuthHOC>
       <h1>The Gambia COVID-19 Vaccination Dashboard</h1>
@@ -172,15 +163,19 @@ const Dashboard = ({
         {console.log("VACCIFULL", vaccinatedTotals.fully)}
         <DataTable
           title="Fully Vaccinated By Region"
-          data={vaccinatedTotals.fully.map((i) => ({
-            name: i.id,
-            value: i.count,
-            totalPopulation: poblationPerRegion.map(() => {
-              if (poblationPerRegion.regionName == i.id) {
-                return poblationPerRegion.regionNumber;
-              }
-            }),
-          }))}
+          data={vaccinatedTotals.fully.map((i) => {
+            const totalP = regions.filter(
+              (region) => region.id === i._id
+            )[0]
+              ? regions.filter((region) => region.id === i._id)[0].population
+              : 0
+            return {
+              name: i.id,
+              value: i.count,
+              totalPopulation: totalP,
+              percentage: totalP && Math.ceil(100*100*i.count/totalP)/100+"%"
+            };
+          })}
           config={[
             {
               field: "name",
@@ -195,11 +190,11 @@ const Dashboard = ({
               header: "Vaccinated People",
             },
             {
-              field: "known",
+              field: "percentage",
               header: "Percentage of Vaccinated People",
             },
           ]}
-          totals
+          
         />
         <DataTable
           title="Preexisting conditions"
