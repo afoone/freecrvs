@@ -184,11 +184,6 @@ export const getFullyVaccinated = async () => {
     ])
     .toArray();
 
-    console.log("QUE SOS", byRegion.map((i) => ({
-      ...i,
-      _id: !i._id ? "" : i._id,
-      id: regions.filter((e) => e.id === i._id)[0]?.name || "",
-    })))
   return byRegion.map((i) => ({
     ...i,
     _id: !i._id ? "" : i._id,

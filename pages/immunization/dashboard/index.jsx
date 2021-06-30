@@ -129,7 +129,6 @@ const Dashboard = ({
             },
           ]}
         />
-        {console.log("priorityGroups", priorityGroups)}
         <DataTable
           title="Priority Groups"
           data={totalByPriorityGroups.map((i) => ({
@@ -160,20 +159,18 @@ const Dashboard = ({
         >
           Fully Vaccinated
         </Label>
-        {console.log("VACCIFULL", vaccinatedTotals.fully)}
         <DataTable
           title="Fully Vaccinated By Region"
           data={vaccinatedTotals.fully.map((i) => {
-            const totalP = regions.filter(
-              (region) => region.id === i._id
-            )[0]
+            const totalP = regions.filter((region) => region.id === i._id)[0]
               ? regions.filter((region) => region.id === i._id)[0].population
-              : 0
+              : 0;
             return {
               name: i.id,
               value: i.count,
               totalPopulation: totalP,
-              percentage: totalP && Math.ceil(100*100*i.count/totalP)/100+"%"
+              percentage:
+                totalP && Math.ceil((100 * 100 * i.count) / totalP) / 100 + "%",
             };
           })}
           config={[
@@ -194,7 +191,6 @@ const Dashboard = ({
               header: "Percentage of Vaccinated People",
             },
           ]}
-          
         />
         <DataTable
           title="Preexisting conditions"
