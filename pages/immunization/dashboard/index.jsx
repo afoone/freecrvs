@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   preexistingConditions,
   priorityGroups,
 } from "../../../components/extraData/multiselect";
+
+import axios from "axios";
 
 import { Label } from "semantic-ui-react";
 import AuthHOC from "../../../components/auth/AuthHOC";
@@ -28,6 +30,7 @@ import {
   getFirstDoseVaccinated,
   getFullyVaccinated,
 } from "../../../services/dashboard";
+import { use } from "ast-types";
 
 const Dashboard = ({
   totalVaccinesByDate = [],
@@ -39,7 +42,34 @@ const Dashboard = ({
   date = "",
 }) => {
   const lastUpdated = new Date(date);
+  const [totalByPriorityGroups, setTotalByPriorityGroups] = useState([]);
+  const [totalByPreexistingConditions, setTotalByPreexistingConditions] =
+    useState([]);
+  const [totalByAge, setTotalByAge] = useState([]);
 
+  useEffect(() => {
+    axios.get(`/api/patients/dashboard/totalByPriorityGroups`).then((res) => {
+      setTotalByPriorityGroups(res.data);
+    });
+    axios
+      .get(`/api/patients/dashboard/totalByPreexistingConditions`)
+      .then((res) => {
+        setTotalByPreexistingConditions(res.data);
+      });
+    axios.get(`/api/patients/dashboard/totalByAge`).then((res) => {
+      setTotalByAge(res.data);
+    });
+  }, []);
+
+  const poblationPerRegion = [
+    { regionName: "Central River Region Total", regionNumber: "262,851.23" },
+    { regionName: "Lower River Region Total", regionNumber: "89,156.75" },
+    { regionName: "North Bank East Region Total", regionNumber: "132,740.05" },
+    { regionName: "North Bank West Region Total", regionNumber: "133,320.34" },
+    { regionName: "Upper River Region Total", regionNumber: "291,293.09" },
+    { regionName: "Western Region 1 Total", regionNumber: "985,182.64" },
+    { regionName: "Western Region 2 Total", regionNumber: "544,354.45" },
+  ];
   return (
     <AuthHOC>
       <h1>The Gambia COVID-19 Vaccination Dashboard</h1>
@@ -90,11 +120,11 @@ const Dashboard = ({
           ]}
           totals
         />
-        {/* <DataTable
+        <DataTable
           title="Age Range"
-          data={ageRangeArray.map((i) => ({
-            name: i,
-            value: i,
+          data={totalByAge.map((i) => ({
+            name: i.key,
+            value: i.value,
           }))}
           config={[
             {
@@ -106,13 +136,13 @@ const Dashboard = ({
               header: "Vaccinated",
             },
           ]}
-          totals
-        /> */}
+        />
         {console.log("priorityGroups", priorityGroups)}
         <DataTable
           title="Priority Groups"
-          data={priorityGroups.map((i) => ({
-            name: i.value,
+          data={totalByPriorityGroups.map((i) => ({
+            name: i.key,
+            value: i.value,
           }))}
           config={[
             {
@@ -124,7 +154,6 @@ const Dashboard = ({
               header: "Value",
             },
           ]}
-          totals
         />
         <Label
           color="green"
@@ -139,11 +168,17 @@ const Dashboard = ({
         >
           Fully Vaccinated
         </Label>
+        {console.log("VACCIFULL", vaccinatedTotals.fully)}
         <DataTable
           title="Fully Vaccinated By Region"
           data={vaccinatedTotals.fully.map((i) => ({
             name: i.id,
             value: i.count,
+            totalPopulation: poblationPerRegion.map(() => {
+              if (poblationPerRegion.regionName == i.id) {
+                return poblationPerRegion.regionNumber;
+              }
+            }),
           }))}
           config={[
             {
@@ -151,7 +186,7 @@ const Dashboard = ({
               header: "Region's Name",
             },
             {
-              field: "value",
+              field: "totalPopulation",
               header: "Total Population",
             },
             {
@@ -159,7 +194,7 @@ const Dashboard = ({
               header: "Vaccinated People",
             },
             {
-              field: "value",
+              field: "known",
               header: "Percentage of Vaccinated People",
             },
           ]}
@@ -167,11 +202,10 @@ const Dashboard = ({
         />
         <DataTable
           title="Preexisting conditions"
-          data={preexistingConditions.map((i) => ({
-            name: i.value,
-            value: i.count,
+          data={totalByPreexistingConditions.map((i) => ({
+            name: i.key,
+            value: i.value,
           }))}
-          totals
         />
         <Label
           size="huge"

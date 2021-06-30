@@ -1,6 +1,7 @@
-import { getFirstDoseByPriorityGroups } from "../../../../services/dashboard";
+import { getFirstDoseByPreexistingConditions } from "../../../../services/dashboard";
 export default async (req, res) => {
-  const results = await getFirstDoseByPriorityGroups();
+  const results = await getFirstDoseByPreexistingConditions();
+
   res.json(results.map(
     i => (
       {

@@ -50,7 +50,7 @@ export const getFirstDoseByAge = async () => {
   ]).toArray();
 };
 
-export const getFirstDoseByPriorityGroups = async () => {
+export const getFirstDoseByPreexistingConditions = async () => {
   const { db } = await connectToDatabase();
   return await db.collection("vaccination").aggregate(
     [
@@ -75,6 +75,27 @@ export const getFirstDoseByPriorityGroups = async () => {
     ]
     ).toArray();
 };
+
+export const getFirstDoseByPriorityGroups = async () => {
+  const { db } = await connectToDatabase();
+  return await db.collection("vaccination").aggregate(
+    [
+        {
+            $unwind: "$priorityGroups"
+        },
+        {
+            $group: {
+                _id:  {value: "$priorityGroups.value"},
+                count: {$sum:1}
+            }
+        
+        }
+        
+    ]
+    ).toArray();
+};
+
+
 export const getTotalDosesByTypeAndDay = async () => {
   const { db } = await connectToDatabase();
   return await db
@@ -162,6 +183,12 @@ export const getFullyVaccinated = async () => {
       { $group: { _id: "$address.province", count: { $sum: 1 } } },
     ])
     .toArray();
+
+    console.log("QUE SOS", byRegion.map((i) => ({
+      ...i,
+      _id: !i._id ? "" : i._id,
+      id: regions.filter((e) => e.id === i._id)[0]?.name || "",
+    })))
   return byRegion.map((i) => ({
     ...i,
     _id: !i._id ? "" : i._id,
