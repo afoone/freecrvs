@@ -38,63 +38,108 @@ export const getTotalDosesByType = async () => {
 
 export const getFirstDoseByAge = async () => {
   const { db } = await connectToDatabase();
-  return await db.collection("vaccination").aggregate([
-    {
-      $group: {
-        _id: "$age",
-        count: {
-          $sum: 1,
+  return await db
+    .collection("vaccination")
+    .aggregate([
+      {
+        $group: {
+          _id: "$age",
+          count: {
+            $sum: 1,
+          },
         },
       },
-    },
-  ]).toArray();
+    ])
+    .toArray();
 };
 
 export const getFirstDoseByPreexistingConditions = async () => {
   const { db } = await connectToDatabase();
-  return await db.collection("vaccination").aggregate(
-    [
-        {
-            $unwind: "$preexistingConditions"
+  return await db
+    .collection("vaccination")
+    .aggregate([
+      {
+        $unwind: "$preexistingConditions",
+      },
+
+      {
+        $match: {
+          "preexistingConditions.value": { $ne: "None" },
         },
-        
-        {
-            $match: {
-                "preexistingConditions.value" : { $ne: "None"}
-            }
+      },
+
+      {
+        $group: {
+          _id: { value: "$preexistingConditions.value" },
+          count: { $sum: 1 },
         },
-        
-        {
-            $group: {
-                _id:  {value: "$preexistingConditions.value"},
-                count: {$sum:1}
-            }
-        
-        }
-        
-    ]
-    ).toArray();
+      },
+    ])
+    .toArray();
 };
 
 export const getFirstDoseByPriorityGroups = async () => {
   const { db } = await connectToDatabase();
-  return await db.collection("vaccination").aggregate(
-    [
-        {
-            $unwind: "$priorityGroups"
+  return await db
+    .collection("vaccination")
+    .aggregate([
+      {
+        $unwind: "$priorityGroups",
+      },
+      {
+        $group: {
+          _id: { value: "$priorityGroups.value" },
+          count: { $sum: 1 },
         },
-        {
-            $group: {
-                _id:  {value: "$priorityGroups.value"},
-                count: {$sum:1}
-            }
-        
-        }
-        
-    ]
-    ).toArray();
+      },
+    ])
+    .toArray();
 };
 
+export const getSecondDoseByPreexistingConditions = async () => {
+  const { db } = await connectToDatabase();
+  return await db
+    .collection("vaccination")
+    .aggregate([
+      { $match: { "vaccination.1.nameOfTheVaccine": { $exists: true } } },
+      {
+        $unwind: "$preexistingConditions",
+      },
+
+      {
+        $match: {
+          "preexistingConditions.value": { $ne: "None" },
+        },
+      },
+
+      {
+        $group: {
+          _id: { value: "$preexistingConditions.value" },
+          count: { $sum: 1 },
+        },
+      },
+    ])
+    .toArray();
+};
+
+export const getSecondDoseByPriorityGroups = async () => {
+  const { db } = await connectToDatabase();
+  return await db
+    .collection("vaccination")
+    .aggregate([
+      { $match: { "vaccination.1.nameOfTheVaccine": { $exists: true } } },
+      {
+        $unwind: "$priorityGroups",
+      },
+      {
+        $group: {
+          _id: { value: "$priorityGroups.value" },
+          count: { $sum: 1 },
+        },
+      },
+    ])
+    .toArray();
+};
 
 export const getTotalDosesByTypeAndDay = async () => {
   const { db } = await connectToDatabase();
