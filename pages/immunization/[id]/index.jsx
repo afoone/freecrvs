@@ -1,7 +1,7 @@
 import React from "react";
-import ImmunizationLayout from "../../components/immunization/Layout";
+import ImmunizationLayout from "../../../components/immunization/Layout";
 import { useRouter } from "next/router";
-import ImmunizationForm from "../../components/immunization/ImmunizationForm";
+import ImmunizationForm from "../../../components/immunization/ImmunizationForm";
 
 const ImmunizationHome = () => {
   const { id } = useRouter().query;
