@@ -1,8 +1,10 @@
 import React, { useRef, useState, useEffect } from "react";
 import { PDFExport } from "@progress/kendo-react-pdf";
 import { Button } from "@progress/kendo-react-buttons";
-import { Card, Icon, Image } from "semantic-ui-react";
+import { Card, Icon, Image, Grid, Segment } from "semantic-ui-react";
+
 import axios from "axios";
+import PatientData from "../PatientData";
 const ImmunizationReport = ({ id }) => {
   const pdfExportComponent = useRef(null);
   const handleExport = (e) => {
@@ -17,10 +19,28 @@ const ImmunizationReport = ({ id }) => {
     });
   }, [id]);
 
-  console.log("patient", patient.firstName);
+  console.log("patient", patient);
 
   return (
     <PDFExport ref={pdfExportComponent} paperSize="A4">
+      <div
+        className="button-area"
+        style={{ display: "flex", justifyContent: "flex-end" }}
+      >
+        <Button primary={true} onClick={handleExport}>
+          Download PDF
+        </Button>
+      </div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "flex-start",
+          width: "20%",
+          height: "20%",
+        }}
+      >
+        <Image src="/images/logo2.png" size="medium" />
+      </div>
       <div
         style={{
           display: "flex",
@@ -28,39 +48,35 @@ const ImmunizationReport = ({ id }) => {
           alignItems: "center",
         }}
       >
-        <div className="button-area">
-          <Button primary={true} onClick={handleExport}>
-            Download PDF
-          </Button>
-        </div>
-        <Card>
-          <Image
-            src="https://react.semantic-ui.com/images/avatar/large/daniel.jpg"
-            wrapped
-            ui={false}
-          />
-          <Card.Content>
-            <Card.Header>Full Name:{patient.firstName} </Card.Header>
-            <Card.Header>Nationality:</Card.Header>
-            <Card.Header>Vaccine Name:</Card.Header>
-            <Card.Header>Date of Application:</Card.Header>
-            <Card.Header>Batch o:</Card.Header>
-            <Card.Header>Date of Birth:</Card.Header>
-            <Card.Header>Mobile Number:</Card.Header>
-            <Card.Header>NIN:</Card.Header>
-            <Card.Meta>Joined in 2016</Card.Meta>
-            <Card.Description>
-              Daniel is a comedian living in Nashville.
-            </Card.Description>
-          </Card.Content>
-          <Card.Content extra>
-            <a>
-              <Icon name="user" />
-              10 Friends
-            </a>
-          </Card.Content>
-        </Card>
+        {patient && <PatientData patient={patient} />}
       </div>
+
+      <Grid columns="equal">
+        <Grid.Column>
+          <Segment>Full Name:</Segment>
+          <Segment>Nationality:</Segment>
+          <Segment>Vaccine Name:</Segment>
+          <Segment>Date of Application:</Segment>
+          <Segment>Batch o:</Segment>
+          <Segment>Date of Birth:</Segment>
+          <Segment>Mobile Number:</Segment>
+          <Segment>NIN:</Segment>
+        </Grid.Column>
+        <Grid.Column>
+          <Segment>
+            {patient.firstName} {patient.middleName} {patient.lastName}
+          </Segment>
+          <Segment>{patient.nationality}</Segment>
+          {/* <Segment>{patient.vaccination.nameOfTheVaccine}</Segment> */}
+          <Segment>Date of Application:</Segment>
+          <Segment>Date of Application:</Segment>
+          <Segment>Date of Application:</Segment>
+          {/* <Segment>{patient.vaccination[0].batchNumber}</Segment> */}
+          <Segment>{patient.dateOfBirth}</Segment>
+          <Segment>{patient.phoneNumber}</Segment>
+          <Segment>{patient.NIN ? patient.NIN : "None"}</Segment>
+        </Grid.Column>
+      </Grid>
     </PDFExport>
   );
 };
