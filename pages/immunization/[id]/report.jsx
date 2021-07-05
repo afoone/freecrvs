@@ -5,7 +5,6 @@ import { PDFViewer } from "@react-pdf/renderer";
 import axios from "axios";
 import { useState } from "react";
 import QRCode from "qrcode.react";
-import { Hidden } from "@material-ui/core";
 
 const ImmunizationHome = () => {
   const { id } = useRouter().query;
@@ -23,9 +22,7 @@ const ImmunizationHome = () => {
 
   setTimeout(() => {
     setQrCodeCanvas(document.querySelector("canvas"));
-    console.log("get qrcode canvas", qrCodeCanvas);
     setqrCodeDataUri(qrCodeCanvas?.toDataURL("image/jpg", 0.3));
-    console.log("data uri", qrCodeDataUri);
   }, 300);
 
   return (
