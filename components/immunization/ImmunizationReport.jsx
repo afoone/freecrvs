@@ -1,83 +1,255 @@
-import React, { useRef, useState, useEffect } from "react";
-import { PDFExport } from "@progress/kendo-react-pdf";
-import { Button } from "@progress/kendo-react-buttons";
-import { Card, Icon, Image, Grid, Segment } from "semantic-ui-react";
+import React from "react";
+import {
+  Page,
+  Text,
+  View,
+  Document,
+  StyleSheet,
+  Image,
+} from "@react-pdf/renderer";
+import { NonceProvider } from "react-select";
 
-import axios from "axios";
-import PatientData from "../PatientData";
-const ImmunizationReport = ({ id }) => {
-  const pdfExportComponent = useRef(null);
-  const handleExport = (e) => {
-    pdfExportComponent.current.save();
-  };
+// Create styles
+const styles = StyleSheet.create({
+  page: {
+    flexDirection: "column",
+  },
+  section: {
+    padding: 10,
+    flexGrow: 1,
+  },
+  title: {
+    fontSize: 16,
+    fontWeight: "bold",
+    textAlign: "center",
+    maxWidth: "50%",
+  },
+  header: {
+    padding: 30,
+    marginBottom: 30,
+    display: "flex",
+    flexDirection: "row",
+    width: "100%",
+  },
+  image: {
+    width: 100,
+    height: 100,
+  },
+  qr: {
+    width: 100,
+    height: 100,
+    marginLeft: 100,
+  },
+  rectangulo: {
+    display: "flex",
+    width: "200px",
+    height: "40px",
+    border: 1,
+    justifyContent: "center",
+  },
+  textDesign: {
+    textAlign: "center",
+  },
+  marginTop: {
+    marginTop: "3%",
+  },
+});
 
-  const [patient, setPatient] = useState({});
-
-  useEffect(() => {
-    axios.get(`/api/patients/${id}/`).then((res) => {
-      setPatient(res.data);
-    });
-  }, [id]);
-
+// Create Document Component
+const ImmunizationReport = ({ patient, qrcode }) => {
   console.log("patient", patient);
-
   return (
-    <PDFExport ref={pdfExportComponent} paperSize="A4">
-      <div
-        className="button-area"
-        style={{ display: "flex", justifyContent: "flex-end" }}
-      >
-        <Button primary={true} onClick={handleExport}>
-          Download PDF
-        </Button>
-      </div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "flex-start",
-          width: "20%",
-          height: "20%",
-        }}
-      >
-        <Image src="/images/logo2.png" size="medium" />
-      </div>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        {patient && <PatientData patient={patient} />}
-      </div>
+    <>
+      <Document>
+        <Page size="A4" style={styles.page}>
+          <View style={styles.header}>
+            <Image src="/images/logo2.png" size="large" style={styles.image} />
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                marginRight: "5%",
+              }}
+            >
+              <Text wrap={false} style={styles.title}>
+                The Gambia Patient Immunization Certificate
+              </Text>
+            </div>
+            {qrcode && (
+              <Image source={{ uri: qrcode }} size="large" style={styles.qr} />
+            )}
+          </View>
+          <View style={styles.section}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+              }}
+            >
+              <div>
+                <div style={styles.rectangulo}>
+                  <Text style={styles.textDesign}>Full Name:</Text>
+                </div>
+                <div style={styles.rectangulo}>
+                  <Text style={styles.textDesign}>Nationality:</Text>
+                </div>
 
-      <Grid columns="equal">
-        <Grid.Column>
-          <Segment>Full Name:</Segment>
-          <Segment>Nationality:</Segment>
-          <Segment>Vaccine Name:</Segment>
-          <Segment>Date of Application:</Segment>
-          <Segment>Batch o:</Segment>
-          <Segment>Date of Birth:</Segment>
-          <Segment>Mobile Number:</Segment>
-          <Segment>NIN:</Segment>
-        </Grid.Column>
-        <Grid.Column>
-          <Segment>
-            {patient.firstName} {patient.middleName} {patient.lastName}
-          </Segment>
-          <Segment>{patient.nationality}</Segment>
-          {/* <Segment>{patient.vaccination.nameOfTheVaccine}</Segment> */}
-          <Segment>Date of Application:</Segment>
-          <Segment>Date of Application:</Segment>
-          <Segment>Date of Application:</Segment>
-          {/* <Segment>{patient.vaccination[0].batchNumber}</Segment> */}
-          <Segment>{patient.dateOfBirth}</Segment>
-          <Segment>{patient.phoneNumber}</Segment>
-          <Segment>{patient.NIN ? patient.NIN : "None"}</Segment>
-        </Grid.Column>
-      </Grid>
-    </PDFExport>
+                <div style={styles.rectangulo}>
+                  <Text style={styles.textDesign}>Date of Birth:</Text>
+                </div>
+                <div style={styles.rectangulo}>
+                  <Text style={styles.textDesign}>Mobile Number:</Text>
+                </div>
+                <div style={styles.rectangulo}>
+                  <Text style={styles.textDesign}>NIN:</Text>
+                </div>
+              </div>
+              <div>
+                <div style={styles.rectangulo}>
+                  <Text style={styles.textDesign}>
+                    {patient.firstName} {patient.middleName} {patient.lastName}
+                  </Text>
+                </div>
+                <div style={styles.rectangulo}>
+                  <Text style={styles.textDesign}>{patient.nationality}</Text>
+                </div>
+
+                <div style={styles.rectangulo}>
+                  <Text style={styles.textDesign}>{patient.dateOfBirth}</Text>
+                </div>
+                <div style={styles.rectangulo}>
+                  <Text style={styles.textDesign}>{patient.phoneNumber}</Text>
+                </div>
+                <div style={styles.rectangulo}>
+                  <Text style={styles.textDesign}>
+                    {patient.NIN ? patient.NIN : "None"}
+                  </Text>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <Text
+                  style={{
+                    marginTop: "10%",
+                    display: "flex",
+                    justifyItem: "center",
+                    textDecoration: "underline",
+                    marginBottom: "2%",
+                  }}
+                >
+                  First Dose:
+                </Text>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "center",
+                }}
+              >
+                <div>
+                  <div style={styles.rectangulo}>
+                    <Text style={styles.textDesign}>Vaccine Name:</Text>
+                  </div>
+                  <div style={styles.rectangulo}>
+                    <Text style={styles.textDesign}>Date of Application:</Text>
+                  </div>
+
+                  <div style={styles.rectangulo}>
+                    <Text style={styles.textDesign}>Batch o:</Text>
+                  </div>
+                </div>
+                <div>
+                  <div style={styles.rectangulo}>
+                    <Text style={styles.textDesign}>
+                      {patient.vaccination[0]?.nameOfTheVaccine}
+                    </Text>
+                  </div>
+                  <div style={styles.rectangulo}>
+                    <Text style={styles.textDesign}>
+                      {patient.vaccination[0]?.firstDoseDate}
+                    </Text>
+                  </div>
+
+                  <div style={styles.rectangulo}>
+                    <Text style={styles.textDesign}>
+                      {patient.vaccination[0]?.batchNumber}
+                    </Text>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <Text
+                    style={{
+                      marginTop: "10%",
+                      display: "flex",
+                      textDecoration: "underline",
+                      marginBottom: "2%",
+                    }}
+                  >
+                    Second Dose:
+                  </Text>
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                  }}
+                >
+                  <div>
+                    <div style={styles.rectangulo}>
+                      <Text style={styles.textDesign}>Vaccine Name:</Text>
+                    </div>
+                    <div style={styles.rectangulo}>
+                      <Text style={styles.textDesign}>
+                        Date of Application:
+                      </Text>
+                    </div>
+
+                    <div style={styles.rectangulo}>
+                      <Text style={styles.textDesign}>Batch o:</Text>
+                    </div>
+                  </div>
+                  <div>
+                    <div style={styles.rectangulo}>
+                      <Text style={styles.textDesign}>
+                        {patient.vaccination[1]?.nameOfTheVaccine}
+                      </Text>
+                    </div>
+                    <div style={styles.rectangulo}>
+                      <Text style={styles.textDesign}>
+                        {patient.vaccination[1]?.firstDoseDate}
+                      </Text>
+                    </div>
+
+                    <div style={styles.rectangulo}>
+                      <Text style={styles.textDesign}>
+                        {patient.vaccination[1]?.batchNumber}
+                      </Text>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </View>
+        </Page>
+      </Document>
+    </>
   );
 };
 

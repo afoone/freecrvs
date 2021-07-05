@@ -4,11 +4,14 @@ import ImmunizationReport from "../../../components/immunization/ImmunizationRep
 import { PDFViewer } from "@react-pdf/renderer";
 import axios from "axios";
 import { useState } from "react";
+import QRCode from "qrcode.react";
 
 const ImmunizationHome = () => {
   const { id } = useRouter().query;
 
   const [patient, setPatient] = useState(undefined);
+  const [qrCodeCanvas, setQrCodeCanvas] = useState(undefined);
+  const [qrCodeDataUri, setqrCodeDataUri] = useState(undefined);
 
   useEffect(() => {
     id &&
@@ -17,12 +20,27 @@ const ImmunizationHome = () => {
       });
   }, [id]);
 
+  setTimeout(() => {
+    setQrCodeCanvas(document.querySelector("canvas"));
+    setqrCodeDataUri(qrCodeCanvas?.toDataURL("image/jpg", 0.3));
+  }, 300);
+
   return (
     <>
       {patient && (
-        <PDFViewer width="100%" height="800px">
-          <ImmunizationReport patient={patient}></ImmunizationReport>
-        </PDFViewer>
+        <>
+          <div style={{ width: 0, height: 0, marginLeft: 10, marginTop: 10 , overflow: "hidden"}}>
+            <QRCode value={patient._id} />
+          </div>
+          {qrCodeDataUri && (
+            <PDFViewer width="100%" height="800px">
+              <ImmunizationReport
+                patient={patient}
+                qrcode={qrCodeDataUri}
+              ></ImmunizationReport>
+            </PDFViewer>
+          )}
+        </>
       )}
     </>
   );
