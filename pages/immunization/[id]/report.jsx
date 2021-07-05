@@ -29,8 +29,8 @@ const ImmunizationHome = () => {
     <>
       {patient && (
         <>
-          <div style={{ width: 0, height: 0, marginLeft: 10, marginTop: 10 }}>
-            <QRCode value={patient._id} width="0px" />
+          <div style={{ width: 0, height: 0, marginLeft: 10, marginTop: 10 , overflow: "hidden"}}>
+            <QRCode value={patient._id} />
           </div>
           {qrCodeDataUri && (
             <PDFViewer width="100%" height="800px">
