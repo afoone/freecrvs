@@ -940,6 +940,11 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
+"@david.kucsai/react-pdf-table@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@david.kucsai/react-pdf-table/-/react-pdf-table-0.3.0.tgz#d7c932394ea23209dce45051135bc16639e2a6bc"
+  integrity sha512-qL/co/JtkYH69SuXsllAbnQO0fbmOxofNwCLEo/oJU7BEkwiQYxGYAsZp1DQxLYwhlML7QgQpL/ApkhOWrIVug==
+
 "@emotion/cache@^10.0.27":
   version "10.0.29"
   resolved "https://registry.npmjs.org/@emotion/cache/-/cache-10.0.29.tgz"
@@ -7105,6 +7110,14 @@ react-popper@^2.2.4:
   dependencies:
     react-fast-compare "^3.0.1"
     warning "^4.0.2"
+
+react-qr-svg@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/react-qr-svg/-/react-qr-svg-2.4.0.tgz#c703d95907b9713192730a5bbeffb57e4aa782bd"
+  integrity sha512-3Q/LyjBi+eWjJ0WyZvBzyY3rCMlUBZyRnbTcKbXQ39J1bd0/vgqYhXoYai7XlDTS42Ro50BBY4TmeUVyIZh+nA==
+  dependencies:
+    prop-types "^15.5.8"
+    qr.js "0.0.0"
 
 react-reconciler@^0.23.0:
   version "0.23.0"
