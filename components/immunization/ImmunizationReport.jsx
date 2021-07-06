@@ -26,7 +26,6 @@ const styles = StyleSheet.create({
   },
   header: {
     padding: 30,
-    marginBottom: 30,
     display: "flex",
     flexDirection: "row",
     width: "100%",
@@ -52,6 +51,21 @@ const styles = StyleSheet.create({
   },
   marginTop: {
     marginTop: "3%",
+  },
+  preDosis: {
+    display: "flex",
+    alignItems: "center",
+  },
+  titleDosis: {
+    marginTop: "4%",
+    display: "flex",
+    textDecoration: "underline",
+    marginBottom: "2%",
+  },
+  divTable: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
   },
 });
 
@@ -130,31 +144,10 @@ const ImmunizationReport = ({ patient, qrcode }) => {
               </div>
             </div>
             <div>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                <Text
-                  style={{
-                    marginTop: "10%",
-                    display: "flex",
-                    justifyItem: "center",
-                    textDecoration: "underline",
-                    marginBottom: "2%",
-                  }}
-                >
-                  First Dose:
-                </Text>
+              <div style={styles.preDosis}>
+                <Text style={styles.titleDosis}>First Dose:</Text>
               </div>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "center",
-                }}
-              >
+              <div style={styles.divTable}>
                 <div>
                   <div style={styles.rectangulo}>
                     <Text style={styles.textDesign}>Vaccine Name:</Text>
@@ -187,30 +180,10 @@ const ImmunizationReport = ({ patient, qrcode }) => {
                 </div>
               </div>
               <div>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                >
-                  <Text
-                    style={{
-                      marginTop: "10%",
-                      display: "flex",
-                      textDecoration: "underline",
-                      marginBottom: "2%",
-                    }}
-                  >
-                    Second Dose:
-                  </Text>
+                <div style={styles.preDosis}>
+                  <Text style={styles.titleDosis}>Second Dose:</Text>
                 </div>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "center",
-                  }}
-                >
+                <div style={styles.divTable}>
                   <div>
                     <div style={styles.rectangulo}>
                       <Text style={styles.textDesign}>Vaccine Name:</Text>
@@ -245,6 +218,45 @@ const ImmunizationReport = ({ patient, qrcode }) => {
                   </div>
                 </div>
               </div>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-evenly",
+                marginTop: "13%",
+              }}
+            >
+              <div
+                style={{
+                  height: "2px",
+                  width: "40%",
+                  backgroundColor: "black",
+                  marginLeft: "3%",
+                }}
+              />
+
+              <div
+                style={{
+                  height: "2px",
+                  width: "40%",
+                  backgroundColor: "black",
+                  marginRight: "3%",
+                }}
+              />
+            </div>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-evenly",
+                marginLeft: "6%",
+              }}
+            >
+              <Text>Signature of Registrar</Text>
+              <Text style={{ marginLeft: "2%" }}>
+                Date Certified (DD/MM/YYYY)
+              </Text>
             </div>
           </View>
         </Page>
