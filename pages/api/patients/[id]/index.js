@@ -1,6 +1,6 @@
 import Cors from "cors";
 
-import { update, get } from "../../../services/immunization";
+import { update, get } from "../../../../services/immunization";
 
 // Initializing the cors middleware
 const cors = Cors({
