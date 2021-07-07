@@ -8,6 +8,7 @@
     "test": "jest --watch"
   },
   "dependencies": {
+    "@david.kucsai/react-pdf-table": "^0.3.0",
     "@material-ui/core": "^4.11.4",
     "@material-ui/data-grid": "^4.0.0-alpha.32",
     "@progress/kendo-drawing": "^1.10.1",
@@ -37,6 +38,7 @@
     "react-dom": "^17.0.2",
     "react-hook-form": "^7.1.1",
     "react-loading-skeleton": "^2.2.0",
+    "react-qr-svg": "^2.4.0",
     "react-redux": "^7.2.3",
     "react-select": "^4.3.0",
     "react-to-pdf": "^0.0.14",

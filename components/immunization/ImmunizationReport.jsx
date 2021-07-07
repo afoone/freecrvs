@@ -15,7 +15,6 @@ const styles = StyleSheet.create({
     flexDirection: "column",
   },
   section: {
-    margin: 10,
     padding: 10,
     flexGrow: 1,
   },
@@ -27,66 +26,238 @@ const styles = StyleSheet.create({
   },
   header: {
     padding: 30,
-    marginBottom: 30,
     display: "flex",
     flexDirection: "row",
     width: "100%",
   },
   image: {
     width: 100,
-    height: 100
+    height: 100,
   },
   qr: {
     width: 100,
     height: 100,
-    marginLeft: 100
+    marginLeft: 100,
+  },
+  rectangulo: {
+    display: "flex",
+    width: "200px",
+    height: "40px",
+    border: 1,
+    justifyContent: "center",
+  },
+  textDesign: {
+    textAlign: "center",
+  },
+  marginTop: {
+    marginTop: "3%",
+  },
+  preDosis: {
+    display: "flex",
+    alignItems: "center",
+  },
+  titleDosis: {
+    marginTop: "4%",
+    display: "flex",
+    textDecoration: "underline",
+    marginBottom: "2%",
+  },
+  divTable: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
   },
 });
 
 // Create Document Component
 const ImmunizationReport = ({ patient, qrcode }) => {
+  console.log("patient", patient);
   return (
     <>
       <Document>
         <Page size="A4" style={styles.page}>
           <View style={styles.header}>
             <Image src="/images/logo2.png" size="large" style={styles.image} />
-            <Text wrap={false} style={styles.title}>
-              The Gambia Patient Immunization Certificate
-            </Text>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                marginRight: "5%",
+              }}
+            >
+              <Text wrap={false} style={styles.title}>
+                The Gambia Patient Immunization Certificate
+              </Text>
+            </div>
             {qrcode && (
-              <Image
-                source={{ uri: qrcode }}
-                size="large"
-                style={styles.qr}
-              />
+              <Image source={{ uri: qrcode }} size="large" style={styles.qr} />
             )}
           </View>
           <View style={styles.section}>
-
-            
-
             <div
               style={{
                 display: "flex",
-                justifyContent: "flex-start",
-                width: "20%",
-                height: "20%",
-              }}
-            ></div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
+                flexDirection: "row",
+                justifyContent: "center",
               }}
             >
-              {/* {patient && <PatientData patient={patient} />} */}
-              <Text style={{ fontWeight: "bold" }}>{patient.firstName}</Text>
+              <div>
+                <div style={styles.rectangulo}>
+                  <Text style={styles.textDesign}>Full Name:</Text>
+                </div>
+                <div style={styles.rectangulo}>
+                  <Text style={styles.textDesign}>Nationality:</Text>
+                </div>
+
+                <div style={styles.rectangulo}>
+                  <Text style={styles.textDesign}>Date of Birth:</Text>
+                </div>
+                <div style={styles.rectangulo}>
+                  <Text style={styles.textDesign}>Mobile Number:</Text>
+                </div>
+                <div style={styles.rectangulo}>
+                  <Text style={styles.textDesign}>NIN:</Text>
+                </div>
+              </div>
+              <div>
+                <div style={styles.rectangulo}>
+                  <Text style={styles.textDesign}>
+                    {patient.firstName} {patient.middleName} {patient.lastName}
+                  </Text>
+                </div>
+                <div style={styles.rectangulo}>
+                  <Text style={styles.textDesign}>{patient.nationality}</Text>
+                </div>
+
+                <div style={styles.rectangulo}>
+                  <Text style={styles.textDesign}>{patient.dateOfBirth}</Text>
+                </div>
+                <div style={styles.rectangulo}>
+                  <Text style={styles.textDesign}>{patient.phoneNumber}</Text>
+                </div>
+                <div style={styles.rectangulo}>
+                  <Text style={styles.textDesign}>
+                    {patient.NIN ? patient.NIN : "None"}
+                  </Text>
+                </div>
+              </div>
             </div>
-          </View>
-          <View style={styles.section}>
-            <Text>Section #2</Text>
+            <div>
+              <div style={styles.preDosis}>
+                <Text style={styles.titleDosis}>First Dose:</Text>
+              </div>
+              <div style={styles.divTable}>
+                <div>
+                  <div style={styles.rectangulo}>
+                    <Text style={styles.textDesign}>Vaccine Name:</Text>
+                  </div>
+                  <div style={styles.rectangulo}>
+                    <Text style={styles.textDesign}>Date of Application:</Text>
+                  </div>
+
+                  <div style={styles.rectangulo}>
+                    <Text style={styles.textDesign}>Batch o:</Text>
+                  </div>
+                </div>
+                <div>
+                  <div style={styles.rectangulo}>
+                    <Text style={styles.textDesign}>
+                      {patient.vaccination[0]?.nameOfTheVaccine}
+                    </Text>
+                  </div>
+                  <div style={styles.rectangulo}>
+                    <Text style={styles.textDesign}>
+                      {patient.vaccination[0]?.firstDoseDate}
+                    </Text>
+                  </div>
+
+                  <div style={styles.rectangulo}>
+                    <Text style={styles.textDesign}>
+                      {patient.vaccination[0]?.batchNumber}
+                    </Text>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div style={styles.preDosis}>
+                  <Text style={styles.titleDosis}>Second Dose:</Text>
+                </div>
+                <div style={styles.divTable}>
+                  <div>
+                    <div style={styles.rectangulo}>
+                      <Text style={styles.textDesign}>Vaccine Name:</Text>
+                    </div>
+                    <div style={styles.rectangulo}>
+                      <Text style={styles.textDesign}>
+                        Date of Application:
+                      </Text>
+                    </div>
+
+                    <div style={styles.rectangulo}>
+                      <Text style={styles.textDesign}>Batch o:</Text>
+                    </div>
+                  </div>
+                  <div>
+                    <div style={styles.rectangulo}>
+                      <Text style={styles.textDesign}>
+                        {patient.vaccination[1]?.nameOfTheVaccine}
+                      </Text>
+                    </div>
+                    <div style={styles.rectangulo}>
+                      <Text style={styles.textDesign}>
+                        {patient.vaccination[1]?.firstDoseDate}
+                      </Text>
+                    </div>
+
+                    <div style={styles.rectangulo}>
+                      <Text style={styles.textDesign}>
+                        {patient.vaccination[1]?.batchNumber}
+                      </Text>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-evenly",
+                marginTop: "13%",
+              }}
+            >
+              <div
+                style={{
+                  height: "2px",
+                  width: "40%",
+                  backgroundColor: "black",
+                  marginLeft: "3%",
+                }}
+              />
+
+              <div
+                style={{
+                  height: "2px",
+                  width: "40%",
+                  backgroundColor: "black",
+                  marginRight: "3%",
+                }}
+              />
+            </div>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-evenly",
+                marginLeft: "6%",
+              }}
+            >
+              <Text>Signature of Registrar</Text>
+              <Text style={{ marginLeft: "2%" }}>
+                Date Certified (DD/MM/YYYY)
+              </Text>
+            </div>
           </View>
         </Page>
       </Document>
