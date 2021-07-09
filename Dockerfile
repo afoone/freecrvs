@@ -1,5 +1,6 @@
 FROM node:current-alpine AS base
 WORKDIR /base
+RUN apt install git -y
 COPY package*.json ./
 RUN npm install
 COPY . .
