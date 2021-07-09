@@ -61,8 +61,7 @@ export const mapToFhir = (patient) => {
             {
               family: patient.lastName,
               given: [patient.firstName, patient.middleName],
-            },
-            
+            }, 
           ],
           identifier: {
             use : "official",

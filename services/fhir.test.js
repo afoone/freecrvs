@@ -80,7 +80,7 @@ const patient = {
 
 test("map to fhir patient", () => {
   expect(mapToFhir(patient)).toEqual({
-    name: [
+      name: [
       {
         family: "NDOYE",
         given: ["AMIE",""],
