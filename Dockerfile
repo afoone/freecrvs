@@ -16,7 +16,7 @@ WORKDIR /app
 COPY --from=build /build/package*.json ./
 COPY --from=build /build/.next ./.next
 COPY --from=build /build/public ./public
-RUN npm install next
+RUN npm install next --legacy-peer-deps
 
 EXPOSE 3000
 CMD npm run start
