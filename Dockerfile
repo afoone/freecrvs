@@ -1,8 +1,7 @@
 FROM node:current-alpine AS base
 WORKDIR /base
-RUN apt install git -y
 COPY package*.json ./
-RUN npm install
+RUN npm install --legacy-peer-deps
 COPY . .
 
 FROM base AS build
