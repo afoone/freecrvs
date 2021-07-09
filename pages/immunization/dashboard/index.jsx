@@ -47,7 +47,9 @@ const Dashboard = ({
   const [totalByPreexistingConditions, setTotalByPreexistingConditions] =
     useState([]);
   const [totalByAge, setTotalByAge] = useState([]);
-
+  const [fullyByPreexistingConditions, setFullyByPreexistingConditions] =
+    useState([]);
+  const [fullyByPriorityGroups, setFullyByPriorityGroups] = useState([]);
   useEffect(() => {
     axios.get(`/api/patients/dashboard/totalByPriorityGroups`).then((res) => {
       setTotalByPriorityGroups(res.data);
@@ -59,6 +61,14 @@ const Dashboard = ({
       });
     axios.get(`/api/patients/dashboard/totalByAge`).then((res) => {
       setTotalByAge(res.data);
+    });
+    axios
+      .get(`/api/patients/dashboard/fullyByPreexistingConditions`)
+      .then((res) => {
+        setFullyByPreexistingConditions(res.data);
+      });
+    axios.get(`/api/patients/dashboard/fullyByPriorityGroups`).then((res) => {
+      setFullyByPriorityGroups(res.data);
     });
   }, []);
 
@@ -76,7 +86,7 @@ const Dashboard = ({
           display: "grid",
           gridTemplateColumns: "50% 50%",
           gridTemplateRows:
-            "auto auto auto auto auto auto 30rem 30rem auto auto",
+            "auto auto auto auto auto auto auto 30rem 30rem auto auto",
           gap: "1rem",
         }}
       >
@@ -146,6 +156,13 @@ const Dashboard = ({
             },
           ]}
         />
+        <DataTable
+          title="Preexisting conditions"
+          data={totalByPreexistingConditions.map((i) => ({
+            name: i.key,
+            value: i.value,
+          }))}
+        />
         <Label
           color="green"
           tag
@@ -193,8 +210,25 @@ const Dashboard = ({
           ]}
         />
         <DataTable
+          title="Priority Groups"
+          data={fullyByPriorityGroups.map((i) => ({
+            name: i.key,
+            value: i.value,
+          }))}
+          config={[
+            {
+              field: "name",
+              header: "Name",
+            },
+            {
+              field: "value",
+              header: "Value",
+            },
+          ]}
+        />
+        <DataTable
           title="Preexisting conditions"
-          data={totalByPreexistingConditions.map((i) => ({
+          data={fullyByPreexistingConditions.map((i) => ({
             name: i.key,
             value: i.value,
           }))}

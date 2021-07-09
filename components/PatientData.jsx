@@ -32,9 +32,9 @@ const PatientData = ({ patient, image, setImage }) => {
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
-        justifyContent: "space-around",
+        justifyContent: "space-evenly",
         height: "100%",
-        width: "100%",
+        width: "80%",
       }}
     >
       <div className="ui card">
