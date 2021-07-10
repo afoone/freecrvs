@@ -2,20 +2,12 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import Skeleton from "react-loading-skeleton";
+import { getIdentifiers, Errors } from "./immunizationListPresenter";
 
 export const getFullName = (patient) => {
   return `${patient.firstName}  ${patient.middleName || ""} ${
     patient.lastName
   }`;
-};
-
-export const getIdentifiers = (patient) => {
-  return (
-    <div>
-      {patient.NIN && <div>{`NIN: ${patient.NIN}`}</div>}
-      {patient.myChildId && <div>{`myChildId: ${patient.myChildId}`}</div>}
-    </div>
-  );
 };
 
 const PatientRow = ({ patient }) => {
@@ -30,6 +22,9 @@ const PatientRow = ({ patient }) => {
       <td>{getIdentifiers(patient)}</td>
       <td>{!patient.pending ? "Yes" : "No"}</td>
       <td>
+        <Errors patient={patient}></Errors>
+      </td>
+      <td>
         {!patient.pending && (
           <a href={`/immunization/${patient._id}`}>
             <button className="primary mini ui button">Edit</button>
@@ -43,6 +38,9 @@ const PatientRow = ({ patient }) => {
 const PatientSkeletonRow = () => {
   return (
     <tr>
+      <td>
+        <Skeleton></Skeleton>
+      </td>
       <td>
         <Skeleton></Skeleton>
       </td>
@@ -215,6 +213,7 @@ const ImmunizationList = () => {
             <th>Gender</th>
             <th>Identifiers</th>
             <th>Synchronized</th>
+            <th>Problems</th>
             <th>
               <a href={`/immunization/new`}>
                 <button className="positive mini ui button">New Patient</button>

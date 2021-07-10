@@ -27,7 +27,7 @@ export async function connectToDatabase() {
       useUnifiedTopology: true,
     };
 
-    console.log("la uri", MONGODB_URI);
+    // console.log("la uri", MONGODB_URI);
     cached.promise = MongoClient.connect(MONGODB_URI, opts).then((client) => {
       return {
         client,
