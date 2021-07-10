@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { getFullName, getIdentifiers } from "./ImmunizationList";
+import { getFullName } from "./ImmunizationList";
+import { getIdentifiers } from "./immunizationListPresenter";
 import QRCode from "qrcode.react";
 import styles from "./PatientData.module.css";
 import axios from "axios";

@@ -21,6 +21,11 @@ export const getTotalDosesByType = async () => {
           $or: [
             { "vaccination.firstDoseDate": { $ne: null } },
             { "vaccination.date": { $ne: null } },
+            { "vaccination.nameOfTheVaccine": { $ne: null } },
+            { "vaccination.dateOfNextVisit": { $ne: null } },
+            { "vaccination.vaccinatorFullName": { $ne: null } },
+            { "vaccination.expiryDate": { $ne: null } },
+            { "vaccination.batchNumber": { $ne: null } },
           ],
         },
       },
@@ -192,6 +197,11 @@ export const getTotalDosesByRegionAndDay = async () => {
           $or: [
             { "vaccination.firstDoseDate": { $ne: null } },
             { "vaccination.date": { $ne: null } },
+             { "vaccination.nameOfTheVaccine": { $ne: null } },
+             { "vaccination.dateOfNextVisit": { $ne: null } },
+             { "vaccination.vaccinatorFullName": { $ne: null } },
+             { "vaccination.expiryDate": { $ne: null } },
+             { "vaccination.batchNumber": { $ne: null } },
           ],
         },
       },
