@@ -2,7 +2,12 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import Skeleton from "react-loading-skeleton";
-import { getIdentifiers, Errors } from "./immunizationListPresenter";
+import {
+  getIdentifiers,
+  Errors,
+  firstDoseVaccinated,
+  secondDoseVaccinated,
+} from "./immunizationListPresenter";
 
 export const getFullName = (patient) => {
   return `${patient.firstName}  ${patient.middleName || ""} ${
@@ -20,7 +25,27 @@ const PatientRow = ({ patient }) => {
       </td>
       <td>{patient.gender === "M" ? "Male" : "Female"}</td>
       <td>{getIdentifiers(patient)}</td>
-      <td>{!patient.pending ? "Yes" : "No"}</td>
+      <td>
+        {!patient.pending ? (
+          <i class="check icon green"></i>
+        ) : (
+          <i class="close icon red"></i>
+        )}
+      </td>
+      <td>
+        {firstDoseVaccinated(patient) ? (
+          <i class="check icon green"></i>
+        ) : (
+          <i class="close icon red"></i>
+        )}
+      </td>
+      <td>
+        {secondDoseVaccinated(patient) ? (
+          <i class="check icon green"></i>
+        ) : (
+          <i class="close icon red"></i>
+        )}
+      </td>
       <td>
         <Errors patient={patient}></Errors>
       </td>
@@ -38,6 +63,12 @@ const PatientRow = ({ patient }) => {
 const PatientSkeletonRow = () => {
   return (
     <tr>
+      <td>
+        <Skeleton></Skeleton>
+      </td>
+      <td>
+        <Skeleton></Skeleton>
+      </td>
       <td>
         <Skeleton></Skeleton>
       </td>
@@ -212,6 +243,8 @@ const ImmunizationList = () => {
             <th>Birth Date</th>
             <th>Gender</th>
             <th>Identifiers</th>
+            <th>1st Dose</th>
+            <th>2nd Dose</th>
             <th>Synchronized</th>
             <th>Problems</th>
             <th>

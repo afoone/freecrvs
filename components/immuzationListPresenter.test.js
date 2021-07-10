@@ -2,7 +2,12 @@ import React from "react";
 import { act } from "react-dom/test-utils";
 import { container } from "webpack";
 import { render, fireEvent, waitFor, screen } from "@testing-library/react";
-import { getIdentifiers, Errors } from "./immunizationListPresenter";
+import {
+  getIdentifiers,
+  Errors,
+  firstDoseVaccinated,
+  secondDoseVaccinated,
+} from "./immunizationListPresenter";
 
 describe("identifiers", () => {
   test("renders ok the nin", async () => {
@@ -54,5 +59,27 @@ describe("errors", () => {
     expect(screen.getByTestId("errors")).not.toHaveTextContent(
       "Name of the vaccine is missing"
     );
+  });
+});
+
+describe("checks for vaccination", () => {
+  test("first dose vaccinated", () => {
+    expect(
+      firstDoseVaccinated({ vaccination: [{ firstDoseDate: "some" }] })
+    ).toBeTruthy();
+    expect(
+      firstDoseVaccinated({ vaccination: [{ nameOfTheVaccine: "some" }] })
+    ).toBeTruthy();
+    expect(firstDoseVaccinated({ vaccination: [{}] })).toBeFalsy();
+  });
+  test("second dose vaccinated", () => {
+    expect(
+      secondDoseVaccinated({ vaccination: [{}, { firstDoseDate: "some" }] })
+    ).toBeTruthy();
+    expect(
+      secondDoseVaccinated({ vaccination: [{}, { nameOfTheVaccine: "some" }] })
+    ).toBeTruthy();
+    expect(secondDoseVaccinated({ vaccination: [{}] })).toBeFalsy();
+    expect(secondDoseVaccinated({ vaccination: [{}, {}] })).toBeFalsy();
   });
 });
