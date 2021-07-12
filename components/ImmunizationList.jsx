@@ -16,7 +16,7 @@ export const getFullName = (patient) => {
 };
 
 const PatientRow = ({ patient }) => {
-  console.log(patient.pending)
+  console.log(patient.pending);
   return (
     <tr>
       <td>{getFullName(patient)}</td>
@@ -43,11 +43,9 @@ const PatientRow = ({ patient }) => {
       </td>
       <td>
         {patient.pending ? (
-         <i class="close icon red"></i>
+          <i class="close icon red"></i>
         ) : (
-         
           <i class="check icon green"></i>
-          
         )}
       </td>
       <td>
