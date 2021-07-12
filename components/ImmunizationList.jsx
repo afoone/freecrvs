@@ -16,6 +16,7 @@ export const getFullName = (patient) => {
 };
 
 const PatientRow = ({ patient }) => {
+  console.log(patient.pending)
   return (
     <tr>
       <td>{getFullName(patient)}</td>
@@ -25,13 +26,7 @@ const PatientRow = ({ patient }) => {
       </td>
       <td>{patient.gender === "M" ? "Male" : "Female"}</td>
       <td>{getIdentifiers(patient)}</td>
-      <td>
-        {!patient.pending ? (
-          <i class="check icon green"></i>
-        ) : (
-          <i class="close icon red"></i>
-        )}
-      </td>
+
       <td>
         {firstDoseVaccinated(patient) ? (
           <i class="check icon green"></i>
@@ -44,6 +39,15 @@ const PatientRow = ({ patient }) => {
           <i class="check icon green"></i>
         ) : (
           <i class="close icon red"></i>
+        )}
+      </td>
+      <td>
+        {patient.pending ? (
+         <i class="close icon red"></i>
+        ) : (
+         
+          <i class="check icon green"></i>
+          
         )}
       </td>
       <td>
