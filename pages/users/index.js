@@ -36,10 +36,6 @@ const users = () => {
           )}
         </div>
         <hr></hr>
-        <div>
-          <Duplicates/>
-          
-        </div>
       </AuthHOC>
     </div>
   );

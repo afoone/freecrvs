@@ -22,12 +22,13 @@ const Layout = ({ children }) => {
       case "users":
         router.push("/users/");
         break;
+      case "duplicates":
+        router.push("/duplicates/");
+        break;
       default:
         break;
     }
   };
-
-
 
   return (
     <div className="layout">
@@ -35,7 +36,9 @@ const Layout = ({ children }) => {
       <Container>
         <Menu attached="top">
           <Menu.Item header>
-            <span>The Gambia CRVS <small>1.3.0</small></span>
+            <span>
+              The Gambia CRVS <small>1.3.0</small>
+            </span>
           </Menu.Item>
           <Menu.Item
             name="home"
@@ -53,6 +56,13 @@ const Layout = ({ children }) => {
             <Menu.Item
               name="users"
               active={activeItem === "users"}
+              onClick={handleItemClick}
+            />
+          </AuthHOC>
+          <AuthHOC admin>
+            <Menu.Item
+              name="duplicates"
+              active={activeItem === "duplicates"}
               onClick={handleItemClick}
             />
           </AuthHOC>

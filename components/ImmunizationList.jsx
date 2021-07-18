@@ -136,7 +136,7 @@ const ImmunizationList = () => {
   const [patients, setPatients] = useState([]);
   const [total, setTotal] = useState(0);
   const [offset, setOffset] = useState(0);
-  const [count, setCount] = useState(25);
+  const [count, setCount] = useState(100);
   const [searchGiven, setSearchGiven] = useState("");
   const [searchLast, setSearchLast] = useState("");
   const [searchNIN, setSearchNIN] = useState("");
@@ -281,10 +281,10 @@ const ImmunizationList = () => {
               value={count}
               onChange={(e) => setCount(parseInt(e.target.value))}
             >
-              <option value={10}>10</option>
-              <option value={25}>25</option>
-              <option value={50}>50</option>
               <option value={100}>100</option>
+              <option value={200}>200</option>
+              <option value={500}>500</option>
+              <option value={1000}>1000</option>
             </select>
           </div>
         </div>
