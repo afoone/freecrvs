@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import Skeleton from "react-loading-skeleton";
+import Link from 'next/link'
 import {
   getIdentifiers,
   Errors,
@@ -53,9 +54,9 @@ const PatientRow = ({ patient }) => {
       </td>
       <td>
         {!patient.pending && (
-          <a href={`/immunization/${patient._id}`}>
+          <Link href={`/immunization/${patient._id}`}>
             <button className="primary mini ui button">Edit</button>
-          </a>
+          </Link>
         )}
       </td>
     </tr>
@@ -250,9 +251,9 @@ const ImmunizationList = () => {
             <th>Synchronized</th>
             <th>Problems</th>
             <th>
-              <a href={`/immunization/new`}>
+              <Link href={`/immunization/new`}>
                 <button className="positive mini ui button">New Patient</button>
-              </a>
+              </Link>
             </th>
           </tr>
         </thead>
