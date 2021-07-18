@@ -97,9 +97,9 @@ const UserList = ({ setUser, users }) => {
             .filter(
               (u) =>
                 u.username.toLowerCase().includes(search.toLowerCase()) ||
-                u.firstName.toLowerCase().includes(search.toLowerCase()) ||
-                u.lastName.toLowerCase().includes(search.toLowerCase()) ||
-                u.email.toLowerCase().includes(search.toLowerCase())
+                u.firstName?.toLowerCase().includes(search.toLowerCase()) ||
+                u.lastName?.toLowerCase().includes(search.toLowerCase()) ||
+                u.email?.toLowerCase().includes(search.toLowerCase())
             )
             .map((u) => (
               <UserRow user={u} setUser={setUser}></UserRow>
