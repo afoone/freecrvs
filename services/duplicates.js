@@ -3,7 +3,9 @@ import { ObjectId } from "mongodb";
 import { connectToDatabase } from "../util/mongodb";
 
 export const getDuplicatesForNIN = async () => {
+  console.log("connectind db")
   const { db } = await connectToDatabase();
+  
   const duplicates = await db
     .collection("vaccination")
     .aggregate([
@@ -17,8 +19,9 @@ export const getDuplicatesForNIN = async () => {
       },
       { $match: { _id: { $ne: null }, count: { $gt: 1 } } },
       { $project: { nin: "$_id", _id: "$count", documents: "$documents" } },
-    ])
+    ], { allowDiskUse: true })
     .toArray();
+  console.log("duplicates", duplicates);
   return duplicates.filter((i) => i.nin && i.nin.length > 5);
 };
 

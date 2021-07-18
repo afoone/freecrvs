@@ -4,16 +4,16 @@ import { getSession } from "next-auth/client";
 
 
 export default async (req, res) => {
-    const session = await getSession({ req });
+    // const session = await getSession({ req });
   
-    if (!session) {
-      res.status(401).json({ msg: "unauthorized" });
-    } else {
+    // if (!session) {
+    //   res.status(401).json({ msg: "unauthorized" });
+    // } else {
       switch (req.method) {
         default:
           const results = await getDuplicatesForNIN();
           res.json(results);
           break;
       }
-    }
+    // }
   };
