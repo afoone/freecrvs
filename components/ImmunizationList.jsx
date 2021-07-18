@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import Skeleton from "react-loading-skeleton";
-import Link from 'next/link'
+import Link from "next/link";
+import { Button, Header, Icon, Modal } from "semantic-ui-react";
 import {
   getIdentifiers,
   Errors,
@@ -16,8 +17,11 @@ export const getFullName = (patient) => {
   }`;
 };
 
-const PatientRow = ({ patient }) => {
-  console.log(patient.pending);
+const PatientRow = ({ patient, setOpen }) => {
+  const deletePatient = (id) => {
+    setOpen(id);
+  };
+
   return (
     <tr>
       <td>{getFullName(patient)}</td>
@@ -54,9 +58,18 @@ const PatientRow = ({ patient }) => {
       </td>
       <td>
         {!patient.pending && (
-          <Link href={`/immunization/${patient._id}`}>
-            <button className="primary mini ui button">Edit</button>
-          </Link>
+          <div class="ui buttons">
+            <Link href={`/immunization/${patient._id}`}>
+              <button className="primary mini ui button">Edit</button>
+            </Link>
+            <div className="or"></div>
+            <button
+              className="negative mini ui button"
+              onClick={() => deletePatient(patient._id)}
+            >
+              Delete
+            </button>
+          </div>
         )}
       </td>
     </tr>
@@ -131,6 +144,7 @@ const ImmunizationList = () => {
 
   const immunization = useSelector((state) => state.immunization);
   const [loading, setLoading] = useState(true);
+  const [open, setOpen] = useState(false);
 
   const getPatientsWithParams = (params) => {
     let url = `/api/patients/?_count=${count}&_getpagesoffset=${offset}`;
@@ -180,8 +194,44 @@ const ImmunizationList = () => {
     getPatientsWithParams();
   };
 
+  const performDeletion = () => {
+    axios.delete(`/api/patients/${open}`).then(() => {
+      setOpen(undefined);
+      searchPatients();
+    });
+  };
+
   return (
     <div className="immunization-list">
+      {open && (
+        <Modal
+          basic
+          onClose={() => setOpen(false)}
+          onOpen={() => setOpen(true)}
+          open={open}
+          size="small"
+          trigger={<Button>Basic Modal</Button>}
+        >
+          <Header icon>
+            <Icon name="delete" />
+            Delete patient.
+          </Header>
+          <Modal.Content>
+            <p>
+              This operation is not reversible. Are you sure to perform the
+              delete?
+            </p>
+          </Modal.Content>
+          <Modal.Actions>
+            <Button basic color="red" inverted onClick={() => setOpen(false)}>
+              <Icon name="remove" /> No
+            </Button>
+            <Button color="green" inverted onClick={() => performDeletion()}>
+              <Icon name="checkmark" /> Yes
+            </Button>
+          </Modal.Actions>
+        </Modal>
+      )}
       <div className="ui small form">
         <div className="four fields">
           <div className="ui field ">
@@ -263,7 +313,7 @@ const ImmunizationList = () => {
               <PatientSkeletonRow></PatientSkeletonRow>
             ))}
           {patients.map((i, index) => (
-            <PatientRow key={index} patient={i} />
+            <PatientRow key={index} patient={i} setOpen={setOpen} />
           ))}
         </tbody>
       </table>
