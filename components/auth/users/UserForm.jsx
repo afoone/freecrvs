@@ -90,11 +90,11 @@ const UserForm = ({ user, setUser, addUserToList }) => {
           {errors.password && <span>This field is required</span>}
         </div>
 
-        <button className="ui button" type="submit">
+        <button className="ui button positive" type="submit">
           Submit
         </button>
         <button
-          className="ui button"
+          className="ui button negative"
           type="submit"
           onClick={() => setUser(null)}
         >

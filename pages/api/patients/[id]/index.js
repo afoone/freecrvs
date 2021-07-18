@@ -1,6 +1,10 @@
 import Cors from "cors";
 
-import { update, get } from "../../../../services/immunization";
+import {
+  update,
+  get,
+  deleteImmunization,
+} from "../../../../services/immunization";
 
 // Initializing the cors middleware
 const cors = Cors({
@@ -31,8 +35,14 @@ export default async (req, res) => {
       res.json(patient);
       break;
 
+    case "DELETE":
+      console.log("delete patient", id);
+      await deleteImmunization(id);
+      res.json({ id });
+      break;
+
     default:
-      await runMiddleware(req, res, cors)
+      await runMiddleware(req, res, cors);
       const patientResponse = await get(id);
       res.json(patientResponse);
       break;

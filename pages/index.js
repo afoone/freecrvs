@@ -1,4 +1,6 @@
 import { useSession, signIn, signOut } from "next-auth/client";
+import 'semantic-ui-css/semantic.min.css'
+
 
 export default function Home() {
   const [session, loading] = useSession();

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import Skeleton from "react-loading-skeleton";
+import Link from "next/link";
+import { Button, Header, Icon, Modal } from "semantic-ui-react";
 import {
   getIdentifiers,
   Errors,
@@ -15,8 +17,11 @@ export const getFullName = (patient) => {
   }`;
 };
 
-const PatientRow = ({ patient }) => {
-  console.log(patient.pending)
+const PatientRow = ({ patient, setOpen }) => {
+  const deletePatient = (id) => {
+    setOpen(id);
+  };
+
   return (
     <tr>
       <td>{getFullName(patient)}</td>
@@ -43,11 +48,9 @@ const PatientRow = ({ patient }) => {
       </td>
       <td>
         {patient.pending ? (
-         <i class="close icon red"></i>
+          <i class="close icon red"></i>
         ) : (
-         
           <i class="check icon green"></i>
-          
         )}
       </td>
       <td>
@@ -55,9 +58,18 @@ const PatientRow = ({ patient }) => {
       </td>
       <td>
         {!patient.pending && (
-          <a href={`/immunization/${patient._id}`}>
-            <button className="primary mini ui button">Edit</button>
-          </a>
+          <div class="ui buttons">
+            <Link href={`/immunization/${patient._id}`}>
+              <button className="primary mini ui button">Edit</button>
+            </Link>
+            <div className="or"></div>
+            <button
+              className="negative mini ui button"
+              onClick={() => deletePatient(patient._id)}
+            >
+              Delete
+            </button>
+          </div>
         )}
       </td>
     </tr>
@@ -124,7 +136,7 @@ const ImmunizationList = () => {
   const [patients, setPatients] = useState([]);
   const [total, setTotal] = useState(0);
   const [offset, setOffset] = useState(0);
-  const [count, setCount] = useState(25);
+  const [count, setCount] = useState(100);
   const [searchGiven, setSearchGiven] = useState("");
   const [searchLast, setSearchLast] = useState("");
   const [searchNIN, setSearchNIN] = useState("");
@@ -132,6 +144,7 @@ const ImmunizationList = () => {
 
   const immunization = useSelector((state) => state.immunization);
   const [loading, setLoading] = useState(true);
+  const [open, setOpen] = useState(false);
 
   const getPatientsWithParams = (params) => {
     let url = `/api/patients/?_count=${count}&_getpagesoffset=${offset}`;
@@ -181,8 +194,44 @@ const ImmunizationList = () => {
     getPatientsWithParams();
   };
 
+  const performDeletion = () => {
+    axios.delete(`/api/patients/${open}`).then(() => {
+      setOpen(undefined);
+      searchPatients();
+    });
+  };
+
   return (
     <div className="immunization-list">
+      {open && (
+        <Modal
+          basic
+          onClose={() => setOpen(false)}
+          onOpen={() => setOpen(true)}
+          open={open}
+          size="small"
+          trigger={<Button>Basic Modal</Button>}
+        >
+          <Header icon>
+            <Icon name="delete" />
+            Delete patient.
+          </Header>
+          <Modal.Content>
+            <p>
+              This operation is not reversible. Are you sure to perform the
+              delete?
+            </p>
+          </Modal.Content>
+          <Modal.Actions>
+            <Button basic color="red" inverted onClick={() => setOpen(false)}>
+              <Icon name="remove" /> No
+            </Button>
+            <Button color="green" inverted onClick={() => performDeletion()}>
+              <Icon name="checkmark" /> Yes
+            </Button>
+          </Modal.Actions>
+        </Modal>
+      )}
       <div className="ui small form">
         <div className="four fields">
           <div className="ui field ">
@@ -232,10 +281,10 @@ const ImmunizationList = () => {
               value={count}
               onChange={(e) => setCount(parseInt(e.target.value))}
             >
-              <option value={10}>10</option>
-              <option value={25}>25</option>
-              <option value={50}>50</option>
               <option value={100}>100</option>
+              <option value={200}>200</option>
+              <option value={500}>500</option>
+              <option value={1000}>1000</option>
             </select>
           </div>
         </div>
@@ -252,9 +301,9 @@ const ImmunizationList = () => {
             <th>Synchronized</th>
             <th>Problems</th>
             <th>
-              <a href={`/immunization/new`}>
+              <Link href={`/immunization/new`}>
                 <button className="positive mini ui button">New Patient</button>
-              </a>
+              </Link>
             </th>
           </tr>
         </thead>
@@ -264,7 +313,7 @@ const ImmunizationList = () => {
               <PatientSkeletonRow></PatientSkeletonRow>
             ))}
           {patients.map((i, index) => (
-            <PatientRow key={index} patient={i} />
+            <PatientRow key={index} patient={i} setOpen={setOpen} />
           ))}
         </tbody>
       </table>

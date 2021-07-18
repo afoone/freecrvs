@@ -112,7 +112,7 @@ export const mapToFhir = (patient) => {
           patient: {
             reference: "resource:0",
           },
-          occurrenceDateTime: patient.vaccination[0]?.firstDoseDate,
+          occurrenceDateTime: patient.vaccination[0]?.date || patient.vaccination[0]?.firstDoseDate,
           performer: [
             {
               actor: {

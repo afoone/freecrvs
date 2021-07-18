@@ -16,6 +16,7 @@ import ImmunizationRecordForm from "./ImmunizationRecordForm";
 import { add, update } from "../../redux/immunizationSlice";
 import { useDispatch } from "react-redux";
 import AddressFacilityForm from "../adresss/AddressFacilityForm";
+import { Message } from "semantic-ui-react";
 
 const ImmunizationForm = ({ id }) => {
   const router = useRouter();
@@ -58,6 +59,7 @@ const ImmunizationForm = ({ id }) => {
   const [placeOfDelivery, setPlaceOfDelivery] = useState({});
   const [patientAddress, setPatientAddress] = useState({});
   const [patientOccupation, setPatientOccupation] = useState("");
+  const [saving, setSaving] = useState(false);
 
   // Mother
   const [motherFirstName, setMotherFirstName] = useState("");
@@ -158,7 +160,6 @@ const ImmunizationForm = ({ id }) => {
   }, []);
   const savePatient = (createNew = false) => {
     const url = `/api/patients/`;
-    console.log("patient to save vaccination 2nd dose", vaccinationSecondDose);
     const object = {
       patient: patient.id ? patient.id : uuid(),
       phoneNumber,
@@ -211,12 +212,15 @@ const ImmunizationForm = ({ id }) => {
 
     if (Object.keys(validationErrors).length < 1) {
       if (patient._id) {
-        axios
-          .put(url + `${patient._id}/`, object)
-          .then(router.push(redirectUrl));
+        setSaving(true);
+        axios.put(url + `${patient._id}/`, object).then(() => {
+          setSaving(false);
+          router.push(redirectUrl);
+        });
         dispatch(update(object));
       } else {
         dispatch(add(object));
+
         router.push(redirectUrl);
       }
     }
@@ -231,11 +235,21 @@ const ImmunizationForm = ({ id }) => {
           justifyItems: "center",
         }}
       >
-        {patient && (
+        {patient.firstName && (
           <PatientData patient={patient} setImage={setPhoto} image={photo} />
         )}
       </div>
       <div className="register-form ui form">
+        {errors && !!Object.keys(errors).length && (
+          <Message negative>
+            <Message.Header>There's some problems in the form</Message.Header>
+            <ul>
+              {Object.keys(errors).map((e) => (
+                <li key={e}>{errors[e]}</li>
+              ))}
+            </ul>
+          </Message>
+        )}
         <h2 className="ui dividing header">Patient Data</h2>
         <div className="two fields">
           <div className="field">
@@ -326,6 +340,9 @@ const ImmunizationForm = ({ id }) => {
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
             />
+            {errors.phoneNumber && (
+              <div className="error">{errors.phoneNumber}</div>
+            )}
           </div>
         </div>
 
@@ -686,8 +703,12 @@ const ImmunizationForm = ({ id }) => {
               Save and Open New Form
             </button>
           )}
-          <button className="ui button positive" onClick={() => savePatient()}>
-            {patient._id ? "Update Patient" : "Save"}
+          <button
+            className="ui button positive"
+            disabled={saving}
+            onClick={() => savePatient()}
+          >
+            {saving ? "Saving..." : patient._id ? "Update Patient" : "Save"}
           </button>
           <a href="/immunization">
             <button className="ui button negative">Cancel</button>
