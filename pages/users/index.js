@@ -3,6 +3,7 @@ import AuthHOC from "../../components/auth/AuthHOC";
 import UserForm from "../../components/auth/users/UserForm";
 import UserList from "../../components/auth/users/UserList";
 import axios from "axios";
+import Duplicates from "../../components/duplicates/Duplicates";
 
 const users = () => {
   const [editingUser, setEditingUser] = useState(null);
@@ -12,6 +13,7 @@ const users = () => {
   useEffect(() => {
     axios.get("/api/users").then((res) => setUsers(res.data));
   }, []);
+ 
   return (
     <div>
       <AuthHOC>
@@ -32,6 +34,11 @@ const users = () => {
               }
             ></UserForm>
           )}
+        </div>
+        <hr></hr>
+        <div>
+          <Duplicates/>
+          
         </div>
       </AuthHOC>
     </div>
