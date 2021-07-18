@@ -36,7 +36,7 @@ const OfflineBar = () => {
     <Menu color={offline ? "grey" : "green"} inverted widths={4} attached="top">
       {offline
         ? "You're offline. Data will sync when you're back online."
-        : "You're online! Data is being synced."}
+        : ""}
     </Menu>
   );
 };
