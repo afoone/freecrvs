@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useEffect } from "react";
 import Link from "next/link";
 
-
 const Duplicate = ({ duplicate, removeDuplicate, refreshItems }) => {
   const mergeDuplicates = () => {
     axios
@@ -51,8 +50,8 @@ const Duplicate = ({ duplicate, removeDuplicate, refreshItems }) => {
                 {d.vaccination[1]?.date || d.vaccination[1]?.firstDoseDate}
               </td>
               <td>
-              <Link href={`/immunization/${d._id}`}>
-                <button className="ui button mini primary">Edit</button>
+                <Link href={`/immunization/${d._id}`}>
+                  <button className="ui button mini primary">Edit</button>
                 </Link>
                 <button
                   className="negative mini ui button"
