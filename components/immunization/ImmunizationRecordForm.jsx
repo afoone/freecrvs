@@ -20,7 +20,7 @@ const ImmunizationRecordForm = ({
     if (immunization.firstDoseDate)
       setImmunization({ ...immunization, date: immunization.firstDoseDate });
     else {
-      setImmunization({ ...immunization, firstDoseDate: new Date() });
+      setImmunization({ ...immunization, firstDoseDate: immunization.date });
     }
   }, []);
 
@@ -41,7 +41,7 @@ const ImmunizationRecordForm = ({
               onChange={(date) =>
                 setImmunization({
                   ...immunization,
-                  date,
+                  firstDoseDate: date,
                 })
               }
             />

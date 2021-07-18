@@ -29,9 +29,19 @@ export const Errors = ({ patient }) => {
 };
 
 export const firstDoseVaccinated = (patient) => {
-  return patient.vaccination[0] && (patient.vaccination[0].firstDoseDate || patient.vaccination[0].nameOfTheVaccine)
-}
+  return (
+    patient.vaccination[0] &&
+    (patient.vaccination[0].firstDoseDate ||
+      patient.vaccination[0].date ||
+      patient.vaccination[0].nameOfTheVaccine)
+  );
+};
 
 export const secondDoseVaccinated = (patient) => {
-  return patient.vaccination[1] && (patient.vaccination[1].firstDoseDate || patient.vaccination[1].nameOfTheVaccine)
-}
+  return (
+    patient.vaccination[1] &&
+    (patient.vaccination[1].firstDoseDate ||
+      patient.vaccination[0].date ||
+      patient.vaccination[1].nameOfTheVaccine)
+  );
+};

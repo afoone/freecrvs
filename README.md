@@ -23,3 +23,15 @@ insert:
 
 3. run `yarn dev`
 4. login with admin/test
+
+
+
+CLEANING QUERIES
+
+db.getCollection('vaccination').
+    updateMany(
+        { "vaccination.0.date": { $exists: true } },
+        {$set: {"vaccination.0.firstDoseDate":"$vaccination.0.date"}}
+        )
+
+db.getCollection('vaccination').updateMany( { "vaccination.0.nameOfTheVaccine": { $exists: false } },{$set: {"vaccination.0.nameOfTheVaccine":"Astrazeneca"}})

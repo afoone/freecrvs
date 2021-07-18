@@ -169,6 +169,7 @@ const ImmunizationReport = ({ patient, qrcode }) => {
                   <div style={styles.rectangulo}>
                     <Text style={styles.textDesign}>
                       {patient.vaccination[0]?.firstDoseDate}
+                      {patient.vaccination[0]?.date}
                     </Text>
                   </div>
 
