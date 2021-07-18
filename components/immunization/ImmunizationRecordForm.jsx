@@ -19,6 +19,9 @@ const ImmunizationRecordForm = ({
   useEffect(() => {
     if (immunization.firstDoseDate)
       setImmunization({ ...immunization, date: immunization.firstDoseDate });
+    else {
+      setImmunization({ ...immunization, firstDoseDate: new Date() });
+    }
   }, []);
 
   return (
@@ -31,9 +34,7 @@ const ImmunizationRecordForm = ({
             {/* first dose date for compatibility with version 1.0 */}
             <DatePicker
               dateFormat="dd/MM/yyyy"
-              selected={
-                immunization.date ? new Date(immunization.date) : new Date()
-              }
+              selected={immunization.firstDoseDate}
               isClearable
               minDate={new Date("2021-03-01")}
               maxDate={new Date()}

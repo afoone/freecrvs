@@ -16,6 +16,7 @@ import ImmunizationRecordForm from "./ImmunizationRecordForm";
 import { add, update } from "../../redux/immunizationSlice";
 import { useDispatch } from "react-redux";
 import AddressFacilityForm from "../adresss/AddressFacilityForm";
+import { Message } from "semantic-ui-react";
 
 const ImmunizationForm = ({ id }) => {
   const router = useRouter();
@@ -231,11 +232,19 @@ const ImmunizationForm = ({ id }) => {
           justifyItems: "center",
         }}
       >
-        {patient && (
+        {patient.firstName && (
           <PatientData patient={patient} setImage={setPhoto} image={photo} />
         )}
       </div>
       <div className="register-form ui form">
+        <Message negative>
+          <Message.Header>There's some problems in the form</Message.Header>
+          <ul>
+            {Object.keys(errors).map((e) => (
+              <li key={e}>{errors[e]}</li>
+            ))}
+          </ul>
+        </Message>
         <h2 className="ui dividing header">Patient Data</h2>
         <div className="two fields">
           <div className="field">
@@ -326,6 +335,9 @@ const ImmunizationForm = ({ id }) => {
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
             />
+            {errors.phoneNumber && (
+              <div className="error">{errors.phoneNumber}</div>
+            )}
           </div>
         </div>
 
