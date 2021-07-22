@@ -41,7 +41,7 @@ export const secondDoseVaccinated = (patient) => {
   return (
     patient.vaccination[1] &&
     (patient.vaccination[1].firstDoseDate ||
-      patient.vaccination[0].date ||
+      patient.vaccination[1].date ||
       patient.vaccination[1].nameOfTheVaccine)
   );
 };
