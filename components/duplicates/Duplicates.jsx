@@ -3,6 +3,7 @@ import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 import Link from "next/link";
+import { printDuplicateTitle } from "./duplicatesPresenter";
 
 const Duplicate = ({ duplicate, removeDuplicate, refreshItems }) => {
   const mergeDuplicates = () => {
@@ -19,7 +20,7 @@ const Duplicate = ({ duplicate, removeDuplicate, refreshItems }) => {
 
   return (
     <div style={{ marginBottom: "2rem" }}>
-      <h3>NIN {duplicate.nin}</h3>
+      <h3>{printDuplicateTitle(duplicate)}</h3>
       <table className="ui table">
         <thead>
           <tr>
