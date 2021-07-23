@@ -34,23 +34,23 @@ const PatientRow = ({ patient, setOpen }) => {
 
       <td>
         {firstDoseVaccinated(patient) ? (
-          <i class="check icon green"></i>
+          <i className="check icon green"></i>
         ) : (
-          <i class="close icon red"></i>
+          <i className="close icon red"></i>
         )}
       </td>
       <td>
         {secondDoseVaccinated(patient) ? (
-          <i class="check icon green"></i>
+          <i className="check icon green"></i>
         ) : (
-          <i class="close icon red"></i>
+          <i className="close icon red"></i>
         )}
       </td>
       <td>
         {patient.pending ? (
-          <i class="close icon red"></i>
+          <i className="close icon red"></i>
         ) : (
-          <i class="check icon green"></i>
+          <i className="check icon green"></i>
         )}
       </td>
       <td>
@@ -58,7 +58,7 @@ const PatientRow = ({ patient, setOpen }) => {
       </td>
       <td>
         {!patient.pending && (
-          <div class="ui buttons">
+          <div className="ui buttons">
             <Link href={`/immunization/${patient._id}`}>
               <button className="primary mini ui button">Edit</button>
             </Link>
@@ -309,8 +309,8 @@ const ImmunizationList = () => {
         </thead>
         <tbody>
           {loading &&
-            [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(() => (
-              <PatientSkeletonRow></PatientSkeletonRow>
+            [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
+              <PatientSkeletonRow key={i}></PatientSkeletonRow>
             ))}
           {patients.map((i, index) => (
             <PatientRow key={index} patient={i} setOpen={setOpen} />
