@@ -1,4 +1,5 @@
 export const printDuplicateTitle = (duplicate) => {
+
   if (duplicate.nin) return `NIN ${duplicate.nin}`;
   else
     return `${duplicate.nameAndDate?.firstName} ${

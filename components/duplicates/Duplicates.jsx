@@ -9,7 +9,7 @@ const Duplicate = ({ duplicate, removeDuplicate, refreshItems }) => {
   const mergeDuplicates = () => {
     axios
       .post("/api/patients/duplicates/merge", duplicate.documents)
-      .then(removeDuplicate(duplicate.nin));
+      .then(removeDuplicate(duplicate));
   };
 
   const deletePatient = (id) => {
@@ -72,8 +72,21 @@ const Duplicate = ({ duplicate, removeDuplicate, refreshItems }) => {
 const Duplicates = () => {
   const [duplicates, setDuplicates] = useState([]);
 
-  const removeDuplicate = (nin) => {
-    setDuplicates(duplicates.filter((i) => i.nin !== nin));
+  const removeDuplicate = (duplicate) => {
+    console.log(duplicate);
+    setDuplicates(
+      duplicates.filter((i) => {
+        if (duplicate.nin) return i.nin !== duplicate.nin;
+        else {
+          if (i.nameAndDate)
+            return (
+              i.nameAndDate.firstName !== duplicate.nameAndDate.firstName &&
+              i.nameAndDate.lastName !== duplicate.nameAndDate.lastName &&
+              i.nameAndDate.dateOfBirth !== duplicate.nameAndDate.dateOfBirth
+            );
+        }
+      })
+    );
   };
 
   useEffect(() => {
@@ -90,10 +103,10 @@ const Duplicates = () => {
   return (
     <div>
       <h1 className="ui header">Duplicates</h1>
-      {duplicates.map((d) => (
+      {duplicates.map((d, index) => (
         <Duplicate
           duplicate={d}
-          key={d.nin}
+          key={index}
           removeDuplicate={removeDuplicate}
           refreshItems={refreshItems}
         ></Duplicate>
