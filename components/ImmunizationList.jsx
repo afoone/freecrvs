@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { useSelector, useDispatch } from "react-redux";
-import Skeleton from "react-loading-skeleton";
-import Link from "next/link";
-import { Button, Header, Icon, Modal } from "semantic-ui-react";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useSelector, useDispatch } from 'react-redux';
+import Skeleton from 'react-loading-skeleton';
+import Link from 'next/link';
+import { Button, Header, Icon, Modal, Popup, Grid } from 'semantic-ui-react';
 import {
   getIdentifiers,
   Errors,
   firstDoseVaccinated,
   secondDoseVaccinated,
-} from "./immunizationListPresenter";
+} from './immunizationListPresenter';
 
 export const getFullName = (patient) => {
-  return `${patient.firstName}  ${patient.middleName || ""} ${
+  return `${patient.firstName}  ${patient.middleName || ''} ${
     patient.lastName
   }`;
 };
@@ -22,14 +22,98 @@ const PatientRow = ({ patient, setOpen }) => {
     setOpen(id);
   };
 
+  const titlesArray = [
+    'Name:',
+    'Birth Date:',
+    'Gender:',
+    '1st Dose:',
+    '2nd Dose:',
+    'Synchronized:',
+    'Identifiers:',
+  ];
+
   return (
     <tr>
+      <td>
+        <Popup content="Add users to your feed" trigger={<Button icon="eye" />}>
+          <Grid
+            centered
+            divided
+            style={{
+              width: '400px',
+            }}
+          >
+            <Grid.Row
+              textAlign="center"
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-around',
+              }}
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  flexDirection: 'column',
+                }}
+              >
+                {titlesArray.map((d) => (
+                  <Header style={{ marginTop: '5%' }} as="h4">
+                    {d}
+                  </Header>
+                ))}
+              </div>
+              <div style={{ marginTop: '2%' }}>
+                <p>{getFullName(patient)}</p>
+                <p>
+                  {patient.dateOfBirth
+                    ? new Date(patient.dateOfBirth).toLocaleDateString()
+                    : '-'}
+                </p>
+                <p>{patient.gender === 'M' ? 'Male' : 'Female'}</p>
+                <p>
+                  {firstDoseVaccinated(patient) ? (
+                    <i
+                      style={{ marginTop: '15%' }}
+                      className="check icon green"
+                    ></i>
+                  ) : (
+                    <i className="close icon red"></i>
+                  )}
+                </p>
+                <p>
+                  {secondDoseVaccinated(patient) ? (
+                    <i className="check icon green"></i>
+                  ) : (
+                    <i className="close icon red"></i>
+                  )}
+                </p>
+                <p>
+                  {patient.pending ? (
+                    <i className="close icon red"></i>
+                  ) : (
+                    <i className="check icon green"></i>
+                  )}
+                </p>
+                <br />
+                {getIdentifiers(patient) != '' ? (
+                  <p>{getIdentifiers(patient)}</p>
+                ) : (
+                  '-'
+                )}
+              </div>
+            </Grid.Row>
+          </Grid>
+        </Popup>
+      </td>
+
       <td>{getFullName(patient)}</td>
       <td>
         {patient.dateOfBirth &&
           new Date(patient.dateOfBirth).toLocaleDateString()}
       </td>
-      <td>{patient.gender === "M" ? "Male" : "Female"}</td>
+      <td>{patient.gender === 'M' ? 'Male' : 'Female'}</td>
       <td>{getIdentifiers(patient)}</td>
 
       <td>
@@ -119,7 +203,7 @@ const Pagination = ({ size, position, setOffset }) => {
           onClick={() => setOffset(index * 10)}
           key={`page-${index}`}
           className={`ui button basic mini ${
-            index === position ? "blue" : "grey"
+            index === position ? 'blue' : 'grey'
           }`}
         >
           {index + 1}
@@ -137,9 +221,9 @@ const ImmunizationList = () => {
   const [total, setTotal] = useState(0);
   const [offset, setOffset] = useState(0);
   const [count, setCount] = useState(100);
-  const [searchGiven, setSearchGiven] = useState("");
-  const [searchLast, setSearchLast] = useState("");
-  const [searchNIN, setSearchNIN] = useState("");
+  const [searchGiven, setSearchGiven] = useState('');
+  const [searchLast, setSearchLast] = useState('');
+  const [searchNIN, setSearchNIN] = useState('');
   const [searchToday, setSearchToday] = useState(false);
 
   const immunization = useSelector((state) => state.immunization);
@@ -166,7 +250,7 @@ const ImmunizationList = () => {
   }, [immunization, count]);
 
   const searchPatients = () => {
-    let url = "";
+    let url = '';
     if (searchGiven) {
       url += `&firstName=${searchGiven}`;
     }
@@ -180,17 +264,17 @@ const ImmunizationList = () => {
       const date = new Date();
       date.setDate(date.getDate() - 1);
       url += `&_lastUpdated=gt${date.getFullYear()}-${
-        date.getMonth() < 9 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1
-      }-${date.getDate() < 10 ? "0" + date.getDate() : date.getDate()}`;
+        date.getMonth() < 9 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1
+      }-${date.getDate() < 10 ? '0' + date.getDate() : date.getDate()}`;
     }
 
     getPatientsWithParams(url);
   };
 
   const resetSearch = () => {
-    setSearchGiven("");
-    setSearchLast("");
-    setSearchNIN("");
+    setSearchGiven('');
+    setSearchLast('');
+    setSearchNIN('');
     getPatientsWithParams();
   };
 
@@ -292,6 +376,7 @@ const ImmunizationList = () => {
       <table className="ui green striped table">
         <thead>
           <tr>
+            <th />
             <th>Name</th>
             <th>Birth Date</th>
             <th>Gender</th>
