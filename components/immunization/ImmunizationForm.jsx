@@ -227,8 +227,16 @@ const ImmunizationForm = ({ id }) => {
     setErrors(validationErrors);
   };
   const maxLengthCheck = (e) => {
-    if (e.target.value.length > e.target.maxLength) {
-      e.target.value = e.target.value.slice(0, e.target.maxLength);
+    const numberPattern = /^[]?\d*(?:[.,]\d*)?$/;
+    console.log(e.target.name);
+    if (numberPattern.test(e.target.value)) {
+      if (e.target.name == 'NIN') {
+        setNIN(e.target.value);
+      } else if (e.target.name == 'fatherNIN') {
+        setFatherNIN(e.target.value);
+      } else {
+        setMotherNIN(e.target.value);
+      }
     }
   };
   return (
@@ -343,13 +351,44 @@ const ImmunizationForm = ({ id }) => {
 
           {nationality == 'GM' && (
             <div className="field">
-              <label>National ID Number (NIN)</label>
+              <div
+                className="field"
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  height: '20px',
+                }}
+              >
+                <label
+                  style={{
+                    width: '160px',
+                    height: '20px',
+                  }}
+                >
+                  NIN
+                </label>
+                <div
+                  style={{
+                    position: 'relative',
+                    backgroundColor: 'ligthgray',
+                    width: '180px',
+                    height: '20px',
+                    display: 'flex',
+                    bottom: 18,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                  class="ui message"
+                >
+                  Only 12 numbers
+                </div>
+              </div>
               <input
-                type="number"
+                type="text"
                 maxLength="12"
+                name="NIN"
                 value={NIN}
-                onChange={(e) => setNIN(e.target.value)}
-                onInput={maxLengthCheck}
+                onChange={maxLengthCheck}
               />
             </div>
           )}
@@ -562,11 +601,11 @@ const ImmunizationForm = ({ id }) => {
                     <div className="field">
                       <label>NIN</label>
                       <input
-                        type="number"
+                        type="text"
+                        name="fatherNIN"
                         maxLength="12"
                         value={fatherNIN}
-                        onChange={(e) => setFatherNIN(e.target.value)}
-                        onInput={maxLengthCheck}
+                        onChange={maxLengthCheck}
                       />
                     </div>
                   )}
@@ -662,11 +701,11 @@ const ImmunizationForm = ({ id }) => {
                     <div className="field">
                       <label>NIN</label>
                       <input
-                        type="number"
+                        type="text"
+                        name="motherNIN"
                         maxLength="12"
                         value={motherNIN}
-                        onChange={(e) => setMotherNIN(e.target.value)}
-                        onInput={maxLengthCheck}
+                        onChange={maxLengthCheck}
                       />
                     </div>
                   )}
