@@ -1,22 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import axios from 'axios';
-import DatePicker from 'react-datepicker';
-import PatientData from '../PatientData';
-import { validate } from '../validators/validator';
-import Select from 'react-select';
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import axios from "axios";
+import DatePicker from "react-datepicker";
+import PatientData from "../PatientData";
+import { validate } from "../validators/validator";
+import Select from "react-select";
 import {
   priorityGroups,
   preexistingConditions,
-} from '../extraData/multiselect';
-import { v4 as uuid } from 'uuid';
-import AddressForm from '../adresss/AddressForm';
-import { getNationalityOptions } from '../extraData/options';
-import ImmunizationRecordForm from './ImmunizationRecordForm';
-import { add, update } from '../../redux/immunizationSlice';
-import { useDispatch } from 'react-redux';
-import AddressFacilityForm from '../adresss/AddressFacilityForm';
-import { Message } from 'semantic-ui-react';
+} from "../extraData/multiselect";
+import { v4 as uuid } from "uuid";
+import AddressForm from "../adresss/AddressForm";
+import { getNationalityOptions } from "../extraData/options";
+import ImmunizationRecordForm from "./ImmunizationRecordForm";
+import { add, update } from "../../redux/immunizationSlice";
+import { useDispatch } from "react-redux";
+import AddressFacilityForm from "../adresss/AddressFacilityForm";
+import { Message } from "semantic-ui-react";
 
 const ImmunizationForm = ({ id }) => {
   const router = useRouter();
@@ -24,8 +24,8 @@ const ImmunizationForm = ({ id }) => {
 
   // utils
   const [patient, setPatient] = useState({});
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [email, setEmail] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [email, setEmail] = useState("");
 
   // Vaccination 1st Dose
   const [vaccinationFirstDose, setvaccinationFirstDose] = useState({});
@@ -33,53 +33,53 @@ const ImmunizationForm = ({ id }) => {
   const [vaccinationSecondDose, setVaccinationSecondDose] = useState({});
 
   // Patient
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [middleName, setMiddleName] = useState('');
-  const [photo, setPhoto] = useState('');
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [middleName, setMiddleName] = useState("");
+  const [photo, setPhoto] = useState("");
 
   // const [baptismalName, setBaptismalName] = useState("");
-  const [NIN, setNIN] = useState('');
+  const [NIN, setNIN] = useState("");
   // const [myChildId, setMyChildId] = useState("");
-  const [nationality, setNationality] = useState('GM');
-  const [gender, setGender] = useState('M');
+  const [nationality, setNationality] = useState("GM");
+  const [gender, setGender] = useState("M");
   const [dateOfBirth, setDateOfBirth] = useState(new Date());
-  const [age, setAge] = useState('');
-  const [placeOfWork, setPlaceOfWork] = useState('');
+  const [age, setAge] = useState("");
+  const [placeOfWork, setPlaceOfWork] = useState("");
   const [patientPriorityGroups, setPatientPriorityGroups] = useState([]);
   const [patientVaccineRegisterNumber, setPatientVaccineRegisterNumber] =
-    useState('');
+    useState("");
   const [patientPreexistingConditions, setPatientPreexistingConditions] =
     useState([]);
   const [patientPreviousCovid19Infection, setpatientPreviousCovid19Infection] =
     useState(null);
   const [patientPreviousAllergicReaction, setPatientPreviousAllergicReaction] =
-    useState('no');
-  const [attendantAtBirth, setAttendantAtBirth] = useState('');
+    useState("no");
+  const [attendantAtBirth, setAttendantAtBirth] = useState("");
   const [placeOfDelivery, setPlaceOfDelivery] = useState({});
   const [patientAddress, setPatientAddress] = useState({});
-  const [patientOccupation, setPatientOccupation] = useState('');
+  const [patientOccupation, setPatientOccupation] = useState("");
   const [saving, setSaving] = useState(false);
 
   // Mother
-  const [motherFirstName, setMotherFirstName] = useState('');
-  const [motherMiddleName, setMotherMiddleName] = useState('');
-  const [motherLastName, setMotherLastName] = useState('');
-  const [motherNationality, setMotherNationality] = useState('GM');
-  const [motherNIN, setMotherNIN] = useState('');
+  const [motherFirstName, setMotherFirstName] = useState("");
+  const [motherMiddleName, setMotherMiddleName] = useState("");
+  const [motherLastName, setMotherLastName] = useState("");
+  const [motherNationality, setMotherNationality] = useState("GM");
+  const [motherNIN, setMotherNIN] = useState("");
   const [motherDateOfBirth, setMotherDateOfBirth] = useState(new Date());
-  const [motherAge, setMotherAge] = useState('');
+  const [motherAge, setMotherAge] = useState("");
   const [motherResidentialAddress, setMotherResidentialAddress] = useState({});
 
   // Father
-  const [fatherFirstName, setFatherFirstName] = useState('');
-  const [fatherMiddleName, setFatherMiddleName] = useState('');
-  const [fatherLastName, setFatherLastName] = useState('');
-  const [fatherNationality, setFatherNationality] = useState('GM');
+  const [fatherFirstName, setFatherFirstName] = useState("");
+  const [fatherMiddleName, setFatherMiddleName] = useState("");
+  const [fatherLastName, setFatherLastName] = useState("");
+  const [fatherNationality, setFatherNationality] = useState("GM");
   const [fatherDateOfBirth, setFatherDateOfBirth] = useState(new Date());
-  const [fatherAge, setFatherAge] = useState('');
+  const [fatherAge, setFatherAge] = useState("");
   const [fatherResidentialAddress, setFatherResidentialAddress] = useState({});
-  const [fatherNIN, setFatherNIN] = useState('');
+  const [fatherNIN, setFatherNIN] = useState("");
 
   // Errors
   const [errors, setErrors] = useState({});
@@ -208,7 +208,7 @@ const ImmunizationForm = ({ id }) => {
 
     const validationErrors = validate(object, validations);
 
-    const redirectUrl = createNew ? '/immunization/new' : '/immunization/';
+    const redirectUrl = createNew ? "/immunization/new" : "/immunization/";
 
     if (Object.keys(validationErrors).length < 1) {
       if (patient._id) {
@@ -219,8 +219,8 @@ const ImmunizationForm = ({ id }) => {
         });
         dispatch(update(object));
       } else {
+        setSaving(true);
         dispatch(add(object));
-
         router.push(redirectUrl);
       }
     }
@@ -230,9 +230,9 @@ const ImmunizationForm = ({ id }) => {
     const numberPattern = /^[]?\d*(?:[.,]\d*)?$/;
     console.log(e.target.name);
     if (numberPattern.test(e.target.value)) {
-      if (e.target.name == 'NIN') {
+      if (e.target.name == "NIN") {
         setNIN(e.target.value);
-      } else if (e.target.name == 'fatherNIN') {
+      } else if (e.target.name == "fatherNIN") {
         setFatherNIN(e.target.value);
       } else {
         setMotherNIN(e.target.value);
@@ -243,8 +243,8 @@ const ImmunizationForm = ({ id }) => {
     <div className="container two-row">
       <div
         style={{
-          display: 'flex',
-          justifyItems: 'center',
+          display: "flex",
+          justifyItems: "center",
         }}
       >
         {patient.firstName && (
@@ -332,8 +332,8 @@ const ImmunizationForm = ({ id }) => {
           <div className="field">
             <label>Gender</label>
             <select value={gender} onChange={(e) => setGender(e.target.value)}>
-              <option value={'M'}>Male</option>
-              <option value={'F'}>Female</option>
+              <option value={"M"}>Male</option>
+              <option value={"F"}>Female</option>
               <option value="U">Unknown</option>
             </select>
           </div>
@@ -349,34 +349,34 @@ const ImmunizationForm = ({ id }) => {
             )}
           </div>
 
-          {nationality == 'GM' && (
+          {nationality == "GM" && (
             <div className="field">
               <div
                 className="field"
                 style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  height: '20px',
+                  display: "flex",
+                  flexDirection: "row",
+                  height: "20px",
                 }}
               >
                 <label
                   style={{
-                    width: '160px',
-                    height: '20px',
+                    width: "160px",
+                    height: "20px",
                   }}
                 >
                   NIN
                 </label>
                 <div
                   style={{
-                    position: 'relative',
-                    backgroundColor: 'ligthgray',
-                    width: '180px',
-                    height: '20px',
-                    display: 'flex',
+                    position: "relative",
+                    backgroundColor: "ligthgray",
+                    width: "180px",
+                    height: "20px",
+                    display: "flex",
                     bottom: 18,
-                    justifyContent: 'center',
-                    alignItems: 'center',
+                    justifyContent: "center",
+                    alignItems: "center",
                   }}
                   class="ui message"
                 >
@@ -423,9 +423,9 @@ const ImmunizationForm = ({ id }) => {
         <div>
           {/* Place of birth if
            * vaccine recipient is Gambian */}
-          {nationality === 'GM' && (
+          {nationality === "GM" && (
             <>
-              {''}
+              {""}
               <AddressFacilityForm
                 title="Place of Birth"
                 setAddress={setPlaceOfDelivery}
@@ -520,9 +520,9 @@ const ImmunizationForm = ({ id }) => {
             {/* Mother/Father's data
              * if vaccine recipient is Gambian
              */}
-            {nationality === 'GM' && (
+            {nationality === "GM" && (
               <>
-                {' '}
+                {" "}
                 <h2 className="ui dividing header">Father's Information</h2>
                 <div className="three fields">
                   <div className="ui field">
@@ -597,7 +597,7 @@ const ImmunizationForm = ({ id }) => {
                       onChange={(e) => setFatherAge(e.target.value)}
                     />
                   </div>
-                  {fatherNationality == 'GM' && (
+                  {fatherNationality == "GM" && (
                     <div className="field">
                       <label>NIN</label>
                       <input
@@ -697,7 +697,7 @@ const ImmunizationForm = ({ id }) => {
                       onChange={(e) => setMotherAge(e.target.value)}
                     />
                   </div>
-                  {motherNationality == 'GM' && (
+                  {motherNationality == "GM" && (
                     <div className="field">
                       <label>NIN</label>
                       <input
@@ -750,7 +750,7 @@ const ImmunizationForm = ({ id }) => {
           immunization={vaccinationSecondDose}
           errors={errors}
         ></ImmunizationRecordForm>
-        <div style={{ display: 'flex', flexDirection: 'row-reverse' }}>
+        <div style={{ display: "flex", flexDirection: "row-reverse" }}>
           {!patient._id && (
             <button
               className="ui button positive"
@@ -764,7 +764,7 @@ const ImmunizationForm = ({ id }) => {
             disabled={saving}
             onClick={() => savePatient()}
           >
-            {saving ? 'Saving...' : patient._id ? 'Update Patient' : 'Save'}
+            {saving ? "Saving..." : patient._id ? "Update Patient" : "Save"}
           </button>
           <a href="/immunization">
             <button className="ui button negative">Cancel</button>
