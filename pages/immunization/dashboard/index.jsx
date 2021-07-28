@@ -40,6 +40,7 @@ const Dashboard = ({
   differentVaccines = [],
   differentRegions = [],
   vaccinatedTotals = {},
+  totalVaccinesByRegionRaw = [],
   date = "",
 }) => {
   const lastUpdated = new Date(date);
@@ -260,10 +261,47 @@ const Dashboard = ({
             Total vaccines by date
           </Label>
 
+          <h1 className="ui h1">Day by day Region</h1>
+          <div style={{ height: "60rem", overflow: "scroll" }}>
+            <table className="ui table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  {differentRegions.map((i) => (
+                    <th>{i}</th>
+                  ))}
+                  <th>Totals</th>
+                </tr>
+              </thead>
+              <tbody>
+                {totalVaccinesByRegionRaw
+                  .sort((a, b) => (a.name < b.name ? 1 : -1))
+                  .map((i) => (
+                    <tr>
+                      <td>{i.name}</td>
+                      {differentRegions.map((r) => (
+                        <td>{i[r]}</td>
+                      ))}
+                      <td>
+                        {differentRegions.reduce(
+                          (acc, curr) =>
+                            i[curr] && typeof i[curr] === "number"
+                              ? i[curr] + acc
+                              : acc,
+                          0
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+          <h1 className="ui h1">Accumulated By Vaccine Type</h1>
           <StackedAreaChart
             data={totalVaccinesByDate}
             differentVaccines={differentVaccines}
           />
+          <h1 className="ui h1">Accumulated By Region</h1>
           <StackedAreaChart
             data={totalVaccinesByRegion}
             differentVaccines={differentRegions}
@@ -336,6 +374,15 @@ export async function getServerSideProps() {
     props: {
       totalVaccinesByRegion: convertRegionNames(formattedTotalVaccinesByRegion),
       totalVaccinesByDate: formattedTotalVaccinesByDate,
+      totalVaccinesByRegionRaw: convertRegionNames(
+        totalVaccinesByRegion.map((i) => {
+          const newObj = {
+            name: i._id?.date,
+          };
+          newObj[i._id.region] = i.count;
+          return newObj;
+        })
+      ),
       differentRegions,
       totalVaccines: totalVaccines.map((i) => ({
         name: i._id,
