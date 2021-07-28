@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
 import duplicates from "../pages/api/patients/duplicates";
-import {update} from './immunization'
+import { update } from "./immunization";
 
 import { connectToDatabase } from "../util/mongodb";
 
@@ -101,11 +101,23 @@ export const mergeDuplicates = async (duplicates) => {
   if (!duplicates || !duplicates.length) {
     return [];
   }
-  update(duplicates[0]._id, createMergedObject(duplicates))
+  update(duplicates[0]._id, createMergedObject(duplicates));
 
   duplicates.forEach((e, index) => {
     if (index) {
       db.collection("vaccination").deleteOne({ _id: new ObjectId(e._id) });
     }
   });
+};
+
+export const isDuplicate = (object1, object2) => {
+  console.log("duplicates", object1, object2);
+  if (object1.nin || object2.nin) return object1.nin === object2.nin;
+  return (
+    object1.firstName === object2.firstName &&
+    object1.lastName === object2.lastName &&
+    (!object1.dateOfBirth ||
+      !object2.dateOfBirth ||
+      object1.dateOfBirth === object2.dateOfBirth)
+  );
 };
