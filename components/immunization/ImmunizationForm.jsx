@@ -17,6 +17,7 @@ import { add, update } from '../../redux/immunizationSlice';
 import { useDispatch } from 'react-redux';
 import AddressFacilityForm from '../adresss/AddressFacilityForm';
 import { Message } from 'semantic-ui-react';
+import e from 'cors';
 
 const ImmunizationForm = ({ id }) => {
   const router = useRouter();
@@ -100,8 +101,11 @@ const ImmunizationForm = ({ id }) => {
     setPhoto(patient.photo);
     setAttendantAtBirth(patient.attendantAtBirth);
     // setBaptismalName(patient.baptismalName);
+
     setDateOfBirth(patient.dateOfBirth ? new Date(patient.dateOfBirth) : null);
+
     setAge(patient.age);
+
     setFatherFirstName(patient.father.firstName);
     setFatherLastName(patient.father.lastName);
     setFatherMiddleName(patient.father.middleName);
@@ -168,7 +172,7 @@ const ImmunizationForm = ({ id }) => {
       middleName,
       photo,
       NIN,
-      age,
+      age: age >= 12 && age,
       patientVaccineRegisterNumber,
       nationality,
       email,
@@ -239,6 +243,30 @@ const ImmunizationForm = ({ id }) => {
       }
     }
   };
+
+  const handleAge = (e) => {
+    const inputValue = e.target.value;
+    setAge(inputValue);
+  };
+  const [dateOfBirthError, setDateOfBirthError] = useState(false);
+  // const onChange = (date) => {
+  //   console.log('date', date);
+  //   var hoy = new Date();
+  //   var cumpleanos = new Date(date);
+  //   var edad = hoy.getFullYear() - cumpleanos.getFullYear();
+  //   var m = hoy.getMonth() - cumpleanos.getMonth();
+  //   if (m < 0 || (m === 0 && hoy.getDate() < cumpleanos.getDate())) {
+  //     edad--;
+  //   }
+  //   if (edad >= 12) {
+  //     setDateOfBirth(date);
+  //     setDateOfBirthError(false);
+  //   } else {
+  //     setDateOfBirthError(true);
+  //   }
+  // };
+  // tengo que preguntar si calcularEdad(dateOfBirth) <12 que me de el error y no lo guarde
+
   return (
     <div className="container two-row">
       <div
@@ -404,20 +432,47 @@ const ImmunizationForm = ({ id }) => {
                 dateFormat="dd/MM/yyyy"
                 showYearDropdown
                 selected={dateOfBirth}
-                onChange={(date) => setDateOfBirth(date)}
+                onChange={(date) => {
+                  console.log('date', date);
+                  var hoy = new Date();
+                  var cumpleanos = new Date(date);
+                  var edad = hoy.getFullYear() - cumpleanos.getFullYear();
+                  var m = hoy.getMonth() - cumpleanos.getMonth();
+                  if (
+                    m < 0 ||
+                    (m === 0 && hoy.getDate() < cumpleanos.getDate())
+                  ) {
+                    edad--;
+                  }
+                  if (edad >= 12) {
+                    setDateOfBirth(date);
+                    setDateOfBirthError(false);
+                  } else {
+                    setDateOfBirthError(true);
+                  }
+                }}
               />
             </div>
+            {console.log('daaale', dateOfBirth)}
+            {dateOfBirthError == true && (
+              <div class="ui negative message">
+                <i class="close icon"></i>
+                <div class="header">Age must be older than 11</div>
+              </div>
+            )}
             {errors.dateOfBirth && (
               <div className="error">{errors.dateOfBirth}</div>
             )}
           </div>
           <div className="field">
             <label>Age</label>
-            <input
-              type="text"
-              value={age}
-              onChange={(e) => setAge(e.target.value)}
-            />
+            <input type="text" value={age} onChange={handleAge} />
+            {age > 0 && age < 12 && (
+              <div class="ui negative message">
+                <i class="close icon"></i>
+                <div class="header">Age must be older than 11</div>
+              </div>
+            )}
           </div>
         </div>
         <div>
