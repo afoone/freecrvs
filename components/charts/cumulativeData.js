@@ -146,3 +146,26 @@ export const getChartData = (
 
   return createChartData(cumulativeData, dateMin, dateMax, strategy);
 };
+
+export const getChartDataRaw = (
+  data,
+  strategy = vaccineStrategy,
+  dateMin,
+  dateMax
+) => {
+  const dataWithDates = data
+    .filter((i) => i._id.date)
+    .map((i) => ({ ...i, date: new Date(i._id.date) }));
+  if (!dateMax)
+    dateMax = dataWithDates.reduce(
+      (acc, curr) => (!acc ? curr.date : acc - curr.date > 0 ? acc : curr.date),
+      null
+    );
+  if (!dateMin)
+    dateMin = dataWithDates.reduce(
+      (acc, curr) => (!acc ? curr.date : acc - curr.date < 0 ? acc : curr.date),
+      null
+    );
+
+  return createChartData(data, dateMin, dateMax, strategy);
+};

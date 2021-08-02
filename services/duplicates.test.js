@@ -1,4 +1,8 @@
-import { createMergedObject, mergeVaccinations } from "./duplicates";
+import {
+  createMergedObject,
+  mergeVaccinations,
+  isDuplicate,
+} from "./duplicates";
 
 describe("mergeVaccinations", () => {
   test("merge different", () => {
@@ -101,4 +105,13 @@ describe("create merged object", () => {
       ]).vaccination
     ).toEqual([{ firstDoseDate: "A" }]);
   });
+});
+
+test("comparison between duplicates", () => {
+  expect(isDuplicate({ nin: "A" }, { nin: "A" })).toBe(true);
+  expect(isDuplicate({ nin: "B" }, { nin: "A" })).toBe(false);
+  expect(isDuplicate({ nin: undefined }, { nin: "A" })).toBe(false);
+  expect(isDuplicate({ firstName: "A" , lastName: "B", dateOfBirth: "X"}, { firstName: "A" , lastName: "B", dateOfBirth: "X"})).toBe(true);
+  expect(isDuplicate({ firstName: "A" , lastName: "B", dateOfBirth: "Y"}, { firstName: "A" , lastName: "B", dateOfBirth: "X"})).toBe(false);
+  expect(isDuplicate({ firstName: "A" , lastName: "B", dateOfBirth: undefined}, { firstName: "A" , lastName: "B", dateOfBirth: "X"})).toBe(true);
 });
