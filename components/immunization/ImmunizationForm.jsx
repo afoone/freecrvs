@@ -264,7 +264,6 @@ const ImmunizationForm = ({ id }) => {
       setDateOfBirthError(true);
     }
   };
-  // tengo que preguntar si calcularEdad(dateOfBirth) <12 que me de el error y no lo guarde
 
   return (
     <div className="container two-row">
@@ -436,7 +435,6 @@ const ImmunizationForm = ({ id }) => {
             </div>
             {dateOfBirthError == true && (
               <div class="ui negative message">
-                <i class="close icon"></i>
                 <div class="header">Age must be older than 11</div>
               </div>
             )}
@@ -449,7 +447,6 @@ const ImmunizationForm = ({ id }) => {
             <input type="text" value={age} onChange={handleAge} />
             {age > 0 && age < 12 && (
               <div class="ui negative message">
-                <i class="close icon"></i>
                 <div class="header">Age must be older than 11</div>
               </div>
             )}
@@ -460,7 +457,6 @@ const ImmunizationForm = ({ id }) => {
            * vaccine recipient is Gambian */}
           {nationality === 'GM' && (
             <>
-              {''}
               <AddressFacilityForm
                 title="Place of Birth"
                 setAddress={setPlaceOfDelivery}
