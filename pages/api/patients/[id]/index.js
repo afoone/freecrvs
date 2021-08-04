@@ -44,6 +44,7 @@ export default async (req, res) => {
     default:
       await runMiddleware(req, res, cors);
       const patientResponse = await get(id);
+      
       res.json(patientResponse);
       break;
   }
