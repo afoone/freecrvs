@@ -32,6 +32,7 @@ import {
   getFullyVaccinated,
 } from "../../../services/dashboard";
 import { use } from "ast-types";
+import ImmunizationDosesTable from "../../../components/charts/ImmunizationDosesTable";
 
 const Dashboard = ({
   totalVaccinesByDate = [],
@@ -262,40 +263,7 @@ const Dashboard = ({
           </Label>
 
           <h1 className="ui h1">Day by day Region</h1>
-          <div style={{ height: "60rem", overflow: "scroll" }}>
-            <table className="ui table">
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  {differentRegions.map((i) => (
-                    <th>{i}</th>
-                  ))}
-                  <th>Totals</th>
-                </tr>
-              </thead>
-              <tbody>
-                {totalVaccinesByRegionRaw
-                  .sort((a, b) => (a.name < b.name ? 1 : -1))
-                  .map((i) => (
-                    <tr>
-                      <td>{i.name}</td>
-                      {differentRegions.map((r) => (
-                        <td>{i[r]}</td>
-                      ))}
-                      <td>
-                        {differentRegions.reduce(
-                          (acc, curr) =>
-                            i[curr] && typeof i[curr] === "number"
-                              ? i[curr] + acc
-                              : acc,
-                          0
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
-          </div>
+          <ImmunizationDosesTable />
           <h1 className="ui h1">Accumulated By Vaccine Type</h1>
           <StackedAreaChart
             data={totalVaccinesByDate}
