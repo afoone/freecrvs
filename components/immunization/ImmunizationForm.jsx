@@ -22,7 +22,7 @@ import { Message } from 'semantic-ui-react';
 const ImmunizationForm = ({ id }) => {
   const router = useRouter();
   const dispatch = useDispatch();
-
+  let maxAge;
   // utils
   const [patient, setPatient] = useState({});
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -32,7 +32,8 @@ const ImmunizationForm = ({ id }) => {
   const [vaccinationFirstDose, setvaccinationFirstDose] = useState({});
   // Vaccination 2nd dose
   const [vaccinationSecondDose, setVaccinationSecondDose] = useState({});
-
+  console.log('vaccinationFirstDose', vaccinationFirstDose.nameOfTheVaccine);
+  console.log('vaccinationSecondDose', vaccinationSecondDose);
   // Patient
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -248,23 +249,46 @@ const ImmunizationForm = ({ id }) => {
     const inputValue = e.target.value;
     setAge(inputValue);
   };
+
   const [dateOfBirthError, setDateOfBirthError] = useState(false);
   const onChangeDateOfBirth = (date) => {
     var hoy = new Date();
     var cumpleanos = new Date(date);
     var edad = hoy.getFullYear() - cumpleanos.getFullYear();
     var m = hoy.getMonth() - cumpleanos.getMonth();
+    console.log('EDAD', edad);
     if (m < 0 || (m === 0 && hoy.getDate() < cumpleanos.getDate())) {
       edad--;
     }
-    if (edad >= 12) {
-      setDateOfBirth(date);
-      setDateOfBirthError(false);
+    if (
+      vaccinationFirstDose.nameOfTheVaccine == 'Moderna' ||
+      vaccinationFirstDose.nameOfTheVaccine == 'Pfizer-BioNTech'
+    ) {
+      if (edad >= 12) {
+        setDateOfBirth(date);
+        setDateOfBirthError(false);
+      } else {
+        setDateOfBirthError(true);
+      }
     } else {
-      setDateOfBirthError(true);
+      if (edad >= 18) {
+        setDateOfBirth(date);
+        setDateOfBirthError(false);
+      } else {
+        setDateOfBirthError(true);
+      }
     }
   };
 
+  if (
+    vaccinationFirstDose.nameOfTheVaccine == 'Moderna' ||
+    vaccinationFirstDose.nameOfTheVaccine == 'Pfizer-BioNTech'
+  ) {
+    maxAge = 12;
+  } else {
+    maxAge = 18;
+  }
+  console.log('maxAge', maxAge);
   return (
     <div className="container two-row">
       <div
@@ -433,23 +457,36 @@ const ImmunizationForm = ({ id }) => {
                 onChange={(date) => onChangeDateOfBirth(date)}
               />
             </div>
-            {dateOfBirthError == true && (
+            {/* {dateOfBirthError == true && (
               <div class="ui negative message">
-                <div class="header">Age must be older than 11</div>
+                <div class="header">
+                  {vaccinationFirstDose.nameOfTheVaccine == 'Moderna' ||
+                  vaccinationFirstDose.nameOfTheVaccine == 'Pfizer-BioNTech'
+                    ? 'Age must be older than 11'
+                    : 'Age must be older than 17'}
+                </div>
               </div>
-            )}
+            )} */}
             {errors.dateOfBirth && (
               <div className="error">{errors.dateOfBirth}</div>
             )}
           </div>
+          {console.log('errors.dateOfBirth', errors.dateOfBirth)}
           <div className="field">
             <label>Age</label>
             <input type="text" value={age} onChange={handleAge} />
-            {age > 0 && age < 12 && (
+
+            {age > 0 && age < maxAge && (
               <div class="ui negative message">
-                <div class="header">Age must be older than 11</div>
+                <div class="header">
+                  {vaccinationFirstDose.nameOfTheVaccine == 'Moderna' ||
+                  vaccinationFirstDose.nameOfTheVaccine == 'Pfizer-BioNTech'
+                    ? 'Age must be older than 11'
+                    : 'Age must be older than 17'}
+                </div>
               </div>
             )}
+  
           </div>
         </div>
         <div>

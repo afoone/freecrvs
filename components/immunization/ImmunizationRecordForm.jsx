@@ -1,7 +1,7 @@
-import moment from "moment";
-import React, { useEffect, useState } from "react";
-import DatePicker from "react-datepicker";
-import AddressFacilityForm from "../adresss/AddressFacilityForm";
+import moment from 'moment';
+import React, { useEffect, useState } from 'react';
+import DatePicker from 'react-datepicker';
+import AddressFacilityForm from '../adresss/AddressFacilityForm';
 
 const ImmunizationRecordForm = ({
   title,
@@ -11,13 +11,15 @@ const ImmunizationRecordForm = ({
   nextVisit,
 }) => {
   const [aefi, setAefi] = useState(false);
-
+  const [nameOfVaccine, setNameOfVaccine] = useState(false);
+//si !immunization.nameOfTheVaccine entonces 
+  console.log('immunization', immunization.nameOfTheVaccine);
   useEffect(() => {
     setAefi(immunization.aefi && immunization.aefi.length > 0);
   }, [immunization.aefi]);
 
   useEffect(() => {
-    console.log("dates", immunization.firstDoseDate, immunization.date)
+    console.log('dates', immunization.firstDoseDate, immunization.date);
     if (immunization.firstDoseDate)
       setImmunization({ ...immunization, date: immunization.firstDoseDate });
     else {
@@ -41,10 +43,12 @@ const ImmunizationRecordForm = ({
                   : new Date()
               }
               isClearable
-              minDate={new Date("2021-03-01")}
+              minDate={new Date('2021-03-01')}
               maxDate={new Date()}
               onChange={(date) =>
+                
                 setImmunization({
+                 
                   ...immunization,
                   firstDoseDate: date,
                 })
@@ -57,6 +61,7 @@ const ImmunizationRecordForm = ({
         </div>
         <div className="ui field">
           <label>Name of vaccine</label>
+
           <select
             name="last-name"
             value={immunization.nameOfTheVaccine}
@@ -83,6 +88,7 @@ const ImmunizationRecordForm = ({
           )}
         </div>
       </div>
+
       <AddressFacilityForm
         address={immunization.placeofVaccination}
         setAddress={(address) =>
@@ -165,13 +171,14 @@ const ImmunizationRecordForm = ({
                   setImmunization({ ...immunization, dateOfNextVisit: date })
                 }
               />
-            </div>{" "}
+            </div>{' '}
             {errors.dateOfNextVisit && (
               <div className="error">{errors.dateOfNextVisit}</div>
             )}
           </div>
         )}
       </div>
+
       <div className="ui field">
         <label>Vaccinator Full Name</label>
         <input
@@ -216,7 +223,7 @@ const ImmunizationRecordForm = ({
               value={
                 immunization.aefi && immunization.aefi.length > 0
                   ? immunization.aefi[0].aefiSeverity
-                  : ""
+                  : ''
               }
               onChange={(e) => {
                 setImmunization({
@@ -238,7 +245,7 @@ const ImmunizationRecordForm = ({
               value={
                 immunization.aefi && immunization.aefi.length > 0
                   ? immunization.aefi[0].aefiDescription
-                  : ""
+                  : ''
               }
               onChange={(e) => {
                 const aefi = immunization
