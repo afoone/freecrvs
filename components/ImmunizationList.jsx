@@ -107,6 +107,26 @@ const PatientRow = ({ patient, setOpen }) => {
           </Grid>
         </Popup>
       </td>
+      <td>
+        <Link href={`/immunization/${patient._id}/report`}>
+          <button
+            class="ui basic button"
+            style={{
+              width: '2%',
+            }}
+          >
+            <i
+              class="big file icon"
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                position: 'relative',
+                left: -10,
+              }}
+            />
+          </button>
+        </Link>
+      </td>
 
       <td>{getFullName(patient)}</td>
       <td>
@@ -376,6 +396,7 @@ const ImmunizationList = () => {
       <table className="ui green striped table">
         <thead>
           <tr>
+            <th />
             <th />
             <th>Name</th>
             <th>Birth Date</th>
