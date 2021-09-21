@@ -72,6 +72,18 @@ export const get = async (id) => {
   return immunizationNew;
 };
 
+export const getByNamesAndBirthDate = async (
+  firstName,
+  lastName,
+  birthDate
+) => {
+  const { db } = await connectToDatabase();
+  const immunizationNew = await db
+    .collection("vaccination")
+    .findOne({ firstName, lastName, dateOfBirth: new RegExp(birthDate) });
+  return immunizationNew;
+};
+
 export const deleteImmunization = async (id) => {
   const { db } = await connectToDatabase();
   const response = await db

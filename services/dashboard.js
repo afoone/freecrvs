@@ -234,7 +234,7 @@ export const getFullyVaccinated = async () => {
   const byRegion = await db
     .collection("vaccination")
     .aggregate([
-      { $match: { "vaccination.1.nameOfTheVaccine": { $exists: true } } },
+      { $match: { "vaccination.1.nameOfTheVaccine": { $exists: true } } }, // OR vaccination.0.nameOfTheVacine : "Jsonss..."
       { $group: { _id: "$address.province", count: { $sum: 1 } } },
     ])
     .toArray();

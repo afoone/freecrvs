@@ -36,7 +36,6 @@ export default async (req, res) => {
       break;
 
     case "DELETE":
-      console.log("delete patient", id);
       await deleteImmunization(id);
       res.json({ id });
       break;
@@ -45,7 +44,7 @@ export default async (req, res) => {
       await runMiddleware(req, res, cors);
       const patientResponse = await get(id);
       
-      res.json(patientResponse);
+      res.status(200).json(patientResponse);
       break;
   }
 };

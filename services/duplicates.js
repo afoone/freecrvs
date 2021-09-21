@@ -111,7 +111,7 @@ export const mergeDuplicates = async (duplicates) => {
 };
 
 export const isDuplicate = (object1, object2) => {
-  console.log("duplicates", object1, object2);
+  //console.log("duplicates", object1, object2);
   if (object1.nin || object2.nin) return object1.nin === object2.nin;
   return (
     object1.firstName === object2.firstName &&
