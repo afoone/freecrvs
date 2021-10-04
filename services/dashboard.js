@@ -238,7 +238,6 @@ export const getFullyVaccinated = async () => {
       { $group: { _id: "$address.province", count: { $sum: 1 } } },
     ])
     .toArray();
-    //alfonso
   return byRegion.map((i) => ({
     ...i,
     _id: !i._id ? "" : i._id,

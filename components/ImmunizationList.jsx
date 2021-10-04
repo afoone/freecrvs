@@ -243,8 +243,6 @@ const ImmunizationList = () => {
   const [count, setCount] = useState(100);
   const [searchGiven, setSearchGiven] = useState('');
   const [searchLast, setSearchLast] = useState('');
-  const [searchBirthDate, setSearchBirthDate] = useState(new Date());
-  console.log('searchBirthDate', searchBirthDate);
   const [searchNIN, setSearchNIN] = useState('');
   const [searchToday, setSearchToday] = useState(false);
 
@@ -282,10 +280,7 @@ const ImmunizationList = () => {
     if (searchNIN) {
       url += `&NIN=${searchNIN}`;
     }
-    // if (searchBirthDate) {
-    //   url += `&NIN=${searchBirthDate}`;
-    // }
-    //ALFONSO
+
     if (searchToday) {
       const date = new Date();
       date.setDate(date.getDate() - 1);
@@ -301,7 +296,6 @@ const ImmunizationList = () => {
     setSearchGiven('');
     setSearchLast('');
     setSearchNIN('');
-    setSearchBirthDate('');
     getPatientsWithParams();
   };
 
@@ -368,15 +362,6 @@ const ImmunizationList = () => {
               placeholder="ID (NIN)"
               value={searchNIN}
               onChange={(e) => setSearchNIN(e.target.value)}
-            />
-          </div>
-          <div className="datepicker-full">
-            <DatePicker
-              isClearable
-              dateFormat="dd/MM/yyyy"
-              showYearDropdown
-              selected={searchBirthDate}
-              onChange={(date) => setSearchBirthDate(date)}
             />
           </div>
           <div className="inline fields">
