@@ -15,7 +15,7 @@ export default async (req, res) => {
     switch (req.method) {
       case "POST":
         const patient = await add(req.body);
-        res.json(patient);
+        res.status(201).json(patient);
         break;
 
       default:

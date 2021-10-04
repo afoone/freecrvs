@@ -12,8 +12,8 @@ export default async (req, res) => {
   switch (req.method) {
     default:
       const results = await getDuplicatesForNIN();
-      const resultsByDateAndName = await getDuplicatesForBirthDateAndName();
-      res.json([...results, ...resultsByDateAndName]);
+      //const resultsByDateAndName = await getDuplicatesForBirthDateAndName();
+      res.json([...results,]);
       break;
   }
   // }

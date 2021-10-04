@@ -1,6 +1,5 @@
-import { update, get } from "../../../../services/immunization";
-import { mapToFhir } from "../../../../services/fhir";
-import Cors from "cors";
+import { getByNamesAndBirthDate } from "../../../services/immunization";
+import Cors from 'cors'
 
 // Initializing the cors middleware
 const cors = Cors({
@@ -22,16 +21,8 @@ function runMiddleware(req, res, fn) {
 }
 
 export default async (req, res) => {
-  console.log("entrando a buscar el paciente");
-  //   const { db } = await connectToDatabase();
-  const { id } = req.query;
-
   await runMiddleware(req, res, cors);
-  const patientResponse = await get(id);
-  console.log("patiend", patientResponse);
-  if (!patientResponse) {
-    res.status(404).send();
-  } else {
-    res.json(mapToFhir(patientResponse));
-  }
+  const { firstName, lastName, birthDate } = req.query;
+  const patient = await getByNamesAndBirthDate(firstName, lastName, birthDate);
+  res.json(patient);
 };
