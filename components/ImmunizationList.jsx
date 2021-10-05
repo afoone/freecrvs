@@ -10,7 +10,7 @@ import {
   firstDoseVaccinated,
   secondDoseVaccinated,
 } from './immunizationListPresenter';
-
+import DatePicker from 'react-datepicker';
 export const getFullName = (patient) => {
   return `${patient.firstName}  ${patient.middleName || ''} ${
     patient.lastName
@@ -280,6 +280,7 @@ const ImmunizationList = () => {
     if (searchNIN) {
       url += `&NIN=${searchNIN}`;
     }
+
     if (searchToday) {
       const date = new Date();
       date.setDate(date.getDate() - 1);
@@ -354,6 +355,7 @@ const ImmunizationList = () => {
               onChange={(e) => setSearchLast(e.target.value)}
             />
           </div>
+
           <div className="ui field">
             <input
               type="text"
