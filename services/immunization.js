@@ -7,7 +7,6 @@ export const add = async (data) => {
   const mongoResponse = await db
     .collection("vaccination")
     .insertOne(vaccination);
-  console.log("response", mongoResponse);
   return mongoResponse.ops[0];
 };
 
@@ -15,11 +14,9 @@ const createQuery = (query) => {
   let newQuery = {};
   Object.keys(query).forEach((i) => {
     if (query[i]) {
-      console.log(i, query[i]);
       newQuery[i] = { $regex: query[i], $options: "i" };
     }
   });
-  console.log(newQuery);
   return newQuery;
 };
 
@@ -80,7 +77,11 @@ export const getByNamesAndBirthDate = async (
   const { db } = await connectToDatabase();
   const immunizationNew = await db
     .collection("vaccination")
-    .findOne({ firstName, lastName, dateOfBirth: new RegExp(birthDate) });
+    .findOne({
+      firstName: new RegExp("^s*" + firstName + "s*", "i"),
+      lastName: RegExp('^\s*' +lastName + '\s*', 'i'),
+      dateOfBirth: new RegExp(birthDate),
+    });
   return immunizationNew;
 };
 
